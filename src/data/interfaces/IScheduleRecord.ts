@@ -1,10 +1,10 @@
 export interface IScheduleRecord {
     topic: string; //id de materia
     teacher: string; //id de profesor
-    days: IClassDay[]; 
+    days: IScheduleDay[]; 
 };
 
-export interface IClassDay{
+export interface IScheduleDay{
     name: string; //lun, mar, mier, jue, vier 
     time?: string | Date //la hora a la que empieza una clase, es opcional porque no es obligatorio que todos los dias se tenga clase de esa materia
 }
