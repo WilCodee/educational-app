@@ -1,4 +1,4 @@
 export interface IPhoneNumber {
-    prefix: number; 
-    number: number; 
+    prefix: string; 
+    number: string; 
 }

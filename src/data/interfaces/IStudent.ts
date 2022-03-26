@@ -3,6 +3,7 @@ import { IPhoneNumber } from "./IPhoneNumber";
 import { IRepresentative } from "./IRepresentative";
 
 export interface IStudent {
+    _id: string;
     email: string;
     password: string; 
     fullName: IFullName;
@@ -13,5 +14,5 @@ export interface IStudent {
     admissionDate: Date;
     photo: string; 
     createdAt: Date;
-    updatedAt: Date;  
+    updatedAt?: Date;  
 }

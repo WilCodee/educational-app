@@ -1,6 +1,6 @@
 export interface IAssistanceRecord {
     student: string; //id ref del estudiante
-    days: IAssistanceDay; 
+    days: IAssistanceDay[]; 
 }
 
 export interface IAssistanceDay {
