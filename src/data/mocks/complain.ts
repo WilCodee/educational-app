@@ -6,6 +6,7 @@ export const ComplainsMocks:IComplain[] = [
         title: 'Agregar nuevo estudiante al grupo de whatsapp',
         description: 'Por favor agregar este numero al whatsapp 0994130025',
         seller: 'vendedor-1',
+        status: 'A',
         createdAt: new Date(),
     }
 ]

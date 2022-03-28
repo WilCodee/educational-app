@@ -7,6 +7,7 @@ export interface IStudent {
     email: string;
     password: string; 
     fullName: IFullName;
+    ci: string; 
     age:number; 
     phoneNumber: IPhoneNumber;
     representantive: IRepresentative; 

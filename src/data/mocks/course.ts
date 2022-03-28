@@ -13,7 +13,8 @@ export const CoursesMocks:ICourse[] = [
                 days: [
                     {
                         name: 'Lunes',
-                        time: '15:30'
+                        startTime: '15:30',
+                        endTime: '17:30',
                     },
                     {
                         name: 'Martes',
@@ -26,7 +27,8 @@ export const CoursesMocks:ICourse[] = [
                     },
                     {
                         name: 'Viernes',
-                        time: '15:30'
+                        startTime: '15:30',
+                        endTime: '17:30'
                     }
                 ]
             },
