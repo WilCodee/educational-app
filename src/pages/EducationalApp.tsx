@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import AuthenticatedNavigation from "../navigation/AuthenticatedNavigation";
 import UnauthenticatedNavigation from "../navigation/UnauthenticatedNavigation";
+import { AuthContext } from "../context/AuthContext"; 
 
-const EducationalApp = ({isLogin}:any):any => {
-
+const EducationalApp = ():any => {
+  const { isLogin } = useContext(AuthContext)
+ 
   if (!isLogin) return <UnauthenticatedNavigation />;
   if (isLogin) return <AuthenticatedNavigation />;
 };

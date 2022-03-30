@@ -1,13 +1,15 @@
 import React from 'react';
 import "./App.css";
+import { AuthProvider } from './context/AuthContext';
+import EducationalApp from "./pages/EducationalApp";
 
-import { LoginButton } from './Services/LoginButton';
-
-const App =() => {
+function App() {
   
   return (
-    <div>
-      <LoginButton/>
+    <div className="App">
+      <AuthProvider>
+      <EducationalApp />
+      </AuthProvider>
     </div>
   );
 }

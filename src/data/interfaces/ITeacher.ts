@@ -3,8 +3,6 @@ import { IPhoneNumber } from "./IPhoneNumber";
 
 export interface ITeacher {
     _id: string;
-    email: string;
-    password: string; 
     ci: string;
     area: string;  
     fullName: IFullName; 
