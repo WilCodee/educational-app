@@ -32,6 +32,12 @@ export const SideBar = ({ children }) => {
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
               Materias
+            <Link
+                  className="navbar-brand"
+                  to="subjects"
+                >
+                  Materias
+                </Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
               <Menu.Item key="3">
@@ -54,8 +60,12 @@ export const SideBar = ({ children }) => {
           </Menu>
         </Sider>
 
+
         <Layout className="site-layout">
           <Content style={{ margin: '0 16px' }}>
+
+        <Layout className="site-layout" style={{backgroundColor: 'white'}}>
+          <Content >
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
               {children}
             </div>
