@@ -4,8 +4,6 @@ import { IRepresentative } from "./IRepresentative";
 
 export interface IStudent {
     _id: string;
-    email: string;
-    password: string; 
     fullName: IFullName;
     ci: string; 
     age:number; 

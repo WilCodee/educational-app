@@ -1,4 +1,6 @@
+import { IFullName } from "./IFullName";
+
 export interface IAdmin {
-    email:string;
-    password:string;   
+    _id: string; //este debe ser el mismo id desde la colección de usuario
+    fullName: IFullName; 
 }

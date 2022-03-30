@@ -2,6 +2,7 @@ import { ICourse } from "../interfaces/ICourse";
 
 export const CoursesMocks:ICourse[] = [
     {
+        _id: 'curso-1',
         name: 'Curso A',
         startDate: new Date(),
         endDate: new Date(),
@@ -57,11 +58,13 @@ export const CoursesMocks:ICourse[] = [
                         name: 'Deber sobre fracciones',
                         value: 8.5
                     }
-                ]
+                ],
+                average: 8
             }
         ]  
     },
     {
+        _id: 'curso-2',
         name: 'Curso B',
         startDate: new Date(),
         endDate: new Date(),
@@ -73,14 +76,16 @@ export const CoursesMocks:ICourse[] = [
                 days: [
                     {
                         name: 'Lunes',
-                        time: '15:30'
+                        startTime: '15:30',
+                        endTime: '17:30'
                     },
                     {
                         name: 'Martes',
                     },
                     {
                         name: 'Miércoles',
-                        time: '15:30'
+                        startTime: '15:30',
+                        endTime: '17:30'
                     },
                     {
                         name: 'Jueves',
@@ -116,7 +121,8 @@ export const CoursesMocks:ICourse[] = [
                         name: 'Deber sobre fracciones',
                         value: 8.5
                     }
-                ]
+                ],
+                average: 10
             }
         ]  
     }
