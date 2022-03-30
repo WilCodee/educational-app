@@ -6,6 +6,7 @@ import {
   PieChartOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { Navbar } from './Navbar';
 
 
 
@@ -30,6 +31,7 @@ export const SideBar = ({ children }) => {
               Cursos
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
+              Materias
             <Link
                   className="navbar-brand"
                   to="subjects"
@@ -57,6 +59,10 @@ export const SideBar = ({ children }) => {
             </SubMenu>
           </Menu>
         </Sider>
+
+
+        <Layout className="site-layout">
+          <Content style={{ margin: '0 16px' }}>
 
         <Layout className="site-layout" style={{backgroundColor: 'white'}}>
           <Content >
