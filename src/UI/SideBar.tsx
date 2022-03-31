@@ -31,7 +31,7 @@ export const SideBar = ({ children }) => {
               Cursos
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
-              Materias
+             
             <Link
                   className="navbar-brand"
                   to="subjects"
@@ -72,6 +72,8 @@ export const SideBar = ({ children }) => {
           </Content>
           <Footer style={{ textAlign: 'center' }}>SISTEMA EDUCATIVO 2022</Footer>
         </Layout>
+        </Content>
+      </Layout>
       </Layout>
     </>
   )
