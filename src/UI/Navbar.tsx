@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Menu, Layout, Image } from 'antd';
 import { Link } from 'react-router-dom'
 import LOGO from '../images/LOGOSCODE.png'
 import {UserOutlined} from '@ant-design/icons';
+import { AuthContext } from 'src/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 export const Navbar = () => {
+  const navigate = useNavigate()
   const { SubMenu } = Menu;
   const { Header } = Layout;
+  const { logout } = useContext(AuthContext)
+
+  const fullLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
     <>
 
@@ -34,7 +44,7 @@ export const Navbar = () => {
               <Menu.Item key="5">
                   Opciones
               </Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key="6" onClick={fullLogout} >
                   Salir
               </Menu.Item>
             </SubMenu>
