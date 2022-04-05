@@ -4,17 +4,18 @@ import { Button, Card } from 'antd';
 interface ICardTableProps {
     title: string;
     AddText: string; 
+    AddOnClick: () => void;
     children: any
 }
 
-export const CardTable = ({ title,AddText ,children}:ICardTableProps) => {
+export const CardTable = ({ title,AddText, AddOnClick, children}:ICardTableProps) => {
     
     return (
         <>
             <div className="site-card-border-less-wrapper ">
                 <Card 
                 title={title} 
-                extra={<Button type="primary">+ AGREGAR {AddText}</Button>}>
+                extra={<Button type="primary" onClick={AddOnClick} >+ AGREGAR {AddText}</Button>}>
                 {children}
                 </Card>
             </div>
