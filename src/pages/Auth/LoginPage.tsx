@@ -1,14 +1,31 @@
-import { Button } from 'antd';
-import React, { useContext } from 'react'; 
-import { AuthContext } from 'src/context/AuthContext';
+import {Col, Row } from 'antd';
+import React from 'react'; 
+import { ImagenBuo } from 'src/images/ImagenBuo';
+import '../../styles/login.css';
+import { FormLogin } from 'src/components/Login/FormLogin';
 
 const LoginPage = () => {
-    const { login } = useContext(AuthContext)
+    
     return(
-        <div>
+        <>
+        <div className='content-principal'>
+            <Row>
+                <Col span={12}>
+                    <div className='content-left'>
+                        <ImagenBuo/>
+                        <br />
+                        <h1 className='title-pre'>Jean Fourier</h1>
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <div className='content-rigt'>
+                        <FormLogin />
+                    </div>
+                </Col>
+            </Row>
             <h3>LOGIN PAGE</h3>
-            <Button type='primary' onClick={login}>INICIAR SESIÓN</Button>
         </div>
+        </>
     )
 }
 
