@@ -13,6 +13,7 @@ export const Navbar = () => {
 
   const fullLogout = () => {
     logout()
+    localStorage.clear();
     navigate('/')
   }
 

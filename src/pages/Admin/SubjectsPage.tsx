@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, Space, Button,Popconfirm } from 'antd';
+import { Table, Space, Button} from 'antd';
 //import { columns, data } from "../../Components/TableDefault";
 import { CardTable } from 'src/components/CardTable';
 import { ModalDefault } from 'src/components/ModalDefault';
@@ -95,9 +95,9 @@ export const SubjectsPage = () => {
     {
       title: 'Acciones',
       key: 'action',
-      render: (text, record) => (
+      render: (/*text, record*/) => (
         <Space size="middle">
-          <a>Invite {record.name}</a>
+          <a>Invite {/*record.name*/}</a>
           <a>Delete</a>
         </Space>
       ),
