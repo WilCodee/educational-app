@@ -6,8 +6,10 @@ const StudentDetail = () => {
 
     return(
         <div>
-          <h3>{(data.profile.fullName.firstName ?? "") + " " + (data.profile.fullName.lastName ?? "")}</h3>
-
+          { (typeof data !== "undefined" &&  'profile' in data) &&
+            <h3>{(data.profile.fullName?.firstName ?? "") + " " + (data.profile.fullName?.lastName ?? "")}</h3>
+            
+          }
         </div>
     )
 }
