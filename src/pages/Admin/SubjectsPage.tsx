@@ -1,5 +1,8 @@
+
 import React, { useContext, useEffect, useState } from 'react'
 import { Table, Space, Button,Popconfirm, Card } from 'antd';
+
+
 //import { columns, data } from "../../Components/TableDefault";
 import { CardTable } from 'src/components/CardTable';
 import { ModalDefault } from 'src/components/ModalDefault';
@@ -114,6 +117,7 @@ export const SubjectsPage = () => {
       title: 'Descripcion',
       dataIndex: 'description',
       key: 'description',
+
     },
   ];
 
