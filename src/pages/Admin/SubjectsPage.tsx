@@ -1,77 +1,65 @@
 
 import React, { useContext, useEffect, useState } from 'react'
-import { Table, Space, Button,Popconfirm, Card } from 'antd';
-
-
-//import { columns, data } from "../../Components/TableDefault";
+import { Table, Button, Popconfirm, Card } from 'antd';
 import { CardTable } from 'src/components/CardTable';
-import { ModalDefault } from 'src/components/ModalDefault';
-import { SubjectForm } from 'src/components/SubjectForm';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { SubjectContext } from 'src/context/AuthContext/SubjectContext/SubjectContext';
+import { ModalContext } from 'src/context/ModalContext';
 
 export const SubjectsPage = () => {
 
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoadign] = useState(false)
-  const [selectedStudents, setSelectedStudents ] = useState([])
-  const {subjects,readSubject,deleteSubject,createSubject} = useContext(SubjectContext)
+  const [selectedStudents, setSelectedStudents] = useState([])
+  const [tableLoading, setTableLoading ] = useState(false)
+  const { subjects, readSubject, deleteSubject } = useContext(SubjectContext)
+  const { showModal } = useContext(ModalContext);
 
   const [selectedKey, setSelectedKey] = useState('')
   useEffect(() => {
     readSubject(data)
   }, [])
-  
-
-  const showModal = () => {
-    setVisible(true)
-    
-  };
-
-  const handleOk = () => {
-
-    setLoadign(true)
-    setTimeout(() => {
-      setLoadign(false)
-      setVisible(false)
-      
-
-    }, 1000);
-  };
-
-  const handleCancel = () => {
-    setVisible(false)
-  };
 
   const handleDelete = () => {
     deleteSubject(selectedKey)
     console.log(subjects)
   };
 
-  const handleAdd = () => {
-    
-    createSubject({
-      name:'Danny',
-      description:'Quito'  , 
-    }) 
+  const handleAddSubject = () => {
+    showModal({
+      mode: "ADD",
+      data: {},
+      title: "Agregar Materia",
+      contentComponent: 'SubjectForm'
+    })
+  }
 
+  const handleEditSubject = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedStudents[0],
+      title: "Editar Materia",
+      contentComponent: 'SubjectForm'
+    })
+  }
 
-    console.log(subjects)
-  };
-
-
+  const handleViewSubject = () => {
+    showModal({
+      mode: "DETAILS",
+      data: selectedStudents[0],
+      title: "Detalle de la Materia",
+      contentComponent: 'SubjectForm'
+    })
+  }
 
 
   const rowSelection = {
-    onChange: (selectedRowKeys:any, selectedRows:any) => {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedStudents(selectedRows);
       setSelectedKey(selectedRowKeys);
-      console.log(selectedKey)
-      console.log(selectedStudents)
-      console.log(subjects)
     },
-};
+
+
+  };
 
   const data = [
     {
@@ -123,21 +111,24 @@ export const SubjectsPage = () => {
 
   return (
     <>
-      <CardTable title='MATERIAS' AddText='MATERIA'>
-          
-          <Card className='cardbody' >
-            <Button icon={<EyeOutlined /> } onClick={handleAdd} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true } >VER DETALLES</Button>
-            <Button icon={<EditOutlined />} onClick={showModal} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true }>EDITAR </Button>
-            <Button icon={<DeleteOutlined />} onClick={handleDelete} className='buttonTable' type="primary" disabled={selectedStudents.length >= 1 ? false: true}>ELIMINAR</Button>
-          </Card>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={subjects} />
-      </CardTable>
-     <ModalDefault ModalTitle="EDITAR MATERIA" visibleValue={visible} loading={loading} handleOk={handleOk} handleCancel={handleCancel} >
-       <SubjectForm selectedKey={selectedKey} />
-     </ModalDefault>
-     
-     
+      <CardTable title='MATERIAS' AddText='MATERIA' AddOnClick={handleAddSubject}>
 
+        <Card className='cardbody' >
+          <Button icon={<EyeOutlined />} onClick={handleViewSubject} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true} >VER DETALLES</Button>
+          <Button icon={<EditOutlined />} onClick={handleEditSubject} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true}>EDITAR </Button>
+          <Popconfirm
+            title="Estás seguro que deseas eliminar las materias seleccionadas?"
+            onConfirm={handleDelete}
+            okText="Sí"
+            cancelText="No"
+          >
+            <Button icon={<DeleteOutlined />} className='buttonTable' type="primary" disabled={selectedStudents.length >= 1 ? false : true}>ELIMINAR</Button>
+
+          </Popconfirm>
+
+        </Card>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={subjects} loading={tableLoading} />
+      </CardTable>
     </>
   )
 }

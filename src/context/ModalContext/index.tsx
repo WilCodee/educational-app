@@ -5,6 +5,7 @@ import { modalInitialState, modalReducer } from './modalReducer';
 import { MODAL_ACTIONS } from './modalActions';
 import StudentForm from 'src/components/Forms/StudentForm';
 import StudentDetail from 'src/components/Details/StudentDetail';
+import { SubjectForm } from 'src/components/SubjectForm';
 
 
 export const MODAL_MODES = {
@@ -50,6 +51,9 @@ export const ModalProvider = ({children}) => {
             case 'StudentForm':
                 content = <StudentForm />
                 break;  
+            case 'SubjectForm':
+                content = <SubjectForm/>
+                break;
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
                 break;
