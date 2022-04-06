@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Form, Input, Button } from 'antd';
+import { SubjectContext } from 'src/context/AuthContext/SubjectContext/SubjectContext';
 
 
 
-export const SubjectForm = () => {
+export const SubjectForm = ( selectedKey: any) => {
+    const { createSubject, subjects, uploadSubject} = useContext(SubjectContext)
 
     const onFinish = (values: any) => {
-        console.log('Success:', values);
+/* 
+            uploadSubject({
+                key: selectedKey.selectedKey[0],
+                ...values
+            }) */
+
+            createSubject({
+                key: subjects.length + 1, //EN PRUEBAS - CON LA API SE ARREGLA
+                ...values
+            })
+        console.log('LLave:', selectedKey.selectedKey[0]);
+        console.log('Success:', subjects); 
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -15,6 +28,7 @@ export const SubjectForm = () => {
 
     return (
         <>
+
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -26,7 +40,7 @@ export const SubjectForm = () => {
             >
                 <Form.Item
                     label="Nombre"
-                    name="username"
+                    name="name"
                     rules={[{ required: true, message: 'Porfavor Ingresa el nombre' }]}
                 >
                     <Input />
@@ -37,7 +51,7 @@ export const SubjectForm = () => {
                     name="description"
                     rules={[{ required: true, message: 'Porfavor Ingresa la Descripcion' }]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -46,6 +60,7 @@ export const SubjectForm = () => {
                     </Button>
                 </Form.Item>
             </Form>
+
         </>
     )
 }

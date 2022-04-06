@@ -36,7 +36,7 @@ const StudentsPage = () => {
 
     return(
         <div>
-            <CardTable title="Estudiantes" AddText="Estudiante">
+            <CardTable title="ESTUDIANTES" AddText="ESTUDIANTE">
             
             <Card className='cardbody' >
                 <Button type="primary" icon={<EyeOutlined /> }  disabled={selectedStudents.length === 1 ? false : true }  className='buttonTable'>VER DETALLES</Button>
