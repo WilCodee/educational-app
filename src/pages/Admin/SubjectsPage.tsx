@@ -1,79 +1,86 @@
-import React, { useState } from 'react'
-import { Table, Space, Button} from 'antd';
-//import { columns, data } from "../../Components/TableDefault";
+
+import React, { useContext, useEffect, useState } from 'react'
+import { Table, Button, Popconfirm, Card } from 'antd';
 import { CardTable } from 'src/components/CardTable';
-import { ModalDefault } from 'src/components/ModalDefault';
-import { SubjectForm } from 'src/components/SubjectForm';
+import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
+import { ModalContext } from 'src/context/ModalContext';
+import { getData } from 'src/services/fetch/getData';
 
 export const SubjectsPage = () => {
 
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoadign] = useState(false)
+  const [selectedStudents, setSelectedStudents] = useState([])
+  const [tableLoading, setTableLoading] = useState(false)
+  const [subjects, setSubjects] = useState([])
+  const { readSubject, deleteAction } = useContext(ActionsContext)
+  const { showModal } = useContext(ModalContext);
+
+  const [selectedKey, setSelectedKey] = useState('')
 
 
+  const handleAddSubject = () => {
+    showModal({
+      mode: "ADD",
+      data: {},
+      title: "Agregar Materia",
+      contentComponent: 'SubjectForm'
+    })
+  }
 
-  const showModal = () => {
-    setVisible(true)
+  const handleEditSubject = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedStudents[0],
+      title: "Editar Materia",
+      contentComponent: 'SubjectForm'
+    })
+  }
+
+  const handleViewSubject = () => {
+    showModal({
+      mode: "DETAILS",
+      data: selectedStudents[0],
+      title: "Detalle de la Materia",
+      contentComponent: 'SubjectDetail'
+    })
+  }
+
+
+  const handledeleteAction = async () => {
+    deleteAction('subjects',selectedStudents)
+  }
+
+
+  const initialRequest = async () => {
+    setTableLoading(true)
+    const request = await getData('subjects')
+    if (request.status) {
+      const subjectsToTable = request.subjects.map((subject: any) => {
+        subject.key = subject['_id'];
+        return subject;
+      })
+      setSubjects(subjectsToTable)
+
+    }
+    setTableLoading(false)
+  }
+
+  useEffect(() => {
+    initialRequest()
+    initialRequest()
+    console.log('Hola')
+  }, [deleteAction])
+
+
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedStudents(selectedRows);
+      setSelectedKey(selectedRowKeys);
+    },
+
+
   };
-
-  const handleOk = () => {
-
-    setLoadign(true)
-    setTimeout(() => {
-      setLoadign(false)
-      setVisible(false)
-
-    }, 1000);
-  };
-
-  const handleCancel = () => {
-    setVisible(false)
-  };
-
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '4',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '5',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '6',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
 
   const columns = [
     {
@@ -84,46 +91,32 @@ export const SubjectsPage = () => {
     },
     {
       title: 'Descripcion',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Alumnos',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Acciones',
-      key: 'action',
-      render: (/*text, record*/) => (
-        <Space size="middle">
-          <a>Invite {/*record.name*/}</a>
-          <a>Delete</a>
-        </Space>
-      ),
+      dataIndex: 'description',
+      key: 'description',
+
     },
   ];
 
   return (
     <>
-      <CardTable title='MATERIAS' AddText='MATERIA'>
-        <div className='cardbody'>
-          <h1 >MATERIAS</h1>
-          <div>
-            <Button className='buttonTable' type="primary">VER DETALLES</Button>
-            <Button onClick={showModal} className='buttonTable' type="primary">EDITAR </Button>
-            <Button className='buttonTable' type="primary">ELIMINAR</Button>
-          </div>
-        </div>
+      <CardTable title='MATERIAS' AddText='MATERIA' AddOnClick={handleAddSubject}>
 
-        <Table columns={columns} dataSource={data} />
+        <Card className='cardbody' >
+          <Button icon={<EyeOutlined />} onClick={handleViewSubject} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true} >VER DETALLES</Button>
+          <Button icon={<EditOutlined />} onClick={handleEditSubject} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true}>EDITAR </Button>
+          <Popconfirm
+            title="Estás seguro que deseas eliminar las materias seleccionadas?"
+            onConfirm={handledeleteAction}
+            okText="Sí"
+            cancelText="No"
+          >
+            <Button icon={<DeleteOutlined />} className='buttonTable' type="primary" disabled={selectedStudents.length >= 1 ? false : true}>ELIMINAR</Button>
+
+          </Popconfirm>
+
+        </Card>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={subjects} loading={tableLoading} />
       </CardTable>
-     <ModalDefault ModalTitle="EDITAR MATERIA" visibleValue={visible} loading={loading} handleOk={handleOk} handleCancel={handleCancel}>
-       <SubjectForm/>
-     </ModalDefault>
-     
-     
-
     </>
   )
 }

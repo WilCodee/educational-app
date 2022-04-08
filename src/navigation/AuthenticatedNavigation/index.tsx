@@ -6,6 +6,7 @@ import TeachersPage from '../../pages/Admin/TeachersPage';
 import { Layout } from 'antd';
 import { Navbar } from 'src/UI/Navbar';
 import { SubjectsPage } from 'src/pages/Admin/SubjectsPage';
+import { ActionsProvider } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 import { ModalProvider } from 'src/context/ModalContext';
 
 
@@ -13,16 +14,18 @@ const AuthenticatedNavigation = () => {
   return (
     <>
       <Layout>
+      <ActionsProvider>
       <Navbar />
         <SideBar >
         <ModalProvider>
         <Routes>
-          <Route path="students" element={<StudentsPage />} />
-          <Route path="teachers" element={<TeachersPage />} />
-          <Route path="subjects" element={<SubjectsPage/>} />
+          <Route path="students" element={<StudentsPage />}/>
+          <Route path="teachers" element={<TeachersPage />}/>
+          <Route path="subjects" element={<SubjectsPage/>}/>
         </Routes>
         </ModalProvider>
         </SideBar>
+        </ActionsProvider>
       </Layout>
     </>
   )
