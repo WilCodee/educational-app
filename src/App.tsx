@@ -1,7 +1,6 @@
 import React from 'react';
 import "./App.css";
 import { AuthProvider } from './context/AuthContext';
-import { SubjectContext } from './context/AuthContext/SubjectContext/SubjectContext';
 import EducationalApp from "./pages/EducationalApp";
 function App() {
 

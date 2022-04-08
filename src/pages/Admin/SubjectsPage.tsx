@@ -3,25 +3,20 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Table, Button, Popconfirm, Card } from 'antd';
 import { CardTable } from 'src/components/CardTable';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { SubjectContext } from 'src/context/AuthContext/SubjectContext/SubjectContext';
+import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 import { ModalContext } from 'src/context/ModalContext';
+import { getData } from 'src/services/fetch/getData';
 
 export const SubjectsPage = () => {
 
   const [selectedStudents, setSelectedStudents] = useState([])
-  const [tableLoading, setTableLoading ] = useState(false)
-  const { subjects, readSubject, deleteSubject } = useContext(SubjectContext)
+  const [tableLoading, setTableLoading] = useState(false)
+  const [subjects, setSubjects] = useState([])
+  const { readSubject, deleteAction } = useContext(ActionsContext)
   const { showModal } = useContext(ModalContext);
 
   const [selectedKey, setSelectedKey] = useState('')
-  useEffect(() => {
-    readSubject(data)
-  }, [])
 
-  const handleDelete = () => {
-    deleteSubject(selectedKey)
-    console.log(subjects)
-  };
 
   const handleAddSubject = () => {
     showModal({
@@ -46,9 +41,35 @@ export const SubjectsPage = () => {
       mode: "DETAILS",
       data: selectedStudents[0],
       title: "Detalle de la Materia",
-      contentComponent: 'SubjectForm'
+      contentComponent: 'SubjectDetail'
     })
   }
+
+
+  const handledeleteAction = async () => {
+    deleteAction('subjects',selectedStudents)
+  }
+
+
+  const initialRequest = async () => {
+    setTableLoading(true)
+    const request = await getData('subjects')
+    if (request.status) {
+      const subjectsToTable = request.subjects.map((subject: any) => {
+        subject.key = subject['_id'];
+        return subject;
+      })
+      setSubjects(subjectsToTable)
+
+    }
+    setTableLoading(false)
+  }
+
+  useEffect(() => {
+    initialRequest()
+    initialRequest()
+    console.log('Hola')
+  }, [deleteAction])
 
 
   const rowSelection = {
@@ -60,39 +81,6 @@ export const SubjectsPage = () => {
 
 
   };
-
-  const data = [
-    {
-      key: 1,
-      name: 'John Brown',
-      description: 'New York No. 1 Lake Park',
-    },
-    {
-      key: 2,
-      name: 'Jim Green',
-      description: 'London No. 1 Lake Park',
-    },
-    {
-      key: 3,
-      name: 'Joe Black',
-      description: 'Sidney No. 1 Lake Park',
-    },
-    {
-      key: 4,
-      name: 'John Brown',
-      description: 'New York No. 1 Lake Park',
-    },
-    {
-      key: 5,
-      name: 'Jim Green',
-      description: 'London No. 1 Lake Park',
-    },
-    {
-      key: 6,
-      name: 'Joe Black',
-      description: 'Sidney No. 1 Lake Park',
-    },
-  ];
 
   const columns = [
     {
@@ -118,7 +106,7 @@ export const SubjectsPage = () => {
           <Button icon={<EditOutlined />} onClick={handleEditSubject} className='buttonTable' type="primary" disabled={selectedStudents.length === 1 ? false : true}>EDITAR </Button>
           <Popconfirm
             title="Estás seguro que deseas eliminar las materias seleccionadas?"
-            onConfirm={handleDelete}
+            onConfirm={handledeleteAction}
             okText="Sí"
             cancelText="No"
           >

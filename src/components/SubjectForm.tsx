@@ -1,36 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form, Input, Button } from 'antd';
-import { SubjectContext } from 'src/context/AuthContext/SubjectContext/SubjectContext';
+import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 import { ModalContext } from 'src/context/ModalContext';
 
 
 
 export const SubjectForm = (selectedKey: any) => {
-    const { createSubject, subjects, uploadSubject } = useContext(SubjectContext)
+    const { createAction, uploadAction } = useContext(ActionsContext)
     const { mode, data, hideModal } = useContext(ModalContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const onFinishAdd = (values: any) => {
-
-        createSubject({
-            key: subjects.length + 1, //EN PRUEBAS - CON LA API SE ARREGLA
-            ...values
-        })
+    const onFinishAdd = async (values: any) => {
+        setIsSubmitting(true)
+        createAction('subjects',values)
+        setIsSubmitting(false)
         hideModal()
-        console.log('LLave:', selectedKey.selectedKey[0]);
-        console.log('Success:', subjects);
-    };
-    const onFinishEdit = (values: any) => {
 
-        uploadSubject({
-            
-            key: selectedKey.selectedKey[0],
-            ...values
-        })
+    };
+    
+    const onFinishEdit = async (values:any) => {
+
+        setIsSubmitting(true);
+        uploadAction('subjects',data,values)
+        setIsSubmitting(false);
         hideModal()
-        console.log('LLave:', selectedKey.selectedKey[0]);
-        console.log('Success:', subjects);
-    };
-
+      }
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
@@ -73,13 +66,17 @@ export const SubjectForm = (selectedKey: any) => {
             )}
             {mode === "EDIT" && (
                 <Form
+                initialValues={{
+                    name: data.name, 
+                    description: data.description, 
+                  }}
                 name="basic"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
                 onFinish={onFinishEdit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                
             >
                 <Form.Item
                     label="Nombre"
