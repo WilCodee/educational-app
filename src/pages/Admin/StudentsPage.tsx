@@ -6,6 +6,7 @@ import { getData } from 'src/services/fetch/getData';
 import { deleteData } from 'src/services/fetch/deleteData'; 
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ModalContext } from 'src/context/ModalContext';
+import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 
 
 const StudentsPage = () => {
@@ -13,7 +14,7 @@ const StudentsPage = () => {
     const [ selectedStudents, setSelectedStudents ] = useState([])
     const [tableLoading, setTableLoading ] = useState(false)
     const { showModal } = useContext(ModalContext); 
-    
+    const { items, setAction, deleteAction } = useContext(ActionsContext)
     
     const handleAddStudent = () =>{
         showModal({
@@ -43,13 +44,16 @@ const StudentsPage = () => {
     }
 
 
-    const handleDeleteStudent = async () => {
-        const deleteRequest = await deleteData(`users/${selectedStudents[0]['_id']}`)
-        if(deleteRequest.status){
-            message.success("Estudiante(s) eliminado(s) exitosamente")
-        }else{
-            message.error("Algo ha salido mal eliminando el estudiante")
-        }
+    const handleDeleteStudent = () => {
+        selectedStudents.map(async (student)=> {
+            const deleteRequest = await deleteData(`users/${student['_id']}`)
+            if(deleteRequest.status){
+                message.success("Estudiante eliminado exitosamente")
+                deleteAction(student['_id'])
+            }else{
+                message.error("Algo ha salido mal eliminando el estudiante")
+            }
+        })
     }
 
 
@@ -62,7 +66,7 @@ const StudentsPage = () => {
                 user.key = user['_id'];
                 return user;    
             })
-            setStudents(usersToTable)
+            setAction(usersToTable)
         }
         setTableLoading(false)
     }
@@ -99,7 +103,7 @@ const StudentsPage = () => {
                 </Popconfirm>
             </Card>
 
-            <Table rowSelection={rowSelection} columns={StudentsColumns} dataSource={students} loading={tableLoading}  />
+            <Table rowSelection={rowSelection} columns={StudentsColumns} dataSource={items} loading={tableLoading}  />
             
             </CardTable> 
         </div>

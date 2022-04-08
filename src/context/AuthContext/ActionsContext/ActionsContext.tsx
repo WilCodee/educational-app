@@ -1,32 +1,27 @@
 import React, { createContext, useReducer } from 'react'
 import { ActionsInitialState, ActionsReducer } from './ActionsReducer'
-import { ADMIN_ACTIONS } from './AdminTypes';
+import { ACTION_TYPES } from './ActionTypes';
 
 export const ActionsContext:any = createContext()
 
 export const ActionsProvider = ({ children }: any):any => {
-    const [{name,description,key,ObjectAdmin}, dispatch] = useReducer(ActionsReducer, ActionsInitialState)
+    const [{items, refresh}, dispatch] = useReducer(ActionsReducer, ActionsInitialState)
 
     const value:any = {
-        ADD: 'ADD',
-        EDIT: 'EDIT',
-        subjects:ObjectAdmin,
-        key:key,
-        name: name,
-        description: description,
-        readAction: () =>{
-            dispatch({type: ADMIN_ACTIONS.READ_ADMIN});
+        items,
+        refresh, 
+        setAction: (items:any) => {
+            dispatch({type: ACTION_TYPES.SET_ITEMS, payload: {items} })
         },
-        createAction: (url:any,ActionData:any) =>{
-            dispatch({type: ADMIN_ACTIONS.CREATE_ADMIN, payload: {url,ActionData}});
+        createAction: (item:any) =>{
+            dispatch({type: ACTION_TYPES.CREATE_ITEM, payload: {item}});
         },
-        uploadAction: (url:any,data:any,ActionData:any) =>{
-            dispatch({type: ADMIN_ACTIONS.UPDATE_ADMIN, payload: {url,data,ActionData}});
+        updateAction: (itemId:any, updatedItem:any) =>{
+            dispatch({type: ACTION_TYPES.UPDATE_ITEM, payload: {itemId,updatedItem}});
         },
-        deleteAction: (url:any,ActionData:any) =>{
-            dispatch({type: ADMIN_ACTIONS.DELETE_ADMIN, payload: {url,ActionData}});
+        deleteAction: (itemId:any) =>{
+            dispatch({type: ACTION_TYPES.DELETE_ITEM, payload: {itemId}});
         },
-
       };
     return <ActionsContext.Provider value={value}>{children}</ActionsContext.Provider>;
 };

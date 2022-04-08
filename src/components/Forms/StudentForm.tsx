@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
+import { ActionsContext } from '../../context/AuthContext/ActionsContext/ActionsContext';
 import { Button, Card, Form, Input, message } from "antd";
 import { postData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
@@ -8,7 +9,7 @@ import { IUser } from "src/data/interfaces/IUser";
 
 const StudentForm = () => {
   const { mode, data, hideModal } = useContext(ModalContext);
-  console.log("data", data);
+  const { createAction, updateAction } = useContext(ActionsContext)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
@@ -54,6 +55,9 @@ const StudentForm = () => {
     console.info("addRequest", addRequest);
     if(addRequest.status){
       message.success("Estudiante creado exitosamente")
+      let newStudent = addRequest.user
+      newStudent.key = newStudent._id
+      createAction(newStudent)
     }else{
       message.error("Algo ha salido mal creando el estudiante")
     }
@@ -101,6 +105,9 @@ const StudentForm = () => {
     const updateRequest = await putData(`users/${data._id}` , userObject);
     if(updateRequest.status){
       message.success("Estudiante editado exitosamente")
+      let updatedStudent = updateRequest.user
+      updatedStudent.key = updatedStudent._id
+      updateAction(updatedStudent._id, updatedStudent)
     }else{
       message.error("Algo ha salido mal editando el estudiante")
     }
