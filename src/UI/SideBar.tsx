@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import {
   DesktopOutlined,
@@ -11,18 +11,22 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 
 
 
-export const SideBar = ({ children }) => {
+export const SideBar = ({ children }:any) => {
   const { Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
   const [collapsed, setCollapsedt] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   const { setAction } = useContext(ActionsContext)
 
   const onCollapse = (collapsed:boolean) => setCollapsedt(collapsed)
 
   const goToPage = (page:string) => {
-    setAction([])
-    navigate(page)
+    //Se valida que la ruta la que quiero ir es diferente a la de origen, sino no tiene sentido navegar ni reiniciar el state de items
+    if(location.pathname !== page){
+      setAction([])
+      navigate(page)
+    }
   }
   return (
     <>
@@ -30,8 +34,9 @@ export const SideBar = ({ children }) => {
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" icon={<PieChartOutlined />}>
-
+            <Menu.Item key="1" icon={<PieChartOutlined />} 
+            className="navbar-brand"
+            onClick={() => goToPage("/courses") }>
               Cursos
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />} className="navbar-brand"
