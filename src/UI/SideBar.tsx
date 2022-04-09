@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import {
   DesktopOutlined,
@@ -7,19 +7,23 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Navbar } from './Navbar';
+import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 
 
 
 export const SideBar = ({ children }) => {
   const { Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
-
   const [collapsed, setCollapsedt] = useState(false)
+  const navigate = useNavigate()
+  const { setAction } = useContext(ActionsContext)
 
-  const onCollapse = collapsed => {
-    setCollapsedt(collapsed)
+  const onCollapse = (collapsed:boolean) => setCollapsedt(collapsed)
 
-  };
+  const goToPage = (page:string) => {
+    setAction([])
+    navigate(page)
+  }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -30,31 +34,23 @@ export const SideBar = ({ children }) => {
 
               Cursos
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />}>
+            <Menu.Item key="2" icon={<DesktopOutlined />} className="navbar-brand"
+              onClick={() => goToPage("/subjects") }
+            >
              
-            <Link
-                  className="navbar-brand"
-                  to="subjects"
-                >
                   Materias
-                </Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
-              <Menu.Item key="3">
-                <Link
-                  className="navbar-brand"
-                  to="students"
-                >
+              <Menu.Item key="3" className="navbar-brand"
+              onClick={() => goToPage("/students") } >
+                
                   Estudiantes
-                </Link>
+               
               </Menu.Item>
               <Menu.Item key="4">
-                <Link
-                  className="navbar-brand"
-                  to="teachers"
-                >
+               
                   Profesores
-                </Link>
+               
               </Menu.Item>
             </SubMenu>
           </Menu>

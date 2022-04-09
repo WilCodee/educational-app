@@ -106,7 +106,7 @@ export const SubjectsPage = () => {
 
   return (
     <>
-      <CardTable title='MATERIAS' AddText='MATERIA' AddOnClick={handleAddSubject}>
+      <CardTable title='Materias' AddText='Materia' AddOnClick={handleAddSubject}>
 
         <Card className='cardbody' >
           <Button icon={<EyeOutlined />} onClick={handleViewSubject} className='buttonTable' type="primary" disabled={selectedSubjects.length === 1 ? false : true} >VER DETALLES</Button>

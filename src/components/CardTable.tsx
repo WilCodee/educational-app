@@ -14,7 +14,7 @@ export const CardTable = ({ title, AddText, AddOnClick, children }: ICardTablePr
             <div className="site-card-border-less-wrapper ">
                 <Card
                     title={title}
-                    extra={<Button type="primary" onClick={AddOnClick} >+ AGREGAR {AddText}</Button>}>
+                    extra={<Button type="primary" onClick={AddOnClick} >+ Agregar {AddText}</Button>}>
                     {children}
 
                 </Card>
