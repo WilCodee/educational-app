@@ -12,9 +12,8 @@ const LoginPage = () => {
             <Row>
                 <Col span={12}>
                     <div className='content-left'>
-                        <ImagenBuo/>
-                        <br />
-                        <h1 className='title-pre'>Jean Fourier</h1>
+                        
+                        <h1 className='title-pre'>Educational App</h1>
                     </div>
                 </Col>
                 <Col span={12}>

@@ -1,131 +1,156 @@
-
-import React, { useContext, useEffect, useState } from 'react'
-import { Table, Button, Popconfirm, Card, message } from 'antd';
-import { CardTable } from 'src/components/CardTable';
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
-import { ModalContext } from 'src/context/ModalContext';
-import { getData } from 'src/services/fetch/getData';
-import { deleteData } from 'src/services/fetch/deleteData'
+import React, { useContext, useEffect, useState } from "react";
+import { Table, Button, Popconfirm, Card, message } from "antd";
+import { CardTable } from "src/components/CardTable";
+import {
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
+import { ModalContext } from "src/context/ModalContext";
+import { getData } from "src/services/fetch/getData";
+import { deleteData } from "src/services/fetch/deleteData";
+import { CoursesColumns } from "src/data/columns";
 
 const CoursesPage = () => {
-
-  const [selectedSubjects, setSelectedSubjects] = useState([])
-  const [tableLoading, setTableLoading] = useState(false)
-  const [subjects, setSubjects] = useState([])
-  const { items, deleteAction, setAction } = useContext(ActionsContext)
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [tableLoading, setTableLoading] = useState(false);
+  const { items, deleteAction, setAction } = useContext(ActionsContext);
   const { showModal } = useContext(ModalContext);
 
-  const [selectedKey, setSelectedKey] = useState('')
-
-
-  const handleAddSubject = () => {
+  const handleAddCourse = () => {
     showModal({
       mode: "ADD",
       data: {},
-      title: "Agregar Materia",
-      contentComponent: 'SubjectForm'
-    })
-  }
+      title: "Agregar Curso",
+      contentComponent: "CourseForm",
+    });
+  };
 
-  const handleEditSubject = () => {
+  const handleEditCourse = () => {
     showModal({
       mode: "EDIT",
-      data: selectedSubjects[0],
-      title: "Editar Materia",
-      contentComponent: 'SubjectForm'
-    })
-  }
+      data: selectedCourses[0],
+      title: "Editar Curso",
+      contentComponent: "CourseForm",
+    });
+  };
 
-  const handleViewSubject = () => {
+  const handleEditStudentsList = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedCourses[0],
+      title: "Editar lista de estudiantes",
+      contentComponent: "SelectStudents",
+    });
+  };
+
+  const handleViewCourse = () => {
     showModal({
       mode: "DETAILS",
-      data: selectedSubjects[0],
-      title: "Detalle de la Materia",
-      contentComponent: 'SubjectDetail'
-    })
-  }
+      data: selectedCourses[0],
+      title: "Detalles del curso",
+      contentComponent: "SubjectDetail",
+    });
+  };
 
-
-  const handleDeleteSubject = () => {
-      selectedSubjects.map(async (subject) => {
-        const deleteRequest = await deleteData(`subjects/${subject['_id']}`)
-        if(deleteRequest.status){
-            message.success("Materia eliminada exitosamente")
-            deleteAction(subject['_id'])
-        }else{
-            message.error("Algo ha salido mal eliminando la materia")
-        }  
-      })
-  }
-
-
+  const handleDeleteCourse = () => {
+    selectedCourses.map(async (course) => {
+      const deleteRequest = await deleteData(`courses/${course["_id"]}`);
+      if (deleteRequest.status) {
+        message.success("Curso eliminado exitosamente");
+        deleteAction(course["_id"]);
+      } else {
+        message.error("Algo ha salido mal eliminando el curso");
+      }
+    });
+  };
 
   const initialRequest = async () => {
-    setTableLoading(true)
-    const request = await getData('subjects')
+    setTableLoading(true);
+    const request = await getData("courses");
     if (request.status) {
-      const subjectsToTable = request.subjects.map((subject: any) => {
-        subject.key = subject['_id'];
-        return subject;
-      })
-      setAction(subjectsToTable)
+      const coursesToTable = request.courses.map((course: any) => {
+        course.key = course["_id"];
+        return course;
+      });
+      setAction(coursesToTable);
     }
-    setTableLoading(false)
-  }
-
+    setTableLoading(false);
+  };
 
   useEffect(() => {
-    initialRequest()
-  }, [])
-
-
+    initialRequest();
+  }, []);
 
   const rowSelection = {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      setSelectedSubjects(selectedRows)
-      setSelectedKey(selectedRowKeys);
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+      setSelectedCourses(selectedRows);
     },
   };
 
-  const columns = [
-    {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-
-    },
-    {
-      title: 'Descripcion',
-      dataIndex: 'description',
-      key: 'description',
-
-    },
-  ];
-
   return (
     <>
-      <CardTable title='Cursos' AddText='Curso' AddOnClick={handleAddSubject}>
-
-        <Card className='cardbody' >
-          <Button icon={<EyeOutlined />} onClick={handleViewSubject} className='buttonTable' type="primary" disabled={selectedSubjects.length === 1 ? false : true} >VER DETALLES</Button>
-          <Button icon={<EditOutlined />} onClick={handleEditSubject} className='buttonTable' type="primary" disabled={selectedSubjects.length === 1 ? false : true}>EDITAR </Button>
+      <CardTable title="Cursos" AddText="Curso" AddOnClick={handleAddCourse}>
+        <Card className="cardbody">
+          <Button
+            icon={<EyeOutlined />}
+            onClick={handleViewCourse}
+            className="buttonTable"
+            type="primary"
+            disabled={selectedCourses.length === 1 ? false : true}
+          >
+            VER DETALLES
+          </Button>
+          <Button
+            icon={<EditOutlined />}
+            onClick={handleEditCourse}
+            className="buttonTable"
+            type="primary"
+            disabled={selectedCourses.length === 1 ? false : true}
+          >
+            EDITAR INFORMACIÓN GENERAL
+          </Button>
+          <Button
+            icon={<UserOutlined />}
+            onClick={handleEditStudentsList}
+            className="buttonTable"
+            type="primary"
+            disabled={selectedCourses.length === 1 ? false : true}
+          >
+            EDITAR LISTA DE ESTUDIANTES
+          </Button>
           <Popconfirm
             title="Estás seguro que deseas eliminar las materias seleccionadas?"
-            onConfirm={handleDeleteSubject}
+            onConfirm={handleDeleteCourse}
             okText="Sí"
             cancelText="No"
           >
-            <Button icon={<DeleteOutlined />} className='buttonTable' type="primary" disabled={selectedSubjects.length >= 1 ? false : true}>ELIMINAR</Button>
-
+            <Button
+              icon={<DeleteOutlined />}
+              className="buttonTable"
+              type="primary"
+              disabled={selectedCourses.length >= 1 ? false : true}
+            >
+              ELIMINAR
+            </Button>
           </Popconfirm>
-
         </Card>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={items} loading={tableLoading} />
+        <Table
+          rowSelection={rowSelection}
+          columns={CoursesColumns}
+          dataSource={items}
+          loading={tableLoading}
+        />
       </CardTable>
     </>
-  )
-}
+  );
+};
 
-export default CoursesPage; 
+export default CoursesPage;

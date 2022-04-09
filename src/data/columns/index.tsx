@@ -31,3 +31,22 @@ export const StudentsColumns = [
         render: (item:IStudent) => item.admissionDate
       }
 ]
+
+
+export const CoursesColumns = [
+  {
+    title: 'Nombre',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Fecha de inicio',
+    dataIndex: 'startDate',
+    key: 'startDate',
+  },
+  {
+    title: 'Fecha de finalización',
+    dataIndex: 'endDate',
+    key: 'endDate',
+  }
+]

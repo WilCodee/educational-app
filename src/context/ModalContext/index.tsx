@@ -7,6 +7,9 @@ import StudentForm from 'src/components/Forms/StudentForm';
 import StudentDetail from 'src/components/Details/StudentDetail';
 import { SubjectForm } from 'src/components/SubjectForm';
 import { SubjectDetail } from 'src/components/Details/SubjectDetail';
+import CourseForm from 'src/components/Forms/CourseForm';
+import SelectStudents from 'src/components/Modals/SelectStudents';
+import StudentsList from 'src/components/Forms/StudentsList';
 
 
 export const MODAL_MODES = {
@@ -55,6 +58,13 @@ export const ModalProvider = ({ children }) => {
             case 'SubjectForm':
                 content = <SubjectForm />
                 break;
+            case 'CourseForm':
+                content = <CourseForm />
+                break;
+            
+            case 'SelectStudents': 
+                content = <StudentsList />
+                break; 
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
                 break;
@@ -103,7 +113,7 @@ export const ModalProvider = ({ children }) => {
                     maskClosable={false}
                     onCancel={handleCancel}
                     footer={null}
-                    width={600}
+                    width="auto"
                     destroyOnClose={true}>
 
                     {state.mode === MODAL_MODES.ADD && <ModalForm />}

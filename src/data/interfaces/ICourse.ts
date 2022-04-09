@@ -8,8 +8,8 @@ export interface ICourse {
     name: string;
     startDate: Date;
     endDate: Date; 
-    students: string[] | IStudent[]; //un array de los ids de los estudiantes o un aray de estudiantes
-    schedule: IScheduleRecord[];
-    assistance: IAssistanceRecord[]; 
-    grades: IGradeRecord[];
+    students?: string[] | IStudent[]; //un array de los ids de los estudiantes o un aray de estudiantes
+    schedule?: IScheduleRecord[];
+    assistance?: IAssistanceRecord[]; 
+    grades?: IGradeRecord[];
 }

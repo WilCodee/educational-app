@@ -10,7 +10,6 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 
 
 const StudentsPage = () => {
-    const [ students, setStudents ] = useState([])
     const [ selectedStudents, setSelectedStudents ] = useState([])
     const [tableLoading, setTableLoading ] = useState(false)
     const { showModal } = useContext(ModalContext); 

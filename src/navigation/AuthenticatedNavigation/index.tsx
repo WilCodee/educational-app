@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { SideBar } from 'src/UI/SideBar';
 import StudentsPage from '../../pages/Admin/StudentsPage';
 import TeachersPage from '../../pages/Admin/TeachersPage';
@@ -12,6 +12,13 @@ import CoursesPage from 'src/pages/Admin/CoursesPage';
 
 
 const AuthenticatedNavigation = () => {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    navigate("/courses")
+  }, [])
+
   return (
     <>
       <Layout>

@@ -12,12 +12,10 @@ export const SubjectsPage = () => {
 
   const [selectedSubjects, setSelectedSubjects] = useState([])
   const [tableLoading, setTableLoading] = useState(false)
-  const [subjects, setSubjects] = useState([])
   const { items, deleteAction, setAction } = useContext(ActionsContext)
   const { showModal } = useContext(ModalContext);
 
-  const [selectedKey, setSelectedKey] = useState('')
-
+  
 
   const handleAddSubject = () => {
     showModal({
@@ -85,7 +83,6 @@ export const SubjectsPage = () => {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedSubjects(selectedRows)
-      setSelectedKey(selectedRowKeys);
     },
   };
 

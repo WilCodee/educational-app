@@ -5,7 +5,7 @@ import { ModalContext } from 'src/context/ModalContext';
 import { postData } from 'src/services/fetch/postData'
 import { putData } from 'src/services/fetch/putData'
  
-export const SubjectForm = (selectedKey: any) => {
+export const SubjectForm = () => {
     const { createAction, updateAction } = useContext(ActionsContext)
     const { mode, data, hideModal } = useContext(ModalContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,7 +79,7 @@ export const SubjectForm = (selectedKey: any) => {
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                            Agregar Materias
+                            Agregar Materia
                         </Button>
                     </Form.Item>
                 </Form>
@@ -116,7 +116,7 @@ export const SubjectForm = (selectedKey: any) => {
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                        Editar Materias
+                        Editar Materia
                     </Button>
                 </Form.Item>
             </Form>

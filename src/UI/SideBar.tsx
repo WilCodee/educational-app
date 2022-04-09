@@ -6,9 +6,7 @@ import {
   PieChartOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Navbar } from './Navbar';
 import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
-
 
 
 export const SideBar = ({ children }:any) => {
