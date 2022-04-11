@@ -50,11 +50,13 @@ export const SideBar = ({ children }:any) => {
                   Estudiantes
                
               </Menu.Item>
-              <Menu.Item key="4">
-               
+              <Menu.Item key="4" className="navbar-brand"
+              onClick={() => goToPage("/teachers") } >
+                
                   Profesores
                
               </Menu.Item>
+  
             </SubMenu>
           </Menu>
         </Sider>

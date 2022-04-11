@@ -4,7 +4,9 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { modalInitialState, modalReducer } from './modalReducer';
 import { MODAL_ACTIONS } from './modalActions';
 import StudentForm from 'src/components/Forms/StudentForm';
+import TeacherForm from 'src/components/Forms/TeacherForm';
 import StudentDetail from 'src/components/Details/StudentDetail';
+import TeacherDetail from 'src/components/Details/TeacherDetail';
 import { SubjectForm } from 'src/components/SubjectForm';
 import { SubjectDetail } from 'src/components/Details/SubjectDetail';
 import CourseForm from 'src/components/Forms/CourseForm';
@@ -55,6 +57,9 @@ export const ModalProvider = ({ children }) => {
             case 'StudentForm':
                 content = <StudentForm />
                 break;
+            case 'TeacherForm':
+                    content = <TeacherForm />
+                break;
             case 'SubjectForm':
                 content = <SubjectForm />
                 break;
@@ -77,6 +82,9 @@ export const ModalProvider = ({ children }) => {
         switch (state.contentComponent) {
             case 'StudentDetail':
                 content = <StudentDetail />
+                break;
+            case 'TeacherDetail':
+                    content = <TeacherDetail />
                 break;
             case 'SubjectDetail':
                 content = <SubjectDetail/>

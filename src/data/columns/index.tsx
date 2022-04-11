@@ -1,4 +1,5 @@
 import { IStudent } from "../interfaces/IStudent";
+import { ITeacher } from "../interfaces/ITeacher";
 
 export const StudentsColumns = [
       {
@@ -32,6 +33,38 @@ export const StudentsColumns = [
       }
 ]
 
+export const TeachersColumns = [
+  {
+    title: 'Cédula',
+    dataIndex: 'profile',
+    key: 'ci',
+    render: (item:any) => item.ci
+  },
+  {
+    title: 'Nombre',
+    dataIndex: 'profile',
+    key: 'firstName',
+    render: (item:ITeacher) => item.fullName.firstName
+  },
+  {
+    title: 'Apellido',
+    dataIndex: 'profile',
+    key: 'lastName',
+    render: (item:ITeacher) => item.fullName.lastName
+  },
+  {
+    title: 'Area',
+    dataIndex: 'profile',
+    key: 'area',
+    render: (item:any) => item.area
+  },
+  {
+    title: 'Número de teléfono',
+    dataIndex: 'profile',
+    key: 'phoneNumber',
+    render: (item:ITeacher) => item.phoneNumber.prefix + "" + item.phoneNumber.number
+  }
+]
 
 export const CoursesColumns = [
   {
