@@ -6,16 +6,18 @@ export const AuthContext:any = React.createContext();
 
 export const AuthProvider = ({ children }:any):any => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
-
   const value:any = {
     user: state.user,
     isLogin: state.isLogin,
     login: (user:any) => {
       dispatch({ type: AUTH_ACTIONS.LOGIN, payload: user });
     },
+  
     logout: () => {
       dispatch({ type: AUTH_ACTIONS.LOGOUT });
     }
+    
+
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

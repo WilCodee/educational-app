@@ -7,6 +7,7 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 import { ModalContext } from 'src/context/ModalContext';
 import { getData } from 'src/services/fetch/getData';
 import { deleteData } from 'src/services/fetch/deleteData'
+import { AuthContext } from 'src/context/AuthContext';
 
 export const SubjectsPage = () => {
 
@@ -14,7 +15,7 @@ export const SubjectsPage = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const { items, deleteAction, setAction } = useContext(ActionsContext)
   const { showModal } = useContext(ModalContext);
-
+  const { user } = useContext(AuthContext);
   
 
   const handleAddSubject = () => {
@@ -75,6 +76,7 @@ export const SubjectsPage = () => {
 
   useEffect(() => {
     initialRequest()
+    console.log("DATOS DEL USUARIO"+user.profile.fullName)
   }, [])
 
 

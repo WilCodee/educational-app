@@ -3,13 +3,13 @@ import AuthenticatedNavigation from "../navigation/AuthenticatedNavigation";
 import UnauthenticatedNavigation from "../navigation/UnauthenticatedNavigation";
 import { AuthContext } from "../context/AuthContext";
 const EducationalApp = (): any => {
-  const { isLogin, login } = useContext(AuthContext);
+  const { isLogin, login} = useContext(AuthContext);
   useEffect(() => {
     const sessionInfo = localStorage.getItem("userData");
     if (typeof sessionInfo !== "undefined" && sessionInfo !== null) {
-      login(sessionInfo);
+      login(JSON.parse(sessionInfo));
+      console.log("Hola",sessionInfo)
     }
-    console.log(sessionInfo);
   }, []);
 
   if (!isLogin) return <UnauthenticatedNavigation />;

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
-import { Menu, Layout, Image } from 'antd';
-import { Link } from 'react-router-dom'
+import { Menu, Layout } from 'antd';
 import LOGO from '../images/LOGOSCODE.png'
 import {UserOutlined} from '@ant-design/icons';
 import { AuthContext } from 'src/context/AuthContext';
@@ -9,7 +8,9 @@ export const Navbar = () => {
   const navigate = useNavigate()
   const { SubMenu } = Menu;
   const { Header } = Layout;
-  const { logout } = useContext(AuthContext)
+  const { logout,user } = useContext(AuthContext)
+
+  const {firstName} = user.profile.fullName
 
   const fullLogout = () => {
     logout()
@@ -38,7 +39,7 @@ export const Navbar = () => {
 
             Reglamento
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="Fernando">
+          <SubMenu key="sub1" icon={<UserOutlined />} title={firstName}>
               <Menu.Item key="4">
                   Perfil
               </Menu.Item>
