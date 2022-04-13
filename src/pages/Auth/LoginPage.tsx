@@ -1,6 +1,5 @@
 import {Col, Row } from 'antd';
 import React from 'react'; 
-import { ImagenBuo } from 'src/images/ImagenBuo';
 import '../../styles/login.css';
 import { FormLogin } from 'src/components/Login/FormLogin';
 

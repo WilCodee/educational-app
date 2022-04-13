@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { SideBar } from 'src/UI/SideBar';
 import StudentsPage from '../../pages/Admin/StudentsPage';
@@ -18,15 +18,8 @@ const AuthenticatedNavigation = () => {
   const { user } = useContext(AuthContext);
   useEffect(() => {
 
-    {user.isAdmin && (
-    navigate("/courses")
-    )
-  }
-
-  {user.isTeacher && (
-    navigate("/students")
-    )
-  }
+    user.isAdmin && navigate("/courses")
+    user.isTeacher && navigate("/students")
 
   }, [])
 
@@ -50,8 +43,8 @@ const AuthenticatedNavigation = () => {
                 }
                 {user.isTeacher && (
                   <>
-                <Route path="students" element={<StudentsPage />} />
-                </>
+                    <Route path="students" element={<StudentsPage />} />
+                  </>
                 )}
 
               </Routes>

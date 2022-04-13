@@ -7,7 +7,7 @@ import { putData } from 'src/services/fetch/putData'
  
 export const SubjectForm = () => {
     const { createAction, updateAction } = useContext(ActionsContext)
-    const { mode, data, hideModal } = useContext(ModalContext);
+    const { mode, data, hideModal }:any = useContext(ModalContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
 

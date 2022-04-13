@@ -3,9 +3,9 @@ import { Modal, Button,Popconfirm,message } from 'antd';
 
 
 
-export const ModalDefault = ({ ModalTitle,visibleValue, loading, handleOk ,handleCancel, children}) => {
+export const ModalDefault = ({ ModalTitle,visibleValue, loading, handleOk ,handleCancel, children}:any) => {
     
-    const cancel = (e) => {
+    const cancel = (e:any) => {
         console.log(e);
         message.error('Cancelaste la operacion');
       }

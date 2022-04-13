@@ -19,7 +19,7 @@ export const FormLogin = () => {
                 headers:{
                   'Content-Type': 'application/json'
                 }})
-                const {status, token, user, user_id} =  await resp.json();
+                const {status, token, user} =  await resp.json();
             if(status){
                 
                 

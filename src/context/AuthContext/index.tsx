@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import { AUTH_ACTIONS } from "./authActions";
 import { authInitialState, authReducer } from "./authReducer";
 
-export const AuthContext:any = React.createContext();
+export const AuthContext:any = React.createContext(0);
 
 export const AuthProvider = ({ children }:any):any => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);

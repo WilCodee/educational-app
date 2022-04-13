@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {ModalContext} from '../../context/ModalContext';
 
 const TeacherDetail = () => {
-    const { data } = useContext(ModalContext);
+    const { data }:any = useContext(ModalContext);
 
     return(
         <div>

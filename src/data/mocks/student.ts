@@ -1,4 +1,4 @@
-import { IStudent } from "../interfaces/IStudent";
+/* import { IStudent } from "../interfaces/IStudent";
 
 export const StudentsMocks:IStudent[] = [
     {
@@ -58,4 +58,4 @@ export const StudentsMocks:IStudent[] = [
         photo: 'https://pm1.narvii.com/6716/9c796559d3edc1f2bc7c7dfa1a2143cbdc4fef9a_hq.jpg',
         createdAt: new Date(), 
     }
-]
+] */

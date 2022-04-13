@@ -1,19 +1,19 @@
 import { ISeller } from "./ISeller";
 
-export interface IComplain{
-    _id: string; 
-    title: string; 
+export interface IComplain {
+    _id: string;
+    title: string;
     description: string;
-    status: string; 
+    status: string;
     seller: string | ISeller; //seller id referencia
-    createdAt: Date; 
+    createdAt: Date;
     updatedAt?: Date;
 }
 
-const newComplainTosave:IComplain = {
+/* const newComplainTosave: IComplain = {
     _id: '1',
-    title:'t',
-    description:'d',
+    title: 't',
+    description: 'd',
     status: 'A',
     createdAt: new Date(),
     seller: 'seller-1'
@@ -21,28 +21,28 @@ const newComplainTosave:IComplain = {
 
 
 //MONGO LOOKUP
-const newComplainToget:IComplain = {
+const newComplainToget: IComplain = {
     _id: '1',
-    title:'t',
-    description:'d',
+    title: 't',
+    description: 'd',
     status: 'A',
     createdAt: new Date(),
     seller: {
         _id: 'seller-1',
         email: 'seller@gmail.com',
-        password: '123123', 
+        password: '123123',
         fullName: {
-            firstName:'A',
-            lastName:'B'
+            firstName: 'A',
+            lastName: 'B'
         },
         phoneNumber: {
-            prefix:'+593',
-            number:'998131024'
+            prefix: '+593',
+            number: '998131024'
         }
     }
 }
 
-
+ */
 
 
 

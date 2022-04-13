@@ -1,3 +1,5 @@
+//@ts-ignore 
+//@ts-nocheck
 import React, { useReducer } from 'react';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -10,14 +12,13 @@ import TeacherDetail from 'src/components/Details/TeacherDetail';
 import { SubjectForm } from 'src/components/SubjectForm';
 import { SubjectDetail } from 'src/components/Details/SubjectDetail';
 import CourseForm from 'src/components/Forms/CourseForm';
-import SelectStudents from 'src/components/Modals/SelectStudents';
 import StudentsList from 'src/components/Forms/StudentsList';
 
 
 export const MODAL_MODES = {
     ADD: "ADD",
     EDIT: "EDIT",
-    DETAILS: "DETAILS"
+    DETAILS: "DETAILS",
 }
 
 
@@ -26,7 +27,7 @@ export const ModalContext = React.createContext({});
 const { confirm } = Modal;
 
 
-export const ModalProvider = ({ children }) => {
+export const ModalProvider = ({ children }:any) => {
 
 
     const [state, dispatch] = useReducer(modalReducer, modalInitialState);
@@ -105,7 +106,7 @@ export const ModalProvider = ({ children }) => {
         title: state.title,
         contentComponent: state.contentComponent,
         ingredients: state.ingredients,
-        showModal: (info) => dispatch({ type: MODAL_ACTIONS.SHOW_MODAL, payload: info }),
+        showModal: (info:any) => dispatch({ type: MODAL_ACTIONS.SHOW_MODAL, payload: info }),
         hideModal: () => dispatch({ type: MODAL_ACTIONS.HIDE_MODAL })
     };
 

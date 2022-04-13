@@ -14,7 +14,7 @@ export const SubjectsPage = () => {
   const [selectedSubjects, setSelectedSubjects] = useState([])
   const [tableLoading, setTableLoading] = useState(false)
   const { items, deleteAction, setAction } = useContext(ActionsContext)
-  const { showModal } = useContext(ModalContext);
+  const { showModal }:any = useContext(ModalContext);
   const { user } = useContext(AuthContext);
   
 

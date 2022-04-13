@@ -8,7 +8,7 @@ export const modalInitialState = {
   contentComponent:'',
 };
 
-export function modalReducer(state, action) {
+export function modalReducer(state:any, action:any) {
   switch (action.type) {
     case  MODAL_ACTIONS.SHOW_MODAL:
       return { ...state, 

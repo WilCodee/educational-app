@@ -1,4 +1,4 @@
-import { ISeller } from "../interfaces/ISeller";
+/* import { ISeller } from "../interfaces/ISeller";
 
 export const SellersMocks:ISeller[] = [
     {
@@ -27,4 +27,4 @@ export const SellersMocks:ISeller[] = [
             number:'998131024'
         }
     },
-]
+] */

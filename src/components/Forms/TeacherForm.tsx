@@ -9,7 +9,7 @@ import { ITeacher } from "src/data/interfaces/ITeacher";
 import { IUser } from "src/data/interfaces/IUser";
 
 const TeacherForm = () => {
-  const { mode, data, hideModal } = useContext(ModalContext);
+  const { mode, data, hideModal }:any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
