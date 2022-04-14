@@ -27,6 +27,7 @@ const CoursesPage = () => {
       data: {},
       title: "Agregar Curso",
       contentComponent: "CourseForm",
+      width: 600
     });
   };
 
@@ -36,6 +37,7 @@ const CoursesPage = () => {
       data: selectedCourses[0],
       title: "Editar Curso",
       contentComponent: "CourseForm",
+      width: 600
     });
   };
 
@@ -54,6 +56,7 @@ const CoursesPage = () => {
       data: selectedCourses[0],
       title: "Detalles del curso",
       contentComponent: "SubjectDetail",
+      width: 600
     });
   };
 
