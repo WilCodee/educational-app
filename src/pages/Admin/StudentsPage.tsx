@@ -55,8 +55,6 @@ const StudentsPage = () => {
         })
     }
 
-
-
     const initialRequest = async () => {
         setTableLoading(true)
         const request = await getData('students')

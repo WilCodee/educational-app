@@ -78,6 +78,15 @@ export const SideBar = ({ children }:any) => {
             </SubMenu>
             </>
           )}
+           {user.isStudent && (
+            <>
+            <Menu.Item key="1" icon={<PieChartOutlined />} 
+            className="navbar-brand"
+            onClick={() => goToPage("/courses") }>
+              Cursos
+            </Menu.Item>
+            </>
+          )}
           </Menu>
         </Sider>
 

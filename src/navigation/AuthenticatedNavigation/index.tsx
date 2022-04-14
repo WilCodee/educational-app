@@ -20,7 +20,7 @@ const AuthenticatedNavigation = () => {
 
     user.isAdmin && navigate("/courses")
     user.isTeacher && navigate("/students")
-
+    user.isStudent && navigate("/courses")
   }, [])
 
   return (
@@ -44,6 +44,11 @@ const AuthenticatedNavigation = () => {
                 {user.isTeacher && (
                   <>
                     <Route path="students" element={<StudentsPage />} />
+                  </>
+                )}
+                {user.isStudent && (
+                  <>
+                    <Route path="courses" element={<CoursesPage />} />
                   </>
                 )}
 
