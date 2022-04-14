@@ -10,19 +10,18 @@ const LoginPage = () => {
         <>
         <div className='content-principal'>
             <Row>
-                <Col span={12}>
-                    <div className='content-left'>
+                <Col xxl={12} xl={12} lg={12} md={24} sm={24} xs={24}>
+                    <div className='content-left content-left-lg'>
                         
                         <h1 className='title-pre'>Educational App</h1>
                     </div>
                 </Col>
-                <Col span={12}>
+                <Col xxl={12} xl={12} lg={12}  md={24} sm={24} xs={24}>
                     <div className='content-rigt'>
                         <FormLogin />
                     </div>
                 </Col>
             </Row>
-            <h3>LOGIN PAGE</h3>
         </div>
         </>
     )
