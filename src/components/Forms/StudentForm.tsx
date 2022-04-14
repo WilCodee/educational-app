@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import { ActionsContext } from '../../context/AuthContext/ActionsContext/ActionsContext';
-import { Button, Card, Form, Input, message } from "antd";
+import { Button, Card, DatePicker, Form, Input, InputNumber, message, Select } from "antd";
 import { postData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
 import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
+import { Cedula } from "src/validation/Cedula";
+import moment from 'moment';
 
+const { Option } = Select;
 const StudentForm = () => {
   const { mode, data, hideModal } = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext)
@@ -113,8 +116,7 @@ const StudentForm = () => {
     }
     setIsSubmitting(false);
     hideModal()
-  }
-
+  } 
   return (
     <div>
       {mode === "ADD" && (
@@ -130,7 +132,7 @@ const StudentForm = () => {
             <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!", },{ type: 'email', message: "Ingrese un email valido!", whitespace:true }]}
           >
             <Input />
           </Form.Item>
@@ -138,7 +140,10 @@ const StudentForm = () => {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!" },{
+              min: 6,
+              message: "Minimo 6 caracteres!"
+            }]}
           >
             <Input type="password" />
           </Form.Item>
@@ -149,7 +154,11 @@ const StudentForm = () => {
           <Form.Item
             label="Nombre"
             name="firstName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -157,7 +166,11 @@ const StudentForm = () => {
           <Form.Item
             label="Apellido"
             name="lastName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -165,7 +178,24 @@ const StudentForm = () => {
           <Form.Item
             label="Cédula de identidad"
             name="ci"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true },{
+              type:'string',
+              pattern: /^[0-9]+$/,
+              message:'No ingresar letras!',
+              
+            },{
+              max: 10,
+              message: "Maximo 10 caracteres!"
+              },{
+                min: 10,
+                message: "Minimo 10 caracteres!"
+              },{
+                validator: (_, value) => Cedula(value),
+                message:'Cédula no valida!'
+              }  
+                
+            ]}
+            hasFeedback
           >
             <Input />
           </Form.Item>
@@ -173,15 +203,34 @@ const StudentForm = () => {
           <Form.Item
             label="Edad"
             name="age"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true }]}
           >
-            <Input />
+            <InputNumber min={5} max={60} stringMode={true}/>
           </Form.Item>
 
           <Form.Item
             label="Número de teléfono"
             name="phoneNumber"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[
+              { 
+                required: true, 
+                message: "Campo requerido" 
+              },
+              {
+                type: 'string',
+                pattern: /^[0-9]+$/,
+                message: 'No ingresar letras!',
+              },
+              {
+                max: 10,
+                message: "Maximo 10 caracteres!"
+              },
+              {
+                min: 7,
+                message: "Minimo 7 caracteres!"
+              },
+            
+            ]}
           >
             <Input />
           </Form.Item>
@@ -189,17 +238,34 @@ const StudentForm = () => {
           <Form.Item
             label="Tipo de sangre"
             name="bloodType"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido", }]}
           >
-            <Input />
+            <Select
+              showSearch
+              placeholder="Tipo de sangre"
+              optionFilterProp="children"
+              filterOption={(input: any, option: any) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+                <Option value="O+">O+</Option>
+                <Option value="O-">O-</Option>
+                <Option value="A+">A+</Option>
+                <Option value="A-">A-</Option>
+                <Option value="B+">B+</Option>
+                <Option value="B-">B-</Option>
+                <Option value="AB+">AB+</Option>
+                <Option value="AB-">AB-</Option>
+
+            </Select>
           </Form.Item>
 
           <Form.Item
             label="Fecha de ingreso"
             name="admissionDate"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido" }]}
           >
-            <Input />
+            <DatePicker/>
           </Form.Item>
 
           </Card>
@@ -209,7 +275,11 @@ const StudentForm = () => {
           <Form.Item
             label="Nombre"
             name="representativeFirstName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -217,7 +287,11 @@ const StudentForm = () => {
           <Form.Item
             label="Apellido"
             name="representativeLastName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -225,7 +299,27 @@ const StudentForm = () => {
           <Form.Item
             label="Número de teléfono"
             name="representativePhoneNumber"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[
+              { 
+                required: true, 
+                message: "Campo requerido",
+                whitespace:true
+              },
+              {
+                type: 'string',
+                pattern: /^[0-9]+$/,
+                message: 'No ingresar letras!',
+              },
+              {
+                max: 10,
+                message: "Maximo 10 caracteres!"
+              },
+              {
+                min: 7,
+                message: "Minimo 7 caracteres!"
+              },
+            
+            ]}
           >
             <Input />
           </Form.Item>
@@ -251,7 +345,7 @@ const StudentForm = () => {
             age: data.profile.age, 
             phoneNumber: data.profile.phoneNumber.number,
             bloodType: data.profile.bloodType, 
-            admissionDate: data.profile.admissionDate, 
+            admissionDate: moment(data.profile.admissionDate, 'DD-MM-YY'), 
             representativeFirstName: data.profile.representative.fullName.firstName,
             representativeLastName: data.profile.representative.fullName.lastName,
             representativePhoneNumber: data.profile.representative.phoneNumber.number
@@ -267,7 +361,7 @@ const StudentForm = () => {
             <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{ type: 'email', message: "Ingrese un email valido!" },]}
           >
             <Input />
           </Form.Item>
@@ -275,7 +369,10 @@ const StudentForm = () => {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido" },{
+              min: 6,
+              message: "Minimo 6 caracteres!"
+            }]}
           >
             <Input type="password" />
           </Form.Item>
@@ -286,7 +383,11 @@ const StudentForm = () => {
           <Form.Item
             label="Nombre"
             name="firstName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -294,7 +395,11 @@ const StudentForm = () => {
           <Form.Item
             label="Apellido"
             name="lastName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -302,7 +407,24 @@ const StudentForm = () => {
           <Form.Item
             label="Cédula de identidad"
             name="ci"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido",whitespace:true },{
+              type:'string',
+              pattern: /^[0-9]+$/,
+              message:'No ingresar letras!',
+              
+            },{
+              max: 10,
+              message: "Maximo 10 caracteres!"
+              },{
+                min: 10,
+                message: "Minimo 10 caracteres!"
+              },{
+                validator: (_, value) => Cedula(value),
+                message:'Cédula no valida!'
+              }  
+                
+            ]}
+            hasFeedback
           >
             <Input />
           </Form.Item>
@@ -310,15 +432,35 @@ const StudentForm = () => {
           <Form.Item
             label="Edad"
             name="age"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido" },]}
           >
-            <Input />
+            <InputNumber min={5} max={60} stringMode={true}/>
           </Form.Item>
 
           <Form.Item
             label="Número de teléfono"
             name="phoneNumber"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[
+              { 
+                required: true, 
+                message: "Campo requerido",
+                whitespace:true 
+              },
+              {
+                type: 'string',
+                pattern: /^[0-9]+$/,
+                message: 'No ingresar letras!',
+              },
+              {
+                max: 10,
+                message: "Maximo 10 caracteres!"
+              },
+              {
+                min: 7,
+                message: "Minimo 7 caracteres!"
+              },
+            
+            ]}
           >
             <Input />
           </Form.Item>
@@ -326,17 +468,34 @@ const StudentForm = () => {
           <Form.Item
             label="Tipo de sangre"
             name="bloodType"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido" }]}
           >
-            <Input />
+            <Select
+              showSearch
+              placeholder="Tipo de sangre"
+              optionFilterProp="children"
+              filterOption={(input: any, option: any) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+                <Option value="O+">O+</Option>
+                <Option value="O-">O-</Option>
+                <Option value="A+">A+</Option>
+                <Option value="A-">A-</Option>
+                <Option value="B+">B+</Option>
+                <Option value="B-">B-</Option>
+                <Option value="AB+">AB+</Option>
+                <Option value="AB-">AB-</Option>
+
+            </Select>
           </Form.Item>
 
           <Form.Item
             label="Fecha de ingreso"
             name="admissionDate"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido" }]}
           >
-            <Input />
+            <DatePicker />
           </Form.Item>
 
           </Card>
@@ -346,7 +505,11 @@ const StudentForm = () => {
           <Form.Item
             label="Nombre"
             name="representativeFirstName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -354,7 +517,11 @@ const StudentForm = () => {
           <Form.Item
             label="Apellido"
             name="representativeLastName"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Campo requerido!",whitespace:true },{
+              type: 'string',
+              pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+              message: "Ingresar solo letras!"
+              },]}
           >
             <Input />
           </Form.Item>
@@ -362,7 +529,26 @@ const StudentForm = () => {
           <Form.Item
             label="Número de teléfono"
             name="representativePhoneNumber"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[
+              { 
+                required: true, 
+                message: "Campo requerido" 
+              },
+              {
+                type: 'string',
+                pattern: /^[0-9]+$/,
+                message: 'No ingresar letras!',
+              },
+              {
+                max: 10,
+                message: "Maximo 10 caracteres!"
+              },
+              {
+                min: 7,
+                message: "Minimo 7 caracteres!"
+              },
+            
+            ]}
           >
             <Input />
           </Form.Item>
