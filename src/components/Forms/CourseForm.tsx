@@ -83,8 +83,8 @@ const CourseForm = () => {
             <DatePicker />
           </Form.Item>
 
-
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
               Agregar Curso
             </Button>
