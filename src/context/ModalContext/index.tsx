@@ -122,7 +122,7 @@ export const ModalProvider = ({ children }:any) => {
                     maskClosable={false}
                     onCancel={handleCancel}
                     footer={null}
-                    width="auto"
+                    width={state.width}
                     destroyOnClose={true}>
 
                     {state.mode === MODAL_MODES.ADD && <ModalForm />}

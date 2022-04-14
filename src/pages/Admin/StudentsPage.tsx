@@ -20,7 +20,8 @@ const StudentsPage = () => {
             mode: "ADD", 
             data: {}, 
             title: "Agregar Estudiante",
-            contentComponent: 'StudentForm' 
+            contentComponent: 'StudentForm',
+            width: 600
         })
     }
 
@@ -29,7 +30,8 @@ const StudentsPage = () => {
             mode: "EDIT", 
             data: selectedStudents[0], 
             title: "Editar Estudiante",
-            contentComponent: 'StudentForm' 
+            contentComponent: 'StudentForm',
+            width: 600
         })
     }
 
@@ -38,7 +40,8 @@ const StudentsPage = () => {
             mode: "DETAILS",
             data: selectedStudents[0], 
             title: "Detalle del estudiante",
-            contentComponent: 'StudentDetail'
+            contentComponent: 'StudentDetail',
+            width: 600
         })
     }
 

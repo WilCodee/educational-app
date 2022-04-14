@@ -20,7 +20,8 @@ const TeachersPage = () => {
             mode: "ADD", 
             data: {}, 
             title: "Agregar Profesor ",
-            contentComponent: 'TeacherForm' 
+            contentComponent: 'TeacherForm',
+            width: 600
         })
     }
 
@@ -29,7 +30,8 @@ const TeachersPage = () => {
             mode: "EDIT", 
             data: selectedTeachers[0], 
             title: "Editar Profesor",
-            contentComponent: 'TeacherForm' 
+            contentComponent: 'TeacherForm',
+            width: 600
         })
     }
 
@@ -38,7 +40,8 @@ const TeachersPage = () => {
             mode: "DETAILS",
             data: selectedTeachers[0], 
             title: "Detalle del profesor",
-            contentComponent: 'TeacherDetail'
+            contentComponent: 'TeacherDetail',
+            width: 600
         })
     }
 

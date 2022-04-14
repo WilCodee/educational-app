@@ -23,7 +23,8 @@ export const SubjectsPage = () => {
       mode: "ADD",
       data: {},
       title: "Agregar Materia",
-      contentComponent: 'SubjectForm'
+      contentComponent: 'SubjectForm',
+      width: 450
     })
   }
 
@@ -32,7 +33,8 @@ export const SubjectsPage = () => {
       mode: "EDIT",
       data: selectedSubjects[0],
       title: "Editar Materia",
-      contentComponent: 'SubjectForm'
+      contentComponent: 'SubjectForm',
+      width: 450
     })
   }
 
@@ -41,7 +43,8 @@ export const SubjectsPage = () => {
       mode: "DETAILS",
       data: selectedSubjects[0],
       title: "Detalle de la Materia",
-      contentComponent: 'SubjectDetail'
+      contentComponent: 'SubjectDetail',
+      width: 450
     })
   }
 
