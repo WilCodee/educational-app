@@ -1,4 +1,4 @@
-import { ITeacher } from "../interfaces/ITeacher";
+/* import { ITeacher } from "../interfaces/ITeacher";
 
 export const TeachersMocks:ITeacher[] = [
     {
@@ -17,4 +17,4 @@ export const TeachersMocks:ITeacher[] = [
         },
         createdAt: new Date()
     }
-]
+] */

@@ -6,10 +6,10 @@ import { StudentsColumns } from "../../data/columns";
 import { ModalContext } from "../../context/ModalContext";
 import { ActionsContext } from "../../context/AuthContext/ActionsContext/ActionsContext";
 import { IUser } from "src/data/interfaces/IUser";
-import { ICourse } from "src/data/interfaces/ICourse";
+/* import { ICourse } from "src/data/interfaces/ICourse"; */
 
 
-const defaultSelectedStudents = (data:ICourse) => {
+/* const defaultSelectedStudents = (data:ICourse) => {
     if(data.students && data.students.length > 0){
         console.log('si tiene')
         const selectedStudents = data.students.map((student:any) => {
@@ -21,11 +21,11 @@ const defaultSelectedStudents = (data:ICourse) => {
     }else{
         return []
     }
-}
+} */
 
 const StudentsList = () => {
-    const { createAction, updateAction } = useContext(ActionsContext)
-    const { data, hideModal } = useContext(ModalContext);
+    const { updateAction } = useContext(ActionsContext)
+    const { data, hideModal }:any = useContext(ModalContext);
     const [tableLoading, setTableLoading] = useState(false);
     const [students, setStudents] = useState([]);
     const [selectedStudents, setSelectedStudents] = useState([])
@@ -49,7 +49,7 @@ const StudentsList = () => {
       };
     
   
-    const cancelList = () =>  hideModal() //solo se cierra el modal, mas no se guardan los cambios
+   //solo se cierra el modal, mas no se guardan los cambios
     
 
   const initialRequest = async () => {

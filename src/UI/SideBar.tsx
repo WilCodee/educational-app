@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import {
@@ -7,6 +7,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
+import { AuthContext } from 'src/context/AuthContext';
 
 
 export const SideBar = ({ children }:any) => {
@@ -18,10 +19,15 @@ export const SideBar = ({ children }:any) => {
   const { setAction } = useContext(ActionsContext)
 
   const onCollapse = (collapsed:boolean) => setCollapsedt(collapsed)
-
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    console.log("DATOS DEL USUARIO",user)
+  }, [])
+  
   const goToPage = (page:string) => {
     //Se valida que la ruta la que quiero ir es diferente a la de origen, sino no tiene sentido navegar ni reiniciar el state de items
     if(location.pathname !== page){
+      
       setAction([])
       navigate(page)
     }
@@ -32,6 +38,8 @@ export const SideBar = ({ children }:any) => {
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          {user.isAdmin && (
+            <>
             <Menu.Item key="1" icon={<PieChartOutlined />} 
             className="navbar-brand"
             onClick={() => goToPage("/courses") }>
@@ -58,6 +66,18 @@ export const SideBar = ({ children }:any) => {
               </Menu.Item>
   
             </SubMenu>
+            </>
+          )}
+          {user.isTeacher && (
+            <>
+            <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
+              <Menu.Item key="3" className="navbar-brand"
+              onClick={() => goToPage("/students") } >
+                  Estudiantes
+              </Menu.Item>
+            </SubMenu>
+            </>
+          )}
           </Menu>
         </Sider>
 

@@ -19,15 +19,17 @@ export const FormLogin = () => {
                 headers:{
                   'Content-Type': 'application/json'
                 }})
-                const {status, token, user, user_id} =  await resp.json();
+                const {status, token, user} =  await resp.json();
             if(status){
-                localStorage.setItem("userData", user)
-                localStorage.setItem("token", token)
-                console.log( status, token, user, user_id);
-                login()
+                
+                
+                localStorage.setItem("userData", JSON.stringify(user));
+                localStorage.setItem("token", token);
+                login(user)
                 const {firstName,lastName} =  await user.profile.fullName;
-                message.success(`Bienvenido ${firstName}  ${lastName}`)
 
+                message.success(`Bienvenido ${firstName}  ${lastName}`)
+               
                 setTimeout(function(){
                 },5000);
             }else{

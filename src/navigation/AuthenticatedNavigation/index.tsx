@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { SideBar } from 'src/UI/SideBar';
 import StudentsPage from '../../pages/Admin/StudentsPage';
@@ -9,31 +9,47 @@ import { SubjectsPage } from 'src/pages/Admin/SubjectsPage';
 import { ActionsProvider } from 'src/context/AuthContext/ActionsContext/ActionsContext';
 import { ModalProvider } from 'src/context/ModalContext';
 import CoursesPage from 'src/pages/Admin/CoursesPage';
+import { AuthContext } from 'src/context/AuthContext';
 
 
 const AuthenticatedNavigation = () => {
 
   const navigate = useNavigate()
-
+  const { user } = useContext(AuthContext);
   useEffect(() => {
-    navigate("/courses")
+
+    user.isAdmin && navigate("/courses")
+    user.isTeacher && navigate("/students")
+
   }, [])
 
   return (
     <>
       <Layout>
-      <ActionsProvider>
-      <Navbar />
-        <SideBar >
-        <ModalProvider>
-        <Routes>
-          <Route path="students" element={<StudentsPage />}/>
-          <Route path="teachers" element={<TeachersPage />}/>
-          <Route path="subjects" element={<SubjectsPage/>}/>
-          <Route path="courses" element={<CoursesPage/>}/>
-        </Routes>
-        </ModalProvider>
-        </SideBar>
+        <ActionsProvider>
+          <Navbar />
+          <SideBar >
+            <ModalProvider>
+              <Routes>
+
+                {user.isAdmin && (
+                  <>
+                    <Route path="students" element={<StudentsPage />} />
+                    <Route path="teachers" element={<TeachersPage />} />
+                    <Route path="subjects" element={<SubjectsPage />} />
+                    <Route path="courses" element={<CoursesPage />} />
+                  </>
+                )
+                }
+                {user.isTeacher && (
+                  <>
+                    <Route path="students" element={<StudentsPage />} />
+                  </>
+                )}
+
+              </Routes>
+            </ModalProvider>
+          </SideBar>
         </ActionsProvider>
       </Layout>
     </>

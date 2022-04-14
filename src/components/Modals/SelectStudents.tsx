@@ -3,7 +3,7 @@ import { Modal, Table, Button } from "antd";
 import { getData } from "../../services/fetch/getData";
 import { StudentsColumns } from "../../data/columns";
 
-const SelectStudents = ({ selectedStudents, setSelectedStudents }) => {
+const SelectStudents = ({ setSelectedStudents }:any) => {
   const [showModal, setShowModal] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [students, setStudents] = useState([]);

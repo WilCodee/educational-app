@@ -8,7 +8,7 @@ import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
 
 const StudentForm = () => {
-  const { mode, data, hideModal } = useContext(ModalContext);
+  const { mode, data, hideModal }:any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext)
   const [isSubmitting, setIsSubmitting] = useState(false);
 

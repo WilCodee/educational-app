@@ -12,7 +12,7 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 const TeachersPage = () => {
     const [ selectedTeachers, setSelectedTeachers ] = useState([])
     const [tableLoading, setTableLoading ] = useState(false)
-    const { showModal } = useContext(ModalContext); 
+    const { showModal }:any = useContext(ModalContext); 
     const { items, setAction, deleteAction } = useContext(ActionsContext)
     
     const handleAddTeacher = () =>{

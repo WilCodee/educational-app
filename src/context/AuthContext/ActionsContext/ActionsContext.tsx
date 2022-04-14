@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react'
 import { ActionsInitialState, ActionsReducer } from './ActionsReducer'
 import { ACTION_TYPES } from './ActionTypes';
 
-export const ActionsContext:any = createContext()
+export const ActionsContext:any = createContext(0)
 
 export const ActionsProvider = ({ children }: any):any => {
     const [{items, refresh}, dispatch] = useReducer(ActionsReducer, ActionsInitialState)

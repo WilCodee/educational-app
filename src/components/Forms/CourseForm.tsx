@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Form, Input, Button, message, DatePicker, List } from "antd";
+import { Form, Input, Button, message, DatePicker } from "antd";
 import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
 import { postData } from "src/services/fetch/postData";
@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const CourseForm = () => {
   const { createAction, updateAction } = useContext(ActionsContext);
-  const { mode, data, hideModal } = useContext(ModalContext);
+  const { mode, data, hideModal }:any = useContext(ModalContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinishAdd = async (values: any) => {
