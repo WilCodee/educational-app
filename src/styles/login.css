@@ -38,7 +38,9 @@ div .content-principal{
         height: 20vh;
         width: 100%;
     }
-    
+    div .content-rigt{
+        height: 80vh;
+    }
     
 }
 @media (max-width: 600px) {
@@ -52,6 +54,9 @@ div .content-principal{
     div .content-left{
         height: 10vh;
         width: 100%;
+    }
+    div .content-rigt{
+        height: 90vh;
     }
 }
 @media (min-width: 992px){
