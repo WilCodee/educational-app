@@ -54,8 +54,8 @@ const CoursesPage = () => {
     showModal({
       mode: "DETAILS",
       data: selectedCourses[0],
-      title: "Detalles del curso",
-      contentComponent: "SubjectDetail",
+      title: " DETALLES",
+      contentComponent: "CourseDetail",
       width: 600
     });
   };

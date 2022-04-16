@@ -39,7 +39,7 @@ const TeachersPage = () => {
         showModal({
             mode: "DETAILS",
             data: selectedTeachers[0], 
-            title: "Detalle del profesor",
+            title: " DETALLES",
             contentComponent: 'TeacherDetail',
             width: 600
         })

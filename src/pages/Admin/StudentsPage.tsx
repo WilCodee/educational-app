@@ -39,7 +39,7 @@ const StudentsPage = () => {
         showModal({
             mode: "DETAILS",
             data: selectedStudents[0], 
-            title: "Detalle del estudiante",
+            title: " DETALLES",
             contentComponent: 'StudentDetail',
             width: 600
         })

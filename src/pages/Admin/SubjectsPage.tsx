@@ -42,7 +42,7 @@ export const SubjectsPage = () => {
     showModal({
       mode: "DETAILS",
       data: selectedSubjects[0],
-      title: "Detalle de la Materia",
+      title: " DETALLES",
       contentComponent: 'SubjectDetail',
       width: 450
     })
