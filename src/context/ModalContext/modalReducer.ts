@@ -6,9 +6,10 @@ export const modalInitialState = {
   data:{},
   title: '',
   contentComponent:'',
+  width: 'auto'
 };
 
-export function modalReducer(state, action) {
+export function modalReducer(state:any, action:any) {
   switch (action.type) {
     case  MODAL_ACTIONS.SHOW_MODAL:
       return { ...state, 
@@ -16,7 +17,8 @@ export function modalReducer(state, action) {
                mode: action.payload.mode, 
                data: action.payload.data, 
                title: action.payload.title,
-               contentComponent: action.payload.contentComponent
+               contentComponent: action.payload.contentComponent,
+               width: action.payload?.width ?? 'auto'
             };
 
     case MODAL_ACTIONS.HIDE_MODAL :

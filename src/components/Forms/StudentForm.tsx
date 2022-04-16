@@ -11,7 +11,7 @@ import moment from 'moment';
 
 const { Option } = Select;
 const StudentForm = () => {
-  const { mode, data, hideModal } = useContext(ModalContext);
+  const { mode, data, hideModal }:any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext)
   const [isSubmitting, setIsSubmitting] = useState(false);
 

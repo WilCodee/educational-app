@@ -12,12 +12,14 @@ import { ModalContext } from "src/context/ModalContext";
 import { getData } from "src/services/fetch/getData";
 import { deleteData } from "src/services/fetch/deleteData";
 import { CoursesColumns } from "src/data/columns";
+import { AuthContext } from "src/context/AuthContext";
 
 const CoursesPage = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [tableLoading, setTableLoading] = useState(false);
   const { items, deleteAction, setAction } = useContext(ActionsContext);
-  const { showModal } = useContext(ModalContext);
+  const { showModal }: any = useContext(ModalContext);
+  const { user } = useContext(AuthContext);
 
   const handleAddCourse = () => {
     showModal({
@@ -25,6 +27,7 @@ const CoursesPage = () => {
       data: {},
       title: "Agregar Curso",
       contentComponent: "CourseForm",
+      width: 600
     });
   };
 
@@ -34,6 +37,7 @@ const CoursesPage = () => {
       data: selectedCourses[0],
       title: "Editar Curso",
       contentComponent: "CourseForm",
+      width: 600
     });
   };
 
@@ -52,8 +56,11 @@ const CoursesPage = () => {
       data: selectedCourses[0],
       title: "Detalles del curso",
       contentComponent: "SubjectDetail",
+      width: 600
     });
   };
+
+
 
   const handleDeleteCourse = () => {
     selectedCourses.map(async (course) => {
@@ -69,7 +76,13 @@ const CoursesPage = () => {
 
   const initialRequest = async () => {
     setTableLoading(true);
-    const request = await getData("courses");
+    var request = {
+      status:"",
+      courses:[],
+    }
+    user.isAdmin && (request = await getData("courses"))
+    user.isStudent && (request = await getData(`courses_by_student/${user._id}`))
+
     if (request.status) {
       const coursesToTable = request.courses.map((course: any) => {
         course.key = course["_id"];
@@ -78,7 +91,10 @@ const CoursesPage = () => {
       setAction(coursesToTable);
     }
     setTableLoading(false);
+
   };
+
+
 
   useEffect(() => {
     initialRequest();
@@ -99,6 +115,8 @@ const CoursesPage = () => {
     <>
       <CardTable title="Cursos" AddText="Curso" AddOnClick={handleAddCourse}>
         <Card className="cardbody">
+        {user.isAdmin && (
+          <>
           <Button
             icon={<EyeOutlined />}
             onClick={handleViewCourse}
@@ -126,6 +144,7 @@ const CoursesPage = () => {
           >
             EDITAR LISTA DE ESTUDIANTES
           </Button>
+
           <Popconfirm
             title="Estás seguro que deseas eliminar las materias seleccionadas?"
             onConfirm={handleDeleteCourse}
@@ -141,6 +160,8 @@ const CoursesPage = () => {
               ELIMINAR
             </Button>
           </Popconfirm>
+          </>
+          )}
         </Card>
         <Table
           rowSelection={rowSelection}

@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const CourseForm = () => {
   const { createAction, updateAction } = useContext(ActionsContext);
-  const { mode, data, hideModal } = useContext(ModalContext);
+  const { mode, data, hideModal }:any = useContext(ModalContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinishAdd = async (values: any) => {
@@ -80,6 +80,7 @@ const CourseForm = () => {
             <DatePicker.RangePicker />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
               Agregar Curso
             </Button>

@@ -7,14 +7,15 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 import { ModalContext } from 'src/context/ModalContext';
 import { getData } from 'src/services/fetch/getData';
 import { deleteData } from 'src/services/fetch/deleteData'
+import { AuthContext } from 'src/context/AuthContext';
 
 export const SubjectsPage = () => {
 
   const [selectedSubjects, setSelectedSubjects] = useState([])
   const [tableLoading, setTableLoading] = useState(false)
   const { items, deleteAction, setAction } = useContext(ActionsContext)
-  const { showModal } = useContext(ModalContext);
-
+  const { showModal }:any = useContext(ModalContext);
+  const { user } = useContext(AuthContext);
   
 
   const handleAddSubject = () => {
@@ -22,7 +23,8 @@ export const SubjectsPage = () => {
       mode: "ADD",
       data: {},
       title: "Agregar Materia",
-      contentComponent: 'SubjectForm'
+      contentComponent: 'SubjectForm',
+      width: 450
     })
   }
 
@@ -31,7 +33,8 @@ export const SubjectsPage = () => {
       mode: "EDIT",
       data: selectedSubjects[0],
       title: "Editar Materia",
-      contentComponent: 'SubjectForm'
+      contentComponent: 'SubjectForm',
+      width: 450
     })
   }
 
@@ -40,7 +43,8 @@ export const SubjectsPage = () => {
       mode: "DETAILS",
       data: selectedSubjects[0],
       title: "Detalle de la Materia",
-      contentComponent: 'SubjectDetail'
+      contentComponent: 'SubjectDetail',
+      width: 450
     })
   }
 
@@ -75,6 +79,7 @@ export const SubjectsPage = () => {
 
   useEffect(() => {
     initialRequest()
+    console.log("DATOS DEL USUARIO"+user.profile.fullName)
   }, [])
 
 
