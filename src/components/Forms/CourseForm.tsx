@@ -14,8 +14,8 @@ const CourseForm = () => {
   const onFinishAdd = async (values: any) => {
     const dataValues = {
       name: values.name,
-      startData: values.date[0],
-      endData: values.date[1],
+      startDate: values.date[0],
+      endDate: values.date[1],
     };
     setIsSubmitting(true);
     const addRequest = await postData("courses", dataValues);
@@ -33,8 +33,13 @@ const CourseForm = () => {
   };
 
   const onFinishEdit = async (values: any) => {
+    const dataValues = {
+      name: values.name, 
+      startDate: values.date[0],
+      endDate: values.date[1]
+    }
     setIsSubmitting(true);
-    const updateRequest = await putData("courses/" + data._id, values);
+    const updateRequest = await putData("courses/" + data._id, dataValues);
     if (updateRequest.status) {
       message.success("Curso actualizado exitosamente");
       let updatedCourse = updateRequest.course;
@@ -57,7 +62,7 @@ const CourseForm = () => {
       {mode === "ADD" && (
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 10 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinishAdd}
@@ -94,7 +99,7 @@ const CourseForm = () => {
             date: [moment(data.startDate),moment(data.endDate)],
           }}
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 10 }}
           wrapperCol={{ span: 16 }}
           onFinish={onFinishEdit}
           onFinishFailed={onFinishFailed}
@@ -109,7 +114,7 @@ const CourseForm = () => {
           </Form.Item>
 
           <Form.Item
-            label="Fecha de inicio"
+            label="Fecha de inicio / finalización"
             name="date"
             rules={[{ required: true, message: "Requerido" }]}
           >

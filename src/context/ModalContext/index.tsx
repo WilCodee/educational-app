@@ -13,6 +13,7 @@ import { SubjectForm } from 'src/components/SubjectForm';
 import { SubjectDetail } from 'src/components/Details/SubjectDetail';
 import CourseForm from 'src/components/Forms/CourseForm';
 import StudentsList from 'src/components/Forms/StudentsList';
+import ScheduleForm from 'src/components/Forms/ScheduleForm';
 
 
 export const MODAL_MODES = {
@@ -71,6 +72,11 @@ export const ModalProvider = ({ children }:any) => {
             case 'SelectStudents': 
                 content = <StudentsList />
                 break; 
+            
+            case 'ScheduleForm': 
+                content = <ScheduleForm />
+                break; 
+                
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
                 break;

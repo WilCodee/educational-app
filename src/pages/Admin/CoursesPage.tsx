@@ -6,6 +6,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   UserOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
@@ -49,6 +50,16 @@ const CoursesPage = () => {
       contentComponent: "SelectStudents",
     });
   };
+
+
+  const handleEditSchedule = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedCourses[0],
+      title: "Editar Horario", 
+      contentComponent: 'ScheduleForm'
+    })
+  }
 
   const handleViewCourse = () => {
     showModal({
@@ -143,6 +154,17 @@ const CoursesPage = () => {
             disabled={selectedCourses.length === 1 ? false : true}
           >
             EDITAR LISTA DE ESTUDIANTES
+          </Button>
+
+
+          <Button
+            icon={<CalendarOutlined />}
+            onClick={handleEditSchedule}
+            className="buttonTable"
+            type="primary"
+            disabled={selectedCourses.length === 1 ? false : true}
+          >
+            EDITAR HORARIO
           </Button>
 
           <Popconfirm
