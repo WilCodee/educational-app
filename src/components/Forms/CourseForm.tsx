@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Form, Input, Button, message, DatePicker } from "antd";
+import { Form, Input, Button, message, DatePicker} from "antd";
 import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
 import { postData } from "src/services/fetch/postData";
@@ -12,8 +12,13 @@ const CourseForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinishAdd = async (values: any) => {
+    const dataValues = {
+      name: values.name,
+      startData: values.date[0],
+      endData: values.date[1],
+    };
     setIsSubmitting(true);
-    const addRequest = await postData("courses", values);
+    const addRequest = await postData("courses", dataValues);
     console.log("ar", addRequest);
     if (addRequest.status) {
       message.success("Curso creado exitosamente");
@@ -68,21 +73,12 @@ const CourseForm = () => {
           </Form.Item>
 
           <Form.Item
-            label="Fecha de inicio"
-            name="startDate"
+            label="Fecha de inicio / finalización "
+            name="date"
             rules={[{ required: true, message: "Requerido" }]}
           >
-            <DatePicker />
+            <DatePicker.RangePicker />
           </Form.Item>
-
-          <Form.Item
-            label="Fecha de finalización"
-            name="endDate"
-            rules={[{ required: true, message: "Requerido" }]}
-          >
-            <DatePicker />
-          </Form.Item>
-
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
 
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
@@ -95,8 +91,7 @@ const CourseForm = () => {
         <Form
           initialValues={{
             name: data.name,
-            startDate: moment(data.startDate),
-            endDate: moment(data.endDate)
+            date: [moment(data.startDate),moment(data.endDate)],
           }}
           name="basic"
           labelCol={{ span: 8 }}
@@ -115,19 +110,13 @@ const CourseForm = () => {
 
           <Form.Item
             label="Fecha de inicio"
-            name="startDate"
+            name="date"
             rules={[{ required: true, message: "Requerido" }]}
           >
-            <DatePicker  />
+            <DatePicker.RangePicker />
           </Form.Item>
 
-          <Form.Item
-            label="Fecha de finalización"
-            name="endDate"
-            rules={[{ required: true, message: "Requerido" }]}
-          >
-            <DatePicker />
-          </Form.Item>
+          
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
               Editar Curso
