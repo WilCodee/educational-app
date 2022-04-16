@@ -37,8 +37,6 @@ export const FormLogin = () => {
             <div className='form-login'>
                 <Form
                     name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
                     initialValues={{ remember: true }}
                     onFinish={onFinish}
                 >
@@ -58,11 +56,11 @@ export const FormLogin = () => {
                         <Input.Password />
                     </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                    <Form.Item name="remember" valuePropName="checked" >
                         <Checkbox className='check-login'>Recordarme</Checkbox>
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Form.Item >
                         <Button type="primary" htmlType="submit" className='button-login' icon={<LoginOutlined />} loading={loading} disabled={loading}>
                             Iniciar Sesión
                         </Button>

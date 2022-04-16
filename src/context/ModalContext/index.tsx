@@ -15,6 +15,8 @@ import CourseForm from 'src/components/Forms/CourseForm';
 import StudentsList from 'src/components/Forms/StudentsList';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import { CourseDetail } from 'src/components/Details/CourseDetail';
+import ScheduleForm from 'src/components/Forms/ScheduleForm';
+
 
 export const MODAL_MODES = {
     ADD: "ADD",
@@ -72,6 +74,11 @@ export const ModalProvider = ({ children }:any) => {
             case 'SelectStudents': 
                 content = <StudentsList />
                 break; 
+            
+            case 'ScheduleForm': 
+                content = <ScheduleForm />
+                break; 
+                
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
                 break;

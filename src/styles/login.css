@@ -1,11 +1,6 @@
 
-html, body {
-    height: 100%;
-    margin: 0px;
-    
-}
 div .content-left{
-    height: 100vh;
+   
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,8 +13,8 @@ div .content-rigt{
     background:rgba(255, 255, 255, 0.3)
 }
 div .form-login{
-    width: 400px;
-    height: 300px;
+    width: 50vh;
+    height: 45vh;
     border: 5px solid #004465;
     box-sizing: border-box; 
     display: flex;
@@ -33,9 +28,41 @@ div .content-principal{
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
-    font-size: 72px;
     line-height: 0px;
     color: #ED9A2A;
+    font-size:4vw;
+}
+
+@media (max-width: 992px) {
+    div .content-left{
+        height: 20vh;
+        width: 100%;
+    }
+    div .content-rigt{
+        height: 80vh;
+    }
+    
+}
+@media (max-width: 600px) {
+    .title-pre{
+        font-size:6vw;
+    }
+    div .form-login{
+        width: 40vh;
+        border: none;
+    }
+    div .content-left{
+        height: 10vh;
+        width: 100%;
+    }
+    div .content-rigt{
+        height: 90vh;
+    }
+}
+@media (min-width: 992px){
+    div .content-left{
+        height: 100vh;
+    }
 }
 
 .button-login {
