@@ -40,7 +40,6 @@ const CourseForm = () => {
       startDate: values.date[0],
       endDate: values.date[1],
       whatsappGroup: values.whatsappGroup
-    };
     }
     setIsSubmitting(true);
     const updateRequest = await putData("courses/" + data._id, dataValues);
