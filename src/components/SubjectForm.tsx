@@ -84,7 +84,7 @@ export const SubjectForm = () => {
                             }
                         >
                             <Option value="Matemática">Matemática</Option>
-                            <Option value="Lengiaje">Literatura</Option>
+                            <Option value="Lenguaje">Lenguaje</Option>
                             <Option value="Ciencias Sociales">Ciencias Sociales</Option>
                             <Option value="Ciencias Naturales">Ciencias Naturales</Option>
                         </Select>
@@ -133,7 +133,7 @@ export const SubjectForm = () => {
                             }
                         >
                             <Option value="Matemática">Matemática</Option>
-                            <Option value="Lengiaje">Literatura</Option>
+                            <Option value="Lenguaje">Lenguaje</Option>
                             <Option value="Ciencias Sociales">Ciencias Sociales</Option>
                             <Option value="Ciencias Naturales">Ciencias Naturales</Option>
                         </Select>
