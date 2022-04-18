@@ -16,7 +16,9 @@ const StudentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
-
+  const onFinishPrueba = async (values: any) => {
+    console.log(values)
+  }
   const onFinishAdd = async (values: any) => {
     const studentInfo: IStudent = {
       fullName: {
@@ -123,7 +125,7 @@ const StudentForm = () => {
         <Form
           name="basic"
           initialValues={{ remember: true }}
-          onFinish={onFinishAdd}
+          onFinish={onFinishPrueba}
           //onFinishFailed={console.log('hey')}
           autoComplete="off"
           form={form}
@@ -243,8 +245,8 @@ const StudentForm = () => {
                   message: 'No ingresar letras!',
                 },
                 {
-                  max: 10,
-                  message: "Maximo 10 caracteres!"
+                  max: 9,
+                  message: "Maximo 9 caracteres!"
                 },
                 {
                   min: 7,
@@ -253,7 +255,7 @@ const StudentForm = () => {
 
               ]}
             >
-              <Input />
+              <Input addonBefore={'+593'} />
             </Form.Item>
 
             <Form.Item
@@ -332,8 +334,8 @@ const StudentForm = () => {
                   message: 'No ingresar letras!',
                 },
                 {
-                  max: 10,
-                  message: "Maximo 10 caracteres!"
+                  max: 9,
+                  message: "Maximo 9 caracteres!"
                 },
                 {
                   min: 7,
@@ -342,7 +344,7 @@ const StudentForm = () => {
 
               ]}
             >
-              <Input />
+              <Input addonBefore={'+593'} />
             </Form.Item>
 
           </Card>
