@@ -33,8 +33,13 @@ const CourseForm = () => {
   };
 
   const onFinishEdit = async (values: any) => {
+    const dataValues = {
+      name: values.name,
+      startData: values.date[0],
+      endData: values.date[1],
+    };
     setIsSubmitting(true);
-    const updateRequest = await putData("courses/" + data._id, values);
+    const updateRequest = await putData("courses/" + data._id, dataValues);
     if (updateRequest.status) {
       message.success("Curso actualizado exitosamente");
       let updatedCourse = updateRequest.course;
@@ -67,7 +72,7 @@ const CourseForm = () => {
           <Form.Item
             label="Nombre"
             name="name"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Ingresa el nombre de la materia!" }]}
           >
             <Input />
           </Form.Item>
@@ -75,7 +80,7 @@ const CourseForm = () => {
           <Form.Item
             label="Fecha de inicio / finalización "
             name="date"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Ingresa el rango de fecha" }]}
           >
             <DatePicker.RangePicker />
           </Form.Item>
@@ -103,15 +108,15 @@ const CourseForm = () => {
          <Form.Item
             label="Nombre"
             name="name"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Ingresa el nombre de la materia!" }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Fecha de inicio"
+            label="Fecha de inicio / fin"
             name="date"
-            rules={[{ required: true, message: "Requerido" }]}
+            rules={[{ required: true, message: "Ingresa el rango de fecha" }]}
           >
             <DatePicker.RangePicker />
           </Form.Item>
