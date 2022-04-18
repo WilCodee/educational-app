@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import {
-  DesktopOutlined,
-  PieChartOutlined,
+  BookOutlined,
+  ExperimentOutlined,
+  FolderOpenOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
@@ -40,12 +41,12 @@ export const SideBar = ({ children }:any) => {
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           {user.isAdmin && (
             <>
-            <Menu.Item key="1" icon={<PieChartOutlined />} 
+            <Menu.Item key="1" icon={<FolderOpenOutlined />} 
             className="navbar-brand"
             onClick={() => goToPage("/courses") }>
               Cursos
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />} className="navbar-brand"
+            <Menu.Item key="2" icon={<ExperimentOutlined />} className="navbar-brand"
               onClick={() => goToPage("/subjects") }
             >
              
@@ -71,7 +72,7 @@ export const SideBar = ({ children }:any) => {
           {user.isTeacher && (
             <>
             <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
-              <Menu.Item key="3" className="navbar-brand"
+              <Menu.Item key="3" icon={<BookOutlined />} className="navbar-brand"
               onClick={() => goToPage("/students") } >
                   Estudiantes
               </Menu.Item>
@@ -80,8 +81,7 @@ export const SideBar = ({ children }:any) => {
           )}
            {user.isStudent && (
             <>
-            <Menu.Item key="1" icon={<PieChartOutlined />} 
-            className="navbar-brand"
+            <Menu.Item key="1" icon={<BookOutlined />} className="navbar-brand"
             onClick={() => goToPage("/courses") }>
               Cursos
             </Menu.Item>
@@ -100,7 +100,7 @@ export const SideBar = ({ children }:any) => {
               {children}
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>SISTEMA EDUCATIVO 2022</Footer>
+          <Footer style={{ textAlign: 'center' }}>SISTEMA EDUCATIVO 2022 <br/> Hecho con ❤ por NiceCode</Footer>
         </Layout>
         </Content>
       </Layout>

@@ -4,12 +4,14 @@ import { Menu, Layout } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { AuthContext } from 'src/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-export const Navbar = () => {
+
+import "../styles/NavBar.css";
+
+export const Navbar = ({ menu }: any) => {
   const navigate = useNavigate()
   const { SubMenu } = Menu;
   const { Header } = Layout;
   const { logout, user } = useContext(AuthContext)
-
   const { firstName } = user.profile.fullName
 
   const fullLogout = () => {
@@ -54,5 +56,5 @@ export const Navbar = () => {
         </Menu>
       </Header>
     </>
-  )
-}
+  );
+};
