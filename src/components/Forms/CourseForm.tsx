@@ -1,21 +1,23 @@
 import React, { useContext, useState } from "react";
-import { Form, Input, Button, message, DatePicker} from "antd";
+import { Form, Input, Button, message, DatePicker } from "antd";
 import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
 import { postData } from "src/services/fetch/postData";
 import { putData } from "src/services/fetch/putData";
 import moment from 'moment';
+import { WhatsAppOutlined } from "@ant-design/icons";
 
 const CourseForm = () => {
   const { createAction, updateAction } = useContext(ActionsContext);
-  const { mode, data, hideModal }:any = useContext(ModalContext);
+  const { mode, data, hideModal }: any = useContext(ModalContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinishAdd = async (values: any) => {
     const dataValues = {
       name: values.name,
-      startData: values.date[0],
-      endData: values.date[1],
+      startDate: values.date[0] ,
+      endDate: values.date[1] ,
+      whatsappGroup: values.whatsappGroup
     };
     setIsSubmitting(true);
     const addRequest = await postData("courses", dataValues);
@@ -37,6 +39,7 @@ const CourseForm = () => {
       name: values.name,
       startData: values.date[0],
       endData: values.date[1],
+      whatsappGroup: values.whatsappGroup
     };
     setIsSubmitting(true);
     const updateRequest = await putData("courses/" + data._id, dataValues);
@@ -84,6 +87,13 @@ const CourseForm = () => {
           >
             <DatePicker.RangePicker />
           </Form.Item>
+          <Form.Item
+            name="whatsappGroup"
+            label="Grupos de WhatsApp"
+            rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+          >
+            <Input placeholder="input placeholder" />
+          </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
 
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
@@ -96,7 +106,8 @@ const CourseForm = () => {
         <Form
           initialValues={{
             name: data.name,
-            date: [moment(data.startDate),moment(data.endDate)],
+            date: [moment(data.startDate), moment(data.endDate)],
+            whatsappGroup: data.whatsappGroup
           }}
           name="basic"
           labelCol={{ span: 8 }}
@@ -105,7 +116,7 @@ const CourseForm = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-         <Form.Item
+          <Form.Item
             label="Nombre"
             name="name"
             rules={[{ required: true, message: "Ingresa el nombre de la materia!" }]}
@@ -120,8 +131,16 @@ const CourseForm = () => {
           >
             <DatePicker.RangePicker />
           </Form.Item>
+          <Form.Item
+            name="whatsappGroup"
+            label="Grupos de WhatsApp"
+            rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+            extra={<a href={data.whatsappGroup} target='_blank'><WhatsAppOutlined /> prueba lo aquí.</a>}
+          >
+            <Input name="linkWhatsApp" placeholder="link del grupo de WhatsApp" />
+            
+          </Form.Item>
 
-          
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
               Editar Curso

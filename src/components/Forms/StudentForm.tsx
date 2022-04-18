@@ -16,9 +16,7 @@ const StudentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
-  const onFinishPrueba = async (values: any) => {
-    console.log(values)
-  }
+  
   const onFinishAdd = async (values: any) => {
     const studentInfo: IStudent = {
       fullName: {
@@ -125,7 +123,7 @@ const StudentForm = () => {
         <Form
           name="basic"
           initialValues={{ remember: true }}
-          onFinish={onFinishPrueba}
+          onFinish={onFinishAdd}
           //onFinishFailed={console.log('hey')}
           autoComplete="off"
           form={form}
