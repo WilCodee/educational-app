@@ -26,7 +26,7 @@ const CoursesPage = () => {
     showModal({
       mode: "ADD",
       data: {},
-      title: "Agregar Curso",
+      title: " Agregar Curso",
       contentComponent: "CourseForm",
       width: 600
     });
@@ -36,7 +36,7 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Editar Curso",
+      title: " Editar Curso",
       contentComponent: "CourseForm",
       width: 600
     });
@@ -46,7 +46,7 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Editar lista de estudiantes",
+      title: " Editar lista de estudiantes",
       contentComponent: "SelectStudents",
     });
   };
@@ -56,7 +56,7 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Editar Horario", 
+      title: " Editar Horario", 
       contentComponent: 'ScheduleForm'
     })
   }
@@ -190,6 +190,7 @@ const CoursesPage = () => {
           columns={CoursesColumns}
           dataSource={items}
           loading={tableLoading}
+          scroll={{ x: 600 }}
         />
       </CardTable>
     </>
