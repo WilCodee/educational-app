@@ -245,8 +245,8 @@ const TeacherForm = () => {
                   message: 'No ingresar letras!',
                 },
                 {
-                  max: 10,
-                  message: "Maximo 10 caracteres!"
+                  max: 9,
+                  message: "Maximo 9 caracteres!"
                 },
                 {
                   min: 7,
@@ -255,7 +255,7 @@ const TeacherForm = () => {
 
               ]}
             >
-              <Input />
+              <Input addonBefore={'+593'} />
             </Form.Item>
 
             <Form.Item
@@ -431,8 +431,8 @@ const TeacherForm = () => {
                   message: 'No ingresar letras!',
                 },
                 {
-                  max: 10,
-                  message: "Maximo 10 caracteres!"
+                  max: 9,
+                  message: "Maximo 9 caracteres!"
                 },
                 {
                   min: 7,
@@ -441,7 +441,7 @@ const TeacherForm = () => {
 
               ]}
             >
-              <Input />
+              <Input addonBefore={'+593'} />
             </Form.Item>
 
 
