@@ -19,7 +19,7 @@ const TeachersPage = () => {
         showModal({
             mode: "ADD", 
             data: {}, 
-            title: "Agregar Profesor ",
+            title: " Agregar Profesor ",
             contentComponent: 'TeacherForm',
             width: 600
         })
@@ -29,7 +29,7 @@ const TeachersPage = () => {
         showModal({
             mode: "EDIT", 
             data: selectedTeachers[0], 
-            title: "Editar Profesor",
+            title: " Editar Profesor",
             contentComponent: 'TeacherForm',
             width: 600
         })
@@ -39,7 +39,7 @@ const TeachersPage = () => {
         showModal({
             mode: "DETAILS",
             data: selectedTeachers[0], 
-            title: "Detalle del profesor",
+            title: " DETALLES",
             contentComponent: 'TeacherDetail',
             width: 600
         })
@@ -105,7 +105,7 @@ const TeachersPage = () => {
                 </Popconfirm>
             </Card>
 
-            <Table rowSelection={rowSelection} columns={TeachersColumns} dataSource={items} loading={tableLoading}  />
+            <Table rowSelection={rowSelection} columns={TeachersColumns} dataSource={items} loading={tableLoading} scroll={{ x: 600 }} />
             
             </CardTable> 
         </div>

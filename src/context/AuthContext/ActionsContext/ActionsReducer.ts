@@ -10,6 +10,7 @@ export const ActionsReducer = (state = ActionsInitialState, action: any) => {
 
     switch (action.type) {
         case ACTION_TYPES.SET_ITEMS: {
+            
             return {...state, items: action.payload.items }
         }
         

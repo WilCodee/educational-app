@@ -15,8 +15,8 @@ const CourseForm = () => {
   const onFinishAdd = async (values: any) => {
     const dataValues = {
       name: values.name,
-      startDate: values.date[0] ,
-      endDate: values.date[1] ,
+      startDate: values.date[0],
+      endDate: values.date[1],
       whatsappGroup: values.whatsappGroup
     };
     setIsSubmitting(true);
@@ -37,10 +37,11 @@ const CourseForm = () => {
   const onFinishEdit = async (values: any) => {
     const dataValues = {
       name: values.name,
-      startData: values.date[0],
-      endData: values.date[1],
+      startDate: values.date[0],
+      endDate: values.date[1],
       whatsappGroup: values.whatsappGroup
     };
+    }
     setIsSubmitting(true);
     const updateRequest = await putData("courses/" + data._id, dataValues);
     if (updateRequest.status) {
@@ -65,7 +66,7 @@ const CourseForm = () => {
       {mode === "ADD" && (
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 10 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinishAdd}
@@ -110,7 +111,7 @@ const CourseForm = () => {
             whatsappGroup: data.whatsappGroup
           }}
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 10 }}
           wrapperCol={{ span: 16 }}
           onFinish={onFinishEdit}
           onFinishFailed={onFinishFailed}

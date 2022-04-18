@@ -22,7 +22,7 @@ export const SubjectsPage = () => {
     showModal({
       mode: "ADD",
       data: {},
-      title: "Agregar Materia",
+      title: " Agregar Materia",
       contentComponent: 'SubjectForm',
       width: 450
     })
@@ -32,7 +32,7 @@ export const SubjectsPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedSubjects[0],
-      title: "Editar Materia",
+      title: " Editar Materia",
       contentComponent: 'SubjectForm',
       width: 450
     })
@@ -42,7 +42,7 @@ export const SubjectsPage = () => {
     showModal({
       mode: "DETAILS",
       data: selectedSubjects[0],
-      title: "Detalle de la Materia",
+      title: " DETALLES",
       contentComponent: 'SubjectDetail',
       width: 450
     })
@@ -124,7 +124,7 @@ export const SubjectsPage = () => {
           </Popconfirm>
 
         </Card>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={items} loading={tableLoading} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={items} loading={tableLoading} scroll={{ x: 600 }} />
       </CardTable>
     </>
   )

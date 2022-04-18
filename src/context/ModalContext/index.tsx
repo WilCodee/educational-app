@@ -13,6 +13,9 @@ import { SubjectForm } from 'src/components/SubjectForm';
 import { SubjectDetail } from 'src/components/Details/SubjectDetail';
 import CourseForm from 'src/components/Forms/CourseForm';
 import StudentsList from 'src/components/Forms/StudentsList';
+import { UnorderedListOutlined } from '@ant-design/icons';
+import { CourseDetail } from 'src/components/Details/CourseDetail';
+import ScheduleForm from 'src/components/Forms/ScheduleForm';
 
 
 export const MODAL_MODES = {
@@ -71,6 +74,11 @@ export const ModalProvider = ({ children }:any) => {
             case 'SelectStudents': 
                 content = <StudentsList />
                 break; 
+            
+            case 'ScheduleForm': 
+                content = <ScheduleForm />
+                break; 
+                
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
                 break;
@@ -89,6 +97,9 @@ export const ModalProvider = ({ children }:any) => {
                 break;
             case 'SubjectDetail':
                 content = <SubjectDetail/>
+                break;
+            case 'CourseDetail':
+                content = <CourseDetail/>
                 break;
             default:
                 console.log('No se ha enviado un formulario como paráemtro');
@@ -117,7 +128,7 @@ export const ModalProvider = ({ children }:any) => {
                 {children}
 
                 <Modal
-                    title={<h3>{state.title}</h3>}
+                    title={<><h3> <UnorderedListOutlined />{state.title}</h3></>}
                     visible={state.isOpen}
                     maskClosable={false}
                     onCancel={handleCancel}

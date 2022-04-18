@@ -6,6 +6,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   UserOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
@@ -25,7 +26,7 @@ const CoursesPage = () => {
     showModal({
       mode: "ADD",
       data: {},
-      title: "Agregar Curso",
+      title: " Agregar Curso",
       contentComponent: "CourseForm",
       width: 600
     });
@@ -35,7 +36,7 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Editar Curso",
+      title: " Editar Curso",
       contentComponent: "CourseForm",
       width: 600
     });
@@ -45,17 +46,27 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Editar lista de estudiantes",
+      title: " Editar lista de estudiantes",
       contentComponent: "SelectStudents",
     });
   };
+
+
+  const handleEditSchedule = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedCourses[0],
+      title: " Editar Horario", 
+      contentComponent: 'ScheduleForm'
+    })
+  }
 
   const handleViewCourse = () => {
     showModal({
       mode: "DETAILS",
       data: selectedCourses[0],
-      title: "Detalles del curso",
-      contentComponent: "SubjectDetail",
+      title: " DETALLES",
+      contentComponent: "CourseDetail",
       width: 600
     });
   };
@@ -145,6 +156,17 @@ const CoursesPage = () => {
             EDITAR LISTA DE ESTUDIANTES
           </Button>
 
+
+          <Button
+            icon={<CalendarOutlined />}
+            onClick={handleEditSchedule}
+            className="buttonTable"
+            type="primary"
+            disabled={selectedCourses.length === 1 ? false : true}
+          >
+            EDITAR HORARIO
+          </Button>
+
           <Popconfirm
             title="Estás seguro que deseas eliminar las materias seleccionadas?"
             onConfirm={handleDeleteCourse}
@@ -168,6 +190,7 @@ const CoursesPage = () => {
           columns={CoursesColumns}
           dataSource={items}
           loading={tableLoading}
+          scroll={{ x: 600 }}
         />
       </CardTable>
     </>
