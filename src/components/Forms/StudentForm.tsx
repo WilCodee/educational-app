@@ -8,6 +8,7 @@ import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from 'moment';
+import { getData } from "src/services/fetch/getData";
 
 const { Option } = Select;
 const StudentForm = () => {
@@ -55,9 +56,10 @@ const StudentForm = () => {
     };
     setIsSubmitting(true);
     const addRequest = await postData("users", userObject);
+    const requestEmail = await getData(`/mail/${values.email}`)
     console.info("addRequest", addRequest);
-    if (addRequest.status) {
-      message.success("Estudiante creado exitosamente")
+    if (addRequest.status && requestEmail.status) {
+      message.success("Estudiante creado exitosamente - Credenciales enviadas")
       let newStudent = addRequest.user
       newStudent.key = newStudent._id
       createAction(newStudent)
@@ -117,6 +119,7 @@ const StudentForm = () => {
     setIsSubmitting(false);
     hideModal()
   }
+
   return (
     <div>
       {mode === "ADD" && (

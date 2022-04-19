@@ -9,6 +9,7 @@ import { ITeacher } from "src/data/interfaces/ITeacher";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from "moment";
+import { getData } from "src/services/fetch/getData";
 const { Option } = Select;
 
 const TeacherForm = () => {
@@ -46,8 +47,9 @@ const TeacherForm = () => {
     };
     setIsSubmitting(true);
     const addRequest = await postData("users", userObject);
+    const requestEmail = await getData(`/mail/${values.email}`)
     console.info("addRequest", addRequest);
-    if (addRequest.status) {
+    if (addRequest.status && requestEmail.status) {
       message.success("Profesor creado exitosamente")
       let newTeacher = addRequest.user
       newTeacher.key = newTeacher._id
