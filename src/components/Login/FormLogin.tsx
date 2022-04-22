@@ -1,12 +1,13 @@
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import React, { useContext, useState } from 'react';
 import { AuthContext } from 'src/context/AuthContext';
-import { LoginOutlined } from '@ant-design/icons';
+import { LoginOutlined,AlertOutlined } from '@ant-design/icons';
 import { postData } from 'src/services/fetch/postData';
+import { useNavigate } from 'react-router-dom';
 
 export const FormLogin = () => {
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate()
     const { login } = useContext(AuthContext);
 
     const onFinish = async(values: any)=>{
@@ -63,6 +64,11 @@ export const FormLogin = () => {
                     <Form.Item >
                         <Button type="primary" htmlType="submit" className='button-login' icon={<LoginOutlined />} loading={loading} disabled={loading}>
                             Iniciar Sesión
+                        </Button>
+                    </Form.Item>
+                    <Form.Item >
+                        <Button type="primary" htmlType="submit" className='button-login'  onClick={() => navigate("/recoverpassword") }icon={<AlertOutlined />} disabled={loading}>
+                            Olvide mi Contraseña
                         </Button>
                     </Form.Item>
                 </Form>
