@@ -15,8 +15,8 @@ import CourseForm from 'src/components/Forms/CourseForm';
 import StudentsList from 'src/components/Forms/StudentsList';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import { CourseDetail } from 'src/components/Details/CourseDetail';
-import ScheduleForm from 'src/components/Forms/ScheduleForm';
-
+//import ScheduleForm from 'src/components/Forms/ScheduleForm';
+import ScheduleSelector from 'src/components/Forms/ScheduleSelector'
 
 export const MODAL_MODES = {
     ADD: "ADD",
@@ -76,7 +76,7 @@ export const ModalProvider = ({ children }:any) => {
                 break; 
             
             case 'ScheduleForm': 
-                content = <ScheduleForm />
+                content = <ScheduleSelector />
                 break; 
                 
             default:
