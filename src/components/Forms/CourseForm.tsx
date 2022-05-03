@@ -133,9 +133,10 @@ const CourseForm = () => {
           </Form.Item>
           <Form.Item
             name="whatsappGroup"
-            label="Grupo de WhatsApp"
-            rules={[ { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
-            extra={<a href={data.whatsappGroup} target='_blank'><WhatsAppOutlined /> prueba lo aquí.</a>}
+            hasFeedback
+            label="Grupos de WhatsApp"
+            rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+            extra={<a href={data.whatsappGroup} target='_blank'><WhatsAppOutlined /> Pruébalo aquí.</a>}
           >
             <Input name="linkWhatsApp" placeholder='link del grupo de WhatsApp' prefix={<WhatsAppOutlined />}/>
             
