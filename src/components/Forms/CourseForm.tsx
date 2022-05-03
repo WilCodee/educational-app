@@ -5,7 +5,7 @@ import { ModalContext } from "src/context/ModalContext";
 import { postData } from "src/services/fetch/postData";
 import { putData } from "src/services/fetch/putData";
 import moment from 'moment';
-import { WhatsAppOutlined } from "@ant-design/icons";
+import {FolderOpenOutlined, WhatsAppOutlined } from "@ant-design/icons";
 
 const CourseForm = () => {
   const { createAction, updateAction } = useContext(ActionsContext);
@@ -77,7 +77,7 @@ const CourseForm = () => {
             name="name"
             rules={[{ required: true, message: "Ingresa el nombre de la materia!" }]}
           >
-            <Input />
+            <Input placeholder="Primero A" prefix={<FolderOpenOutlined />}/>
           </Form.Item>
 
           <Form.Item
@@ -85,14 +85,14 @@ const CourseForm = () => {
             name="date"
             rules={[{ required: true, message: "Ingresa el rango de fecha" }]}
           >
-            <DatePicker.RangePicker />
+            <DatePicker.RangePicker placeholder={['YYYY/MM/DD','YYYY/MM/DD']}/>
           </Form.Item>
           <Form.Item
             name="whatsappGroup"
-            label="Grupos de WhatsApp"
-            rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+            label="Grupo de WhatsApp"
+            rules={[{ type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
           >
-            <Input placeholder="input placeholder" />
+            <Input placeholder="link del grupo de WhatsApp" prefix={<WhatsAppOutlined />}/>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
 
@@ -121,7 +121,7 @@ const CourseForm = () => {
             name="name"
             rules={[{ required: true, message: "Ingresa el nombre de la materia!" }]}
           >
-            <Input />
+            <Input placeholder="Primero A" prefix={<FolderOpenOutlined />}/>
           </Form.Item>
 
           <Form.Item
@@ -129,15 +129,15 @@ const CourseForm = () => {
             name="date"
             rules={[{ required: true, message: "Ingresa el rango de fecha" }]}
           >
-            <DatePicker.RangePicker />
+            <DatePicker.RangePicker placeholder={['YYYY/MM/DD','YYYY/MM/DD']}/>
           </Form.Item>
           <Form.Item
             name="whatsappGroup"
-            label="Grupos de WhatsApp"
-            rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+            label="Grupo de WhatsApp"
+            rules={[ { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
             extra={<a href={data.whatsappGroup} target='_blank'><WhatsAppOutlined /> prueba lo aquí.</a>}
           >
-            <Input name="linkWhatsApp" placeholder="link del grupo de WhatsApp" />
+            <Input name="linkWhatsApp" placeholder='link del grupo de WhatsApp' prefix={<WhatsAppOutlined />}/>
             
           </Form.Item>
 

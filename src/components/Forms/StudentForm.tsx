@@ -8,6 +8,7 @@ import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from 'moment';
+import { IdcardOutlined, KeyOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const StudentForm = () => {
@@ -133,41 +134,42 @@ const StudentForm = () => {
               label="Email"
               name="email"
               rules={[{ required: true, message: "Campo requerido!", }, { type: 'email', message: "Ingrese un email valido!", whitespace: true }]}
+              
             >
-              <Input />
+              <Input placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Contraseña"
               name="password"
               rules={[{ required: true, message: "Campo requerido!" }, {
                 min: 6,
                 message: "Minimo 6 caracteres!"
               }]}
             >
-              <Input.Password type="password" />
+              <Input.Password type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
             <Form.Item
               name="confirm"
-              label="Confirm Password"
+              label="Confirma la contraseña"
               dependencies={['password']}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: 'Por favor confirma la contraseña!',
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    return Promise.reject(new Error('Las dos contraseñas no coiciden!'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
           </Card>
 
@@ -181,7 +183,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -193,7 +195,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -211,14 +213,14 @@ const StudentForm = () => {
                 min: 10,
                 message: "Minimo 10 caracteres!"
               }, {
-                validator: (_, value) => Cedula(value),
+                validator: async (_, value) =>Cedula(value),
                 message: 'Cédula no valida!'
               }
 
               ]}
               hasFeedback
             >
-              <Input />
+              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -226,7 +228,7 @@ const StudentForm = () => {
               name="age"
               rules={[{ required: true, message: "Campo requerido", whitespace: true }]}
             >
-              <InputNumber min={5} max={60} stringMode={true} />
+              <InputNumber min={5} max={60} stringMode={true} placeholder="18" />
             </Form.Item>
 
             <Form.Item
@@ -252,8 +254,9 @@ const StudentForm = () => {
                 },
 
               ]}
+              
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -268,6 +271,7 @@ const StudentForm = () => {
                 filterOption={(input: any, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                suffixIcon='🩸'
               >
                 <Option value="O+">O+</Option>
                 <Option value="O-">O-</Option>
@@ -286,7 +290,7 @@ const StudentForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker />
+              <DatePicker placeholder="YYYY-MM-DD"/>
             </Form.Item>
 
           </Card>
@@ -302,7 +306,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -314,7 +318,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -342,7 +346,7 @@ const StudentForm = () => {
 
               ]}
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
           </Card>
@@ -384,40 +388,40 @@ const StudentForm = () => {
               name="email"
               rules={[{ required: true, message: "Campo requerido!", whitespace: true }, { type: 'email', message: "Ingrese un email valido!" },]}
             >
-              <Input />
+              <Input placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Contraseña"
               name="password"
               rules={[{ required: true, message: "Campo requerido" }, {
                 min: 6,
                 message: "Minimo 6 caracteres!"
               }]}
             >
-              <Input type="password" />
+              <Input type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
             <Form.Item
               name="confirm"
-              label="Confirm Password"
+              label="Confirma la contraseña"
               dependencies={['password']}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: 'Por favor confirma la contraseña!',
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    return Promise.reject(new Error('Las dos contraseñas no coiciden!'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
           </Card>
 
@@ -431,7 +435,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -443,7 +447,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -461,14 +465,15 @@ const StudentForm = () => {
                 min: 10,
                 message: "Minimo 10 caracteres!"
               }, {
-                validator: (_, value) => Cedula(value),
+                validator: async (_, value) =>Cedula(value),
+
                 message: 'Cédula no valida!'
               }
 
               ]}
               hasFeedback
             >
-              <Input />
+              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -476,7 +481,7 @@ const StudentForm = () => {
               name="age"
               rules={[{ required: true, message: "Campo requerido" },]}
             >
-              <InputNumber min={5} max={60} stringMode={true} />
+              <InputNumber min={5} max={60} stringMode={true} placeholder="18" />
             </Form.Item>
 
             <Form.Item
@@ -504,7 +509,7 @@ const StudentForm = () => {
 
               ]}
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -519,6 +524,7 @@ const StudentForm = () => {
                 filterOption={(input: any, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                suffixIcon='🩸'
               >
                 <Option value="O+">O+</Option>
                 <Option value="O-">O-</Option>
@@ -537,7 +543,7 @@ const StudentForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker />
+              <DatePicker placeholder="YYYY-MM-DD"/>
             </Form.Item>
 
           </Card>
@@ -553,7 +559,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -565,7 +571,7 @@ const StudentForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -592,7 +598,7 @@ const StudentForm = () => {
 
               ]}
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
           </Card>
