@@ -4,6 +4,7 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 import { ModalContext } from 'src/context/ModalContext';
 import { postData } from 'src/services/fetch/postData'
 import { putData } from 'src/services/fetch/putData'
+import { AreaChartOutlined, BookOutlined, BugOutlined, ExperimentOutlined, PlusOutlined } from '@ant-design/icons/lib/icons';
 
 const {Option}= Select;
 export const SubjectForm = () => {
@@ -67,7 +68,7 @@ export const SubjectForm = () => {
                         name="name"
                         rules={[{ required: true, message: 'Porfavor Ingresa el nombre' }]}
                     >
-                        <Input />
+                        <Input placeholder="Matemáticas" prefix={<ExperimentOutlined />}/>
                     </Form.Item>
 
                     <Form.Item
@@ -82,10 +83,12 @@ export const SubjectForm = () => {
                             filterOption={(input: any, option: any) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
+                            suffixIcon={<AreaChartOutlined />}
+                            
                         >
-                            <Option value="Matemática">Matemática</Option>
-                            <Option value="Lenguaje">Lenguaje</Option>
-                            <Option value="Ciencias Sociales">Ciencias Sociales</Option>
+                            <Option value="Matemática" > Matemática</Option>
+                            <Option value="Lenguaje"> Lenguaje</Option>
+                            <Option value="Ciencias Sociales"> Ciencias Sociales</Option>
                             <Option value="Ciencias Naturales">Ciencias Naturales</Option>
                         </Select>
                     </Form.Item>
@@ -116,7 +119,7 @@ export const SubjectForm = () => {
                         name="name"
                         rules={[{ required: true, message: 'Porfavor Ingresa el nombre' }]}
                     >
-                        <Input />
+                        <Input placeholder="Matemáticas" prefix={<ExperimentOutlined />}/>
                     </Form.Item>
 
                     <Form.Item
@@ -131,6 +134,7 @@ export const SubjectForm = () => {
                             filterOption={(input: any, option: any) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
+                            suffixIcon={<AreaChartOutlined />}
                         >
                             <Option value="Matemática">Matemática</Option>
                             <Option value="Lenguaje">Lenguaje</Option>

@@ -29,12 +29,14 @@ const AuthenticatedNavigation = () => {
           <SideBar>
             <ModalProvider>
               <Routes>
+               
                 {user.isAdmin && (
                   <>
                     <Route path="students" element={<StudentsPage />} />
                     <Route path="teachers" element={<TeachersPage />} />
                     <Route path="subjects" element={<SubjectsPage />} />
                     <Route path="courses" element={<CoursesPage />} />
+                    
                   </>
                 )}
                 {user.isTeacher && (

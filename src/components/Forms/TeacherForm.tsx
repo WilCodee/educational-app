@@ -9,6 +9,7 @@ import { ITeacher } from "src/data/interfaces/ITeacher";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from "moment";
+import { AreaChartOutlined, IdcardOutlined, KeyOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons/lib/icons";
 import { getData } from "src/services/fetch/getData";
 const { Option } = Select;
 
@@ -118,40 +119,41 @@ const TeacherForm = () => {
               name="email"
               rules={[{ required: true, message: "Campo requerido!", }, { type: 'email', message: "Ingrese un email valido!", whitespace: true }]}
             >
-              <Input />
+              <Input  placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Contraseña"
               name="password"
               rules={[{ required: true, message: "Campo requerido!" }, {
                 min: 6,
                 message: "Minimo 6 caracteres!"
               }]}
             >
-              <Input.Password type="password" />
+              <Input.Password type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
             <Form.Item
               name="confirm"
-              label="Confirm Password"
+              label="Confirma Password"
               dependencies={['password']}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: 'Por favor confirma la contraseña!',
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    return Promise.reject(new Error('Las dos contraseñas no coinciden!'));
                   },
                 }),
               ]}
+
             >
-              <Input.Password />
+              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
           </Card>
 
@@ -165,7 +167,7 @@ const TeacherForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -176,8 +178,9 @@ const TeacherForm = () => {
                 pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
                 message: "Ingresar solo letras!"
               },]}
+
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -195,14 +198,16 @@ const TeacherForm = () => {
                 min: 10,
                 message: "Minimo 10 caracteres!"
               }, {
-                validator: (_, value) => Cedula(value),
-                message: 'Cédula no valida!'
+                message: 'Cédula no valida!',
+                validator: async (_, value) =>Cedula(value),
+                
+                
               }
 
               ]}
               hasFeedback
             >
-              <Input />
+              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -217,6 +222,7 @@ const TeacherForm = () => {
                 filterOption={(input: any, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                suffixIcon={<AreaChartOutlined/>}
               >
                 <Option value="Matemática">Matemática</Option>
                 <Option value="Lengiaje">Literatura</Option>
@@ -230,7 +236,7 @@ const TeacherForm = () => {
               name="age"
               rules={[{ required: true, message: "Campo requerido", whitespace: true }]}
             >
-              <InputNumber min={18} max={80} stringMode={true} />
+              <InputNumber min={18} max={80} stringMode={true} placeholder="18" />
             </Form.Item>
 
             <Form.Item
@@ -257,7 +263,7 @@ const TeacherForm = () => {
 
               ]}
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -265,7 +271,7 @@ const TeacherForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker />
+              <DatePicker placeholder="YYYY-MM-DD"/>
             </Form.Item>
 
           </Card>
@@ -304,40 +310,40 @@ const TeacherForm = () => {
               name="email"
               rules={[{ required: true, message: "Campo requerido!", }, { type: 'email', message: "Ingrese un email valido!", whitespace: true }]}
             >
-              <Input />
+              <Input  placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Contraseña"
               name="password"
               rules={[{ required: true, message: "Campo requerido!" }, {
                 min: 6,
                 message: "Minimo 6 caracteres!"
               }]}
             >
-              <Input type="password" />
+              <Input type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
             <Form.Item
               name="confirm"
-              label="Confirm Password"
+              label="Confirmar contraseña"
               dependencies={['password']}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: 'Por favor confirma la contraseña!',
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    return Promise.reject(new Error('las dos contraseñas no coiciden!'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
             </Form.Item>
           </Card>
 
@@ -351,7 +357,7 @@ const TeacherForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -363,7 +369,7 @@ const TeacherForm = () => {
                 message: "Ingresar solo letras!"
               },]}
             >
-              <Input />
+              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
             </Form.Item>
 
             <Form.Item
@@ -381,14 +387,14 @@ const TeacherForm = () => {
                 min: 10,
                 message: "Minimo 10 caracteres!"
               }, {
-                validator: (_, value) => Cedula(value),
+                validator: async (_, value) =>Cedula(value),
                 message: 'Cédula no valida!'
               }
 
               ]}
               hasFeedback
             >
-              <Input />
+              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />} />
             </Form.Item>
 
             <Form.Item
@@ -403,6 +409,7 @@ const TeacherForm = () => {
                 filterOption={(input: any, option: any) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                suffixIcon={<AreaChartOutlined/>}
               >
                 <Option value="Matemática">Matemática</Option>
                 <Option value="Lenguaje">Lenguaje</Option>
@@ -416,7 +423,7 @@ const TeacherForm = () => {
               name="age"
               rules={[{ required: true, message: "Campo requerido", whitespace: true }]}
             >
-              <InputNumber min={18} max={80} stringMode={true} />
+              <InputNumber min={18} max={80} stringMode={true} placeholder="18" />
             </Form.Item>
 
             <Form.Item
@@ -443,7 +450,7 @@ const TeacherForm = () => {
 
               ]}
             >
-              <Input addonBefore={'+593'} />
+              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
             </Form.Item>
 
 
@@ -452,7 +459,7 @@ const TeacherForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker />
+              <DatePicker placeholder="YYYY-MM-DD" />
             </Form.Item>
 
           </Card>
