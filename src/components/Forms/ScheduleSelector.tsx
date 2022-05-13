@@ -62,9 +62,9 @@ const ScheduleSelector = () => {
 
   const getBusyHours = async (teacherId: string) => {
     const r = await getData("teacher_busy_hours/" + teacherId);
-    console.log('r', r)
+    console.log("r", r);
     if (r.status && r.busy_days.length > 0) {
-      console.log('r', r)
+      console.log("r", r);
       console.log("aa", [
         parseInt(r.busy_days[0].startTime.substring(0, 2)),
         parseInt(r.busy_days[1].endTime.substring(0, 2)),
@@ -96,7 +96,6 @@ const ScheduleSelector = () => {
       disabledHours.push(parseInt(disabledTime.substring(0, 2)))
     );
 
-    
     return disabledHours;
   };
 
@@ -108,7 +107,10 @@ const ScheduleSelector = () => {
     return disabledMinutes;
   };
 
-  const getBusyHoursInterval = (disabledStartTimes:string[], disabledEndTimes:string[]) => {
+  const getBusyHoursInterval = (
+    disabledStartTimes: string[],
+    disabledEndTimes: string[]
+  ) => {
     let disabledHours: any[] = [];
     disabledStartTimes.map((disabledTime: string) =>
       disabledHours.push(parseInt(disabledTime.substring(0, 2)))
@@ -116,18 +118,18 @@ const ScheduleSelector = () => {
     disabledEndTimes.map((disabledTime: string) =>
       disabledHours.push(parseInt(disabledTime.substring(0, 2)))
     );
-    console.log('disabled hours', disabledHours)
-    
+    console.log("disabled hours", disabledHours);
+
     const lowEnd = disabledHours[0];
     const highEnd = disabledHours[1];
     const list = [];
     for (var i = lowEnd; i <= highEnd; i++) {
       list.push(i);
     }
-    console.log(list)
-    return list; 
+    console.log(list);
+    return list;
     //return disabledHours;
-  }
+  };
 
   const getScheduleDay = (
     day: string,
@@ -143,21 +145,66 @@ const ScheduleSelector = () => {
         "el profesor existe y tiene dias ocupados",
         currentTeacher["busyDays"]
       );
-      const columnDay = currentTeacher["busyDays"].find(
+      const columnDay = currentTeacher["busyDays"].filter(
         (busyDay: any) => busyDay.day === day
       );
+      console.log("column day", columnDay);
       if (
         columnDay &&
-        "disabledStartTimes" in columnDay &&
+        columnDay.length > 0 &&
+        //"disabledStartTimes" in columnDay &&
         inputType === "start"
       ) {
         if (timeType === "hours") {
-          return getBusyHoursInterval(columnDay.disabledStartTimes, columnDay.disabledEndTimes)
+          if (columnDay.length === 1) {
+            console.log("solo un intervalo");
+            return getBusyHoursInterval(
+              columnDay[0].disabledStartTimes,
+              columnDay[0].disabledEndTimes
+            );
+          }
+          if (columnDay.length > 1) {
+            console.log("mas de un intervalo");
+            let interval: any = [];
+            columnDay.map((day: any) => {
+              interval = [
+                ...interval,
+                ...getBusyHoursInterval(
+                  day.disabledStartTimes,
+                  day.disabledEndTimes
+                ),
+              ];
+            });
+            return interval;
+          }
         }
       }
-      if (columnDay && "disabledEndTimes" in columnDay && inputType === "end") {
+      if (
+        columnDay &&
+        columnDay.length > 0 &&
+        //"disabledEndTimes" in columnDay &&
+        inputType === "end"
+      ) {
         if (timeType === "hours") {
-          return getBusyHoursInterval(columnDay.disabledStartTimes, columnDay.disabledEndTimes)
+          if (columnDay.length === 1) {
+            return getBusyHoursInterval(
+              columnDay[0].disabledStartTimes,
+              columnDay[0].disabledEndTimes
+            );
+          }
+          if (columnDay.length > 1) {
+            let interval: any = [];
+            columnDay.map((day: any) => {
+              interval = [
+                ...interval,
+                ...getBusyHoursInterval(
+                  day.disabledStartTimes,
+                  day.disabledEndTimes
+                ),
+              ];
+            });
+            return interval;
+          }
         }
       }
     }
@@ -249,7 +296,7 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      }
+                      },
                     };
                   }}
                 />
@@ -279,7 +326,7 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      }
+                      },
                     };
                   }}
                 />
@@ -309,7 +356,7 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      }
+                      },
                     };
                   }}
                 />
@@ -339,7 +386,7 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      }
+                      },
                     };
                   }}
                 />
@@ -368,7 +415,7 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      }
+                      },
                     };
                   }}
                 />
