@@ -62,7 +62,9 @@ const ScheduleSelector = () => {
 
   const getBusyHours = async (teacherId: string) => {
     const r = await getData("teacher_busy_hours/" + teacherId);
+    console.log('r', r)
     if (r.status && r.busy_days.length > 0) {
+      console.log('r', r)
       console.log("aa", [
         parseInt(r.busy_days[0].startTime.substring(0, 2)),
         parseInt(r.busy_days[1].endTime.substring(0, 2)),
@@ -93,6 +95,8 @@ const ScheduleSelector = () => {
     disabledTimes.map((disabledTime: string) =>
       disabledHours.push(parseInt(disabledTime.substring(0, 2)))
     );
+
+    
     return disabledHours;
   };
 
@@ -103,6 +107,27 @@ const ScheduleSelector = () => {
     );
     return disabledMinutes;
   };
+
+  const getBusyHoursInterval = (disabledStartTimes:string[], disabledEndTimes:string[]) => {
+    let disabledHours: any[] = [];
+    disabledStartTimes.map((disabledTime: string) =>
+      disabledHours.push(parseInt(disabledTime.substring(0, 2)))
+    );
+    disabledEndTimes.map((disabledTime: string) =>
+      disabledHours.push(parseInt(disabledTime.substring(0, 2)))
+    );
+    console.log('disabled hours', disabledHours)
+    
+    const lowEnd = disabledHours[0];
+    const highEnd = disabledHours[1];
+    const list = [];
+    for (var i = lowEnd; i <= highEnd; i++) {
+      list.push(i);
+    }
+    console.log(list)
+    return list; 
+    //return disabledHours;
+  }
 
   const getScheduleDay = (
     day: string,
@@ -127,18 +152,12 @@ const ScheduleSelector = () => {
         inputType === "start"
       ) {
         if (timeType === "hours") {
-          return getDisabledHours(columnDay.disabledStartTimes);
-        }
-        if (timeType === "minutes") {
-          return getDisabledMinutes(columnDay.disabledStartTimes);
+          return getBusyHoursInterval(columnDay.disabledStartTimes, columnDay.disabledEndTimes)
         }
       }
       if (columnDay && "disabledEndTimes" in columnDay && inputType === "end") {
         if (timeType === "hours") {
-          return getDisabledHours(columnDay.disabledEndTimes);
-        }
-        if (timeType === "minutes") {
-          return getDisabledMinutes(columnDay.disabledEndTimes);
+          return getBusyHoursInterval(columnDay.disabledStartTimes, columnDay.disabledEndTimes)
         }
       }
     }
@@ -230,24 +249,6 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      },
-                      disabledMinutes: (selectedHour) => {
-                        if (type === "start") {
-                          return getScheduleDay(
-                            "Lunes",
-                            item.rowIndex,
-                            "start",
-                            "minutes"
-                          );
-                        }
-                        if (type === "end") {
-                          return getScheduleDay(
-                            "Lunes",
-                            item.rowIndex,
-                            "end",
-                            "minutes"
-                          );
-                        }
                       }
                     };
                   }}
@@ -276,24 +277,6 @@ const ScheduleSelector = () => {
                             item.rowIndex,
                             "end",
                             "hours"
-                          );
-                        }
-                      },
-                      disabledMinutes: (selectedHour) => {
-                        if (type === "start") {
-                          return getScheduleDay(
-                            "Martes",
-                            item.rowIndex,
-                            "start",
-                            "minutes"
-                          );
-                        }
-                        if (type === "end") {
-                          return getScheduleDay(
-                            "Martes",
-                            item.rowIndex,
-                            "end",
-                            "minutes"
                           );
                         }
                       }
@@ -326,24 +309,6 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      },
-                      disabledMinutes: (selectedHour) => {
-                        if (type === "start") {
-                          return getScheduleDay(
-                            "Miercoles",
-                            item.rowIndex,
-                            "start",
-                            "minutes"
-                          );
-                        }
-                        if (type === "end") {
-                          return getScheduleDay(
-                            "Miercoles",
-                            item.rowIndex,
-                            "end",
-                            "minutes"
-                          );
-                        }
                       }
                     };
                   }}
@@ -374,24 +339,6 @@ const ScheduleSelector = () => {
                             "hours"
                           );
                         }
-                      },
-                      disabledMinutes: (selectedHour) => {
-                        if (type === "start") {
-                          return getScheduleDay(
-                            "Jueves",
-                            item.rowIndex,
-                            "start",
-                            "minutes"
-                          );
-                        }
-                        if (type === "end") {
-                          return getScheduleDay(
-                            "Jueves",
-                            item.rowIndex,
-                            "end",
-                            "minutes"
-                          );
-                        }
                       }
                     };
                   }}
@@ -419,24 +366,6 @@ const ScheduleSelector = () => {
                             item.rowIndex,
                             "end",
                             "hours"
-                          );
-                        }
-                      },
-                      disabledMinutes: (selectedHour) => {
-                        if (type === "start") {
-                          return getScheduleDay(
-                            "Viernes",
-                            item.rowIndex,
-                            "start",
-                            "minutes"
-                          );
-                        }
-                        if (type === "end") {
-                          return getScheduleDay(
-                            "Viernes",
-                            item.rowIndex,
-                            "end",
-                            "minutes"
                           );
                         }
                       }
