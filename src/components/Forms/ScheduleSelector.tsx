@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Form, Select, TimePicker, Button } from "antd";
+import React, { useEffect, useState, useContext } from "react";
+import { Row, Col, Form, Select, TimePicker, Button, message } from "antd";
 import { getData } from "../../services/fetch/getData";
+import moment from "moment";
+import { ModalContext } from "../../context/ModalContext";
+import { ActionsContext } from '../../context/AuthContext/ActionsContext/ActionsContext';
+import { putData } from 'src/services/fetch/putData'
+
 
 const items = [
   {
@@ -44,10 +49,11 @@ const ScheduleSelector = () => {
   const [subjects, setSubjects] = useState([]);
   const { Option } = Select;
   const [form] = Form.useForm();
+  const { data, hideModal }:any = useContext(ModalContext);
+  const { updateAction } = useContext(ActionsContext)
 
-  const handleSubmit = (values: any) => {
-    console.log("values", values);
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   const initialRequest = async () => {
     const r = await getData("teachers");
@@ -210,6 +216,74 @@ const ScheduleSelector = () => {
     }
   };
 
+  const parseTimePickerValue = (value:any) => moment(new Date(value) ).format('HH:mm:ss')
+
+  const sendData = async (values:any) => {  
+    const dataValues:any = { ...values }
+    const keys = Object.keys(values)
+    let emptyDays = 0
+    keys.forEach((key, index) => {
+      if(Array.isArray(values[key])){
+        console.log('index', index)
+        let dayName = key.replace(/[0-9]/g, '')
+        console.log('dayName', dayName)
+        dataValues[key] =  {
+          day: dayName,
+          startTime: parseTimePickerValue(values[key][0]['_d']), 
+          endTime: parseTimePickerValue(values[key][1]['_d'])
+        } 
+      }else{
+        emptyDays +=1
+      }
+    })
+    if(emptyDays===14){
+      message.error("Debe completar al menos un día!")
+      return;
+    }
+    
+    let schedule = []
+    for(let i=0; i<items.length; i++){
+      const row = keys.filter((k:any) => k.includes(i))
+      const rowObj:any = { subject: '', teacher:'', days: [] };
+      row.forEach((element:any)=> {
+        if(element.includes("teacher")){
+          rowObj.teacher = dataValues[element];
+        }
+        if(element.includes("subject")){
+          rowObj.subject = dataValues[element]
+        }
+        if(!(element.includes("teacher")) && !(element.includes("subject"))){
+          rowObj.days.push(dataValues[element])
+        }
+      });
+      schedule.push(rowObj)
+    }
+    console.log('schedule', schedule)
+    
+    
+    //LOGIC TO SAVE TEACHERS ON INDEPENDENT ARRAY INTO COURSE DOCUMENT
+    let teachersKeys = keys.filter((k) => k.includes('teacher'))
+    let teachers:any = []
+    teachersKeys.map((tk) => {
+      teachers.push(values[tk])
+    })
+
+    
+    
+    setIsSubmitting(true);
+    const updateRequest = await putData(`courses/${data._id}`, { schedule, teachers });
+    if (updateRequest.status) {
+      message.success("Curso editado exitosamente")
+      let updatedCourse = updateRequest.course
+      updatedCourse.key = updatedCourse._id
+      updateAction(updatedCourse._id, updatedCourse)
+    } else {
+      message.error("Algo ha salido mal editando el curso")
+    }
+    setIsSubmitting(false);
+    
+  };
+
   return (
     <div>
       <Row>
@@ -242,11 +316,13 @@ const ScheduleSelector = () => {
           <h4 style={{ textAlign: "center" }}>Viernes</h4>{" "}
         </Col>
       </Row>
-      <Form form={form} onFinish={handleSubmit}>
+      <Form form={form} onFinish={sendData}>
         {items.map((item) => (
           <Row>
             <Col span={2}>
-              <Form.Item name={"teacher" + item.rowIndex}>
+              <Form.Item name={"teacher" + item.rowIndex}
+              rules={[{ required: true, message: 'Debe seleccionar un profesor!' }]} 
+              >
                 <Select
                   placeholder="Seleccionar el profesor"
                   onChange={(value) => getBusyHours(value)}
@@ -262,7 +338,9 @@ const ScheduleSelector = () => {
               </Form.Item>
             </Col>
             <Col span={2}>
-              <Form.Item name={"subject" + item.rowIndex}>
+              <Form.Item name={"subject" + item.rowIndex}
+              rules={[{ required: true, message: 'Debe seleccionar una materia!' }]} 
+              >
                 <Select placeholder="Seleccionar la materia">
                   {subjects &&
                     subjects.length > 0 &&
@@ -424,7 +502,7 @@ const ScheduleSelector = () => {
           </Row>
         ))}
         <Form.Item>
-          <Button htmlType="submit" type="primary">
+          <Button htmlType="submit" type="primary" loading={isSubmitting} >
             Guardar Cambios
           </Button>
         </Form.Item>
