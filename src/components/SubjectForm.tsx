@@ -4,7 +4,7 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 import { ModalContext } from 'src/context/ModalContext';
 import { postData } from 'src/services/fetch/postData'
 import { putData } from 'src/services/fetch/putData'
-import { AreaChartOutlined, BookOutlined, BugOutlined, ExperimentOutlined, PlusOutlined } from '@ant-design/icons/lib/icons';
+import { AreaChartOutlined, ExperimentOutlined } from '@ant-design/icons/lib/icons';
 
 const {Option}= Select;
 export const SubjectForm = () => {

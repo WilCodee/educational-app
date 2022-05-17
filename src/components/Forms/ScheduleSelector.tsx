@@ -91,22 +91,7 @@ const ScheduleSelector = () => {
     initialRequest();
   }, []);
 
-  const getDisabledHours = (disabledTimes: string[]) => {
-    let disabledHours: any[] = [];
-    disabledTimes.map((disabledTime: string) =>
-      disabledHours.push(parseInt(disabledTime.substring(0, 2)))
-    );
 
-    return disabledHours;
-  };
-
-  const getDisabledMinutes = (disabledTimes: string[]) => {
-    let disabledMinutes: any[] = [];
-    disabledTimes.map((disabledTime: string) =>
-      disabledMinutes.push(parseInt(disabledTime.substring(3, 5)))
-    );
-    return disabledMinutes;
-  };
 
   const getBusyHoursInterval = (
     disabledStartTimes: string[],
