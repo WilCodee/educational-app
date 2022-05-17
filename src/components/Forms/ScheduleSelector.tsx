@@ -67,14 +67,9 @@ const ScheduleSelector = () => {
   };
 
   const getBusyHours = async (teacherId: string) => {
-    const r = await getData("teacher_busy_hours/" + teacherId);
+    const r = await getData("teacher_busy_hours/" + teacherId + "/" + data._id);
     console.log("r", r);
     if (r.status && r.busy_days.length > 0) {
-      console.log("r", r);
-      console.log("aa", [
-        parseInt(r.busy_days[0].startTime.substring(0, 2)),
-        parseInt(r.busy_days[1].endTime.substring(0, 2)),
-      ]);
       const tc: any = [...teachers];
       const teacherIndex = tc.findIndex(
         (teacher: any) => teacher._id === teacherId
@@ -277,6 +272,7 @@ const ScheduleSelector = () => {
       let updatedCourse = updateRequest.course
       updatedCourse.key = updatedCourse._id
       updateAction(updatedCourse._id, updatedCourse)
+      hideModal()
     } else {
       message.error("Algo ha salido mal editando el curso")
     }

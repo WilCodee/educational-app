@@ -1,24 +1,38 @@
 import React, { useContext, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
-import { ActionsContext } from '../../context/AuthContext/ActionsContext/ActionsContext';
-import { Button, Card, DatePicker, Form, Input, InputNumber, message, Select } from "antd";
+import { ActionsContext } from "../../context/AuthContext/ActionsContext/ActionsContext";
+import {
+  Button,
+  Card,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import { postData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
 import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
-import moment from 'moment';
-import { IdcardOutlined, KeyOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import moment from "moment";
+import {
+  IdcardOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { getData } from "src/services/fetch/getData";
+import { generatePassword } from "src/utils";
 
 const { Option } = Select;
 const StudentForm = () => {
   const { mode, data, hideModal }: any = useContext(ModalContext);
-  const { createAction, updateAction } = useContext(ActionsContext)
+  const { createAction, updateAction } = useContext(ActionsContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [form] = Form.useForm();
-  
+
   const onFinishAdd = async (values: any) => {
     const studentInfo: IStudent = {
       fullName: {
@@ -48,7 +62,7 @@ const StudentForm = () => {
 
     const userObject: IUser = {
       email: values.email,
-      password: values.password,
+      password: generatePassword(),
       isAdmin: false,
       isSeller: false,
       isTeacher: false,
@@ -57,18 +71,20 @@ const StudentForm = () => {
     };
     setIsSubmitting(true);
     const addRequest = await postData("users", userObject);
-    const requestEmail = await getData(`/mail/${values.email}`)
-    console.info("addRequest", addRequest);
-    if (addRequest.status && requestEmail.status) {
-      message.success("Estudiante creado exitosamente - Credenciales enviadas")
-      let newStudent = addRequest.user
-      newStudent.key = newStudent._id
-      createAction(newStudent)
+    if (addRequest.status) {
+      message.success("Estudiante creado exitosamente");
+      let newStudent = addRequest.user;
+      newStudent.key = newStudent._id;
+      createAction(newStudent);
+      const requestEmail = await getData(`send_welcome_email/${values.email}`);
+      if (requestEmail.status) {
+        message.success("Credenciales enviadas");
+      }
     } else {
-      message.error("Algo ha salido mal creando el estudiante")
+      message.error("Algo ha salido mal creando el estudiante");
     }
     setIsSubmitting(false);
-    hideModal()
+    hideModal();
   };
 
   const onFinishEdit = async (values: any) => {
@@ -100,7 +116,7 @@ const StudentForm = () => {
 
     const userObject: IUser = {
       email: values.email,
-      password: values.password,
+      password: generatePassword(),
       isAdmin: false,
       isSeller: false,
       isTeacher: false,
@@ -110,16 +126,16 @@ const StudentForm = () => {
     setIsSubmitting(true);
     const updateRequest = await putData(`users/${data._id}`, userObject);
     if (updateRequest.status) {
-      message.success("Estudiante editado exitosamente")
-      let updatedStudent = updateRequest.user
-      updatedStudent.key = updatedStudent._id
-      updateAction(updatedStudent._id, updatedStudent)
+      message.success("Estudiante editado exitosamente");
+      let updatedStudent = updateRequest.user;
+      updatedStudent.key = updatedStudent._id;
+      updateAction(updatedStudent._id, updatedStudent);
     } else {
-      message.error("Algo ha salido mal editando el estudiante")
+      message.error("Algo ha salido mal editando el estudiante");
     }
     setIsSubmitting(false);
-    hideModal()
-  }
+    hideModal();
+  };
 
   return (
     <div>
@@ -132,106 +148,119 @@ const StudentForm = () => {
           autoComplete="off"
           form={form}
         >
-          <Card title="Datos de acceso" >
+          <Card title="Datos de acceso">
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Campo requerido!", }, { type: 'email', message: "Ingrese un email valido!", whitespace: true }]}
-              
-            >
-              <Input placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
-            </Form.Item>
-
-            <Form.Item
-              label="Contraseña"
-              name="password"
-              rules={[{ required: true, message: "Campo requerido!" }, {
-                min: 6,
-                message: "Minimo 6 caracteres!"
-              }]}
-            >
-              <Input.Password type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
-            </Form.Item>
-            <Form.Item
-              name="confirm"
-              label="Confirma la contraseña"
-              dependencies={['password']}
-              hasFeedback
               rules={[
+                { required: true, message: "Campo requerido!" },
                 {
-                  required: true,
-                  message: 'Por favor confirma la contraseña!',
+                  type: "email",
+                  message: "Ingrese un email valido!",
+                  whitespace: true,
                 },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('Las dos contraseñas no coiciden!'));
-                  },
-                }),
               ]}
             >
-              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
+              <Input
+                placeholder="correo@dominio.com"
+                prefix={<MailOutlined />}
+              />
             </Form.Item>
           </Card>
 
-          <Card title="Datos del estudiante" >
+          <Card title="Datos del estudiante">
             <Form.Item
               label="Nombre"
               name="firstName"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido!",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
+              <Input placeholder="Nombre" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Apellido"
               name="lastName"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
+              <Input placeholder="Apellido" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Cédula de identidad"
               name="ci"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }, {
-                type: 'string',
-                pattern: /^[0-9]+$/,
-                message: 'No ingresar letras!',
-
-              }, {
-                max: 10,
-                message: "Maximo 10 caracteres!"
-              }, {
-                min: 10,
-                message: "Minimo 10 caracteres!"
-              }, {
-                validator: async (_, value) =>Cedula(value),
-                message: 'Cédula no valida!'
-              }
-
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern: /^[0-9]+$/,
+                  message: "No ingresar letras!",
+                },
+                {
+                  max: 10,
+                  message: "Maximo 10 caracteres!",
+                },
+                {
+                  min: 10,
+                  message: "Minimo 10 caracteres!",
+                },
+                {
+                  validator: async (_, value) => Cedula(value),
+                  message: "Cédula no valida!",
+                },
               ]}
               hasFeedback
             >
-              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />}/>
+              <Input
+                placeholder="Cédula de identidad"
+                prefix={<IdcardOutlined />}
+              />
             </Form.Item>
 
             <Form.Item
               label="Edad"
               name="age"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+              ]}
             >
-              <InputNumber min={5} max={60} stringMode={true} placeholder="18" />
+              <InputNumber
+                min={5}
+                max={60}
+                stringMode={true}
+                placeholder="18"
+              />
             </Form.Item>
 
             <Form.Item
@@ -240,41 +269,44 @@ const StudentForm = () => {
               rules={[
                 {
                   required: true,
-                  message: "Campo requerido"
+                  message: "Campo requerido",
                 },
                 {
-                  type: 'string',
+                  type: "string",
                   pattern: /^[0-9]+$/,
-                  message: 'No ingresar letras!',
+                  message: "No ingresar letras!",
                 },
                 {
                   max: 9,
-                  message: "Maximo 9 caracteres!"
+                  message: "Maximo 9 caracteres!",
                 },
                 {
                   min: 7,
-                  message: "Minimo 7 caracteres!"
+                  message: "Minimo 7 caracteres!",
                 },
-
               ]}
-              
             >
-              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
+              <Input
+                addonBefore={"+593"}
+                placeholder="99 000 0000"
+                prefix={<PhoneOutlined />}
+              />
             </Form.Item>
 
             <Form.Item
               label="Tipo de sangre"
               name="bloodType"
-              rules={[{ required: true, message: "Campo requerido", }]}
+              rules={[{ required: true, message: "Campo requerido" }]}
             >
               <Select
                 showSearch
                 placeholder="Tipo de sangre"
                 optionFilterProp="children"
                 filterOption={(input: any, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
                 }
-                suffixIcon='🩸'
+                suffixIcon="🩸"
               >
                 <Option value="O+">O+</Option>
                 <Option value="O-">O-</Option>
@@ -284,7 +316,6 @@ const StudentForm = () => {
                 <Option value="B-">B-</Option>
                 <Option value="AB+">AB+</Option>
                 <Option value="AB-">AB-</Option>
-
               </Select>
             </Form.Item>
 
@@ -293,35 +324,49 @@ const StudentForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker placeholder="YYYY-MM-DD"/>
+              <DatePicker placeholder="YYYY-MM-DD" />
             </Form.Item>
-
           </Card>
 
-
-          <Card title="Datos del representante" >
+          <Card title="Datos del representante">
             <Form.Item
               label="Nombre"
               name="representativeFirstName"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
+              <Input placeholder="Nombre" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Apellido"
               name="representativeLastName"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
+              <Input placeholder="Apellido" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
@@ -331,27 +376,29 @@ const StudentForm = () => {
                 {
                   required: true,
                   message: "Campo requerido",
-                  whitespace: true
+                  whitespace: true,
                 },
                 {
-                  type: 'string',
+                  type: "string",
                   pattern: /^[0-9]+$/,
-                  message: 'No ingresar letras!',
+                  message: "No ingresar letras!",
                 },
                 {
                   max: 9,
-                  message: "Maximo 9 caracteres!"
+                  message: "Maximo 9 caracteres!",
                 },
                 {
                   min: 7,
-                  message: "Minimo 7 caracteres!"
+                  message: "Minimo 7 caracteres!",
                 },
-
               ]}
             >
-              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
+              <Input
+                addonBefore={"+593"}
+                placeholder="99 000 0000"
+                prefix={<PhoneOutlined />}
+              />
             </Form.Item>
-
           </Card>
 
           <Form.Item>
@@ -366,125 +413,133 @@ const StudentForm = () => {
           name="basic"
           initialValues={{
             email: data.email,
-            password: data.password,
             firstName: data.profile.fullName.firstName ?? "",
             lastName: data.profile.fullName.lastName,
             ci: data.profile.ci,
             age: data.profile.age,
             phoneNumber: data.profile.phoneNumber.number,
             bloodType: data.profile.bloodType,
-            admissionDate: moment(data.profile.admissionDate, 'DD-MM-YY'),
-            representativeFirstName: data.profile.representative.fullName.firstName,
-            representativeLastName: data.profile.representative.fullName.lastName,
-            representativePhoneNumber: data.profile.representative.phoneNumber.number
-
+            admissionDate: moment(data.profile.admissionDate, "DD-MM-YY"),
+            representativeFirstName:
+              data.profile.representative.fullName.firstName,
+            representativeLastName:
+              data.profile.representative.fullName.lastName,
+            representativePhoneNumber:
+              data.profile.representative.phoneNumber.number,
           }}
           onFinish={onFinishEdit}
           /*onFinishFailed={console.log('hey')}*/
           autoComplete="off"
           form={form}
         >
-
-          <Card title="Datos de acceso" >
+          <Card title="Datos de acceso">
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, { type: 'email', message: "Ingrese un email valido!" },]}
-            >
-              <Input placeholder="correo@dominio.com" prefix={<MailOutlined />}/>
-            </Form.Item>
-
-            <Form.Item
-              label="Contraseña"
-              name="password"
-              rules={[{ required: true, message: "Campo requerido" }, {
-                min: 6,
-                message: "Minimo 6 caracteres!"
-              }]}
-            >
-              <Input type="password" placeholder="contraseña" prefix={<KeyOutlined />}/>
-            </Form.Item>
-            <Form.Item
-              name="confirm"
-              label="Confirma la contraseña"
-              dependencies={['password']}
-              hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Por favor confirma la contraseña!',
+                  message: "Campo requerido!",
+                  whitespace: true,
                 },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('Las dos contraseñas no coiciden!'));
-                  },
-                }),
+                { type: "email", message: "Ingrese un email valido!" },
               ]}
             >
-              <Input.Password placeholder="confirmar contraseña" prefix={<KeyOutlined />}/>
+              <Input
+                placeholder="correo@dominio.com"
+                prefix={<MailOutlined />}
+              />
             </Form.Item>
           </Card>
 
-          <Card title="Datos del estudiante" >
+          <Card title="Datos del estudiante">
             <Form.Item
               label="Nombre"
               name="firstName"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido!",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
+              <Input placeholder="Nombre" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Apellido"
               name="lastName"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido!",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
+              <Input placeholder="Apellido" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Cédula de identidad"
               name="ci"
-              rules={[{ required: true, message: "Campo requerido", whitespace: true }, {
-                type: 'string',
-                pattern: /^[0-9]+$/,
-                message: 'No ingresar letras!',
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern: /^[0-9]+$/,
+                  message: "No ingresar letras!",
+                },
+                {
+                  max: 10,
+                  message: "Maximo 10 caracteres!",
+                },
+                {
+                  min: 10,
+                  message: "Minimo 10 caracteres!",
+                },
+                {
+                  validator: async (_, value) => Cedula(value),
 
-              }, {
-                max: 10,
-                message: "Maximo 10 caracteres!"
-              }, {
-                min: 10,
-                message: "Minimo 10 caracteres!"
-              }, {
-                validator: async (_, value) =>Cedula(value),
-
-                message: 'Cédula no valida!'
-              }
-
+                  message: "Cédula no valida!",
+                },
               ]}
               hasFeedback
             >
-              <Input placeholder="Cédula de identidad" prefix={<IdcardOutlined />}/>
+              <Input
+                placeholder="Cédula de identidad"
+                prefix={<IdcardOutlined />}
+              />
             </Form.Item>
 
             <Form.Item
               label="Edad"
               name="age"
-              rules={[{ required: true, message: "Campo requerido" },]}
+              rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <InputNumber min={5} max={60} stringMode={true} placeholder="18" />
+              <InputNumber
+                min={5}
+                max={60}
+                stringMode={true}
+                placeholder="18"
+              />
             </Form.Item>
 
             <Form.Item
@@ -494,25 +549,28 @@ const StudentForm = () => {
                 {
                   required: true,
                   message: "Campo requerido",
-                  whitespace: true
+                  whitespace: true,
                 },
                 {
-                  type: 'string',
+                  type: "string",
                   pattern: /^[0-9]+$/,
-                  message: 'No ingresar letras!',
+                  message: "No ingresar letras!",
                 },
                 {
                   max: 9,
-                  message: "Maximo 9 caracteres!"
+                  message: "Maximo 9 caracteres!",
                 },
                 {
                   min: 7,
-                  message: "Minimo 7 caracteres!"
+                  message: "Minimo 7 caracteres!",
                 },
-
               ]}
             >
-              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
+              <Input
+                addonBefore={"+593"}
+                placeholder="99 000 0000"
+                prefix={<PhoneOutlined />}
+              />
             </Form.Item>
 
             <Form.Item
@@ -525,9 +583,10 @@ const StudentForm = () => {
                 placeholder="Tipo de sangre"
                 optionFilterProp="children"
                 filterOption={(input: any, option: any) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
                 }
-                suffixIcon='🩸'
+                suffixIcon="🩸"
               >
                 <Option value="O+">O+</Option>
                 <Option value="O-">O-</Option>
@@ -537,7 +596,6 @@ const StudentForm = () => {
                 <Option value="B-">B-</Option>
                 <Option value="AB+">AB+</Option>
                 <Option value="AB-">AB-</Option>
-
               </Select>
             </Form.Item>
 
@@ -546,35 +604,49 @@ const StudentForm = () => {
               name="admissionDate"
               rules={[{ required: true, message: "Campo requerido" }]}
             >
-              <DatePicker placeholder="YYYY-MM-DD"/>
+              <DatePicker placeholder="YYYY-MM-DD" />
             </Form.Item>
-
           </Card>
 
-
-          <Card title="Datos del representante" >
+          <Card title="Datos del representante">
             <Form.Item
               label="Nombre"
               name="representativeFirstName"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido!",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Nombre" prefix={<UserOutlined />}/>
+              <Input placeholder="Nombre" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
               label="Apellido"
               name="representativeLastName"
-              rules={[{ required: true, message: "Campo requerido!", whitespace: true }, {
-                type: 'string',
-                pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
-                message: "Ingresar solo letras!"
-              },]}
+              rules={[
+                {
+                  required: true,
+                  message: "Campo requerido!",
+                  whitespace: true,
+                },
+                {
+                  type: "string",
+                  pattern:
+                    /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/,
+                  message: "Ingresar solo letras!",
+                },
+              ]}
             >
-              <Input placeholder="Apellido" prefix={<UserOutlined />}/>
+              <Input placeholder="Apellido" prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
@@ -583,29 +655,30 @@ const StudentForm = () => {
               rules={[
                 {
                   required: true,
-                  message: "Campo requerido"
+                  message: "Campo requerido",
                 },
                 {
-                  type: 'string',
+                  type: "string",
                   pattern: /^[0-9]+$/,
-                  message: 'No ingresar letras!',
+                  message: "No ingresar letras!",
                 },
                 {
                   max: 9,
-                  message: "Maximo 9 caracteres!"
+                  message: "Maximo 9 caracteres!",
                 },
                 {
                   min: 7,
-                  message: "Minimo 7 caracteres!"
+                  message: "Minimo 7 caracteres!",
                 },
-
               ]}
             >
-              <Input addonBefore={'+593'} placeholder="99 000 0000" prefix={<PhoneOutlined />}/>
+              <Input
+                addonBefore={"+593"}
+                placeholder="99 000 0000"
+                prefix={<PhoneOutlined />}
+              />
             </Form.Item>
-
           </Card>
-
 
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
