@@ -17,7 +17,7 @@ const AuthenticatedNavigation = () => {
   const { user } = useContext(AuthContext);
   useEffect(() => {
     user.isAdmin && navigate("/courses");
-    user.isTeacher && navigate("/students");
+    user.isTeacher && navigate("/courses");
     user.isStudent && navigate("/courses");
   }, []);
 
@@ -41,7 +41,7 @@ const AuthenticatedNavigation = () => {
                 )}
                 {user.isTeacher && (
                   <>
-                    <Route path="students" element={<StudentsPage />} />
+                    <Route path="courses" element={<CoursesPage />} />
                   </>
                 )}
                 {user.isStudent && (

@@ -93,6 +93,7 @@ const CoursesPage = () => {
     }
     user.isAdmin && (request = await getData("courses"))
     user.isStudent && (request = await getData(`courses_by_student/${user._id}`))
+    user.isTeacher && (request = await getData(`courses_by_teacher/${user._id}`))
 
     if (request.status) {
       const coursesToTable = request.courses.map((course: any) => {
@@ -184,6 +185,41 @@ const CoursesPage = () => {
           </Popconfirm>
           </>
           )}
+
+          {user.isTeacher && (
+             <>
+             <Button
+               icon={<EyeOutlined />}
+               onClick={handleViewCourse}
+               className="buttonTable"
+               type="primary"
+               disabled={selectedCourses.length === 1 ? false : true}
+             >
+               VER DETALLES
+             </Button>
+             <Button
+               icon={<EyeOutlined />}
+               onClick={handleViewCourse}
+               className="buttonTable"
+               type="primary"
+               disabled={selectedCourses.length === 1 ? false : true}
+             >
+               ASIGNACIÓN DE NOTAS
+             </Button>
+             <Button
+               icon={<EyeOutlined />}
+               onClick={handleViewCourse}
+               className="buttonTable"
+               type="primary"
+               disabled={selectedCourses.length === 1 ? false : true}
+             >
+               ASIGNACIÓN DE ASISTENCIA
+             </Button>
+             </>
+             
+          )
+
+          }
         </Card>
         <Table
           rowSelection={rowSelection}

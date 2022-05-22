@@ -101,7 +101,6 @@ const TeacherForm = () => {
 
     const userObject: IUser = {
       email: values.email,
-      password: generatePassword(),
       isAdmin: false,
       isSeller: false,
       isTeacher: true,
