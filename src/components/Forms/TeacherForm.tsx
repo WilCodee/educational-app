@@ -27,6 +27,7 @@ import {
 } from "@ant-design/icons/lib/icons";
 import { getData } from "src/services/fetch/getData";
 import { generatePassword } from "src/utils";
+import { ObjectId } from "bson";
 const { Option } = Select;
 
 const TeacherForm = () => {
@@ -54,6 +55,7 @@ const TeacherForm = () => {
     };
 
     const userObject: IUser = {
+      _id:new ObjectId().toString(),
       email: values.email,
       password: generatePassword(),
       isAdmin: false,

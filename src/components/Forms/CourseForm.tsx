@@ -6,6 +6,7 @@ import { postData } from "src/services/fetch/postData";
 import { putData } from "src/services/fetch/putData";
 import moment from 'moment';
 import {FolderOpenOutlined, WhatsAppOutlined } from "@ant-design/icons";
+import { ObjectId } from "bson";
 
 const CourseForm = () => {
   const { createAction, updateAction } = useContext(ActionsContext);
@@ -14,6 +15,7 @@ const CourseForm = () => {
 
   const onFinishAdd = async (values: any) => {
     const dataValues = {
+      _id: new ObjectId().toString(),
       name: values.name,
       startDate: values.date[0],
       endDate: values.date[1],

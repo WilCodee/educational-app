@@ -5,6 +5,7 @@ import { ModalContext } from 'src/context/ModalContext';
 import { postData } from 'src/services/fetch/postData'
 import { putData } from 'src/services/fetch/putData'
 import { AreaChartOutlined, ExperimentOutlined } from '@ant-design/icons/lib/icons';
+import { ObjectId } from 'bson';
 
 const {Option}= Select;
 export const SubjectForm = () => {
@@ -16,7 +17,11 @@ export const SubjectForm = () => {
 
     const onFinishAdd = async (values: any) => {
         setIsSubmitting(true);
-        const addRequest = await postData("subjects", values);
+        const dataValues = {
+            _id: new ObjectId().toString(),
+            ...values
+        }
+        const addRequest = await postData("subjects", dataValues);
         console.log('ar', addRequest)
         if (addRequest.status) {
             message.success("Materia creada exitosamente")

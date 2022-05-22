@@ -7,6 +7,7 @@ import { deleteData } from 'src/services/fetch/deleteData';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ModalContext } from 'src/context/ModalContext';
 import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsContext';
+import { AuthContext } from 'src/context/AuthContext';
 
 
 const StudentsPage = () => {
@@ -83,6 +84,8 @@ const StudentsPage = () => {
     };
       
 
+    const { user } = useContext(AuthContext);
+
     return(
         <div>
             <CardTable title="Estudiantes" AddText="Estudiante" AddOnClick={handleAddStudent} >
@@ -90,17 +93,23 @@ const StudentsPage = () => {
                 <Button 
                 onClick={handleViewStudent}
                 type="primary" icon={<EyeOutlined /> }  disabled={selectedStudents.length === 1 ? false : true }  className='buttonTable'>VER DETALLES</Button>
-                <Button 
-                onClick={handleEditStudent}
-                type="primary" icon={<EditOutlined />} disabled={selectedStudents.length === 1 ? false : true }  className='buttonTable'>EDITAR</Button>
-                <Popconfirm
-                    title="Estás seguro que deseas eliminar los estudiantes seleccionados?"
-                    onConfirm={handleDeleteStudent}
-                    okText="Sí"
-                    cancelText="No"
-                >
-                   <Button type="primary" icon={<DeleteOutlined />} disabled={selectedStudents.length >= 1 ? false: true}  className='buttonTable'>ELIMINAR</Button>
-                </Popconfirm>
+                {
+                    user.isAdmin && (
+                    <>
+                    <Button 
+                    onClick={handleEditStudent}
+                    type="primary" icon={<EditOutlined />} disabled={selectedStudents.length === 1 ? false : true }  className='buttonTable'>EDITAR</Button>
+                    <Popconfirm
+                        title="Estás seguro que deseas eliminar los estudiantes seleccionados?"
+                        onConfirm={handleDeleteStudent}
+                        okText="Sí"
+                        cancelText="No"
+                    >
+                       <Button type="primary" icon={<DeleteOutlined />} disabled={selectedStudents.length >= 1 ? false: true}  className='buttonTable'>ELIMINAR</Button>
+                    </Popconfirm>
+                    </>
+                )}
+              
             </Card>
 
             <Table rowSelection={rowSelection} columns={StudentsColumns} dataSource={items} loading={tableLoading} scroll={{ x: 600 }} />
