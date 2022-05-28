@@ -85,6 +85,17 @@ const CoursesPage = () => {
     });
   };
 
+
+  const handleAssignGrades = () => {
+    showModal({
+      mode: "EDIT",
+      data: selectedCourses[0],
+      title: "Asignación de notas",
+      contentComponent: "GradesForm",
+      width: "auto"
+    });
+  };
+
   const initialRequest = async () => {
     setTableLoading(true);
     var request = {
@@ -199,7 +210,7 @@ const CoursesPage = () => {
              </Button>
              <Button
                icon={<EyeOutlined />}
-               onClick={handleViewCourse}
+               onClick={handleAssignGrades}
                className="buttonTable"
                type="primary"
                disabled={selectedCourses.length === 1 ? false : true}
