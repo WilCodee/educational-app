@@ -11,16 +11,14 @@ export const RecoverPassword = () => {
     const onFinish = async(values: any)=>{
         try {
             setLoading(true);
-            const requestEmail = await getData(`/mail/${values.email}`)
-            if(requestEmail.status){
-                message.success(`Las Credenciales has sido enviadad a ${values.email}`)
+            const requestEmail = await getData(`send_welcome_email/${values.email}`);
+            if (requestEmail.status) {
+                message.success("Credenciales enviadas");
             }else{
                 message.error('El Correo No existe en la plataforma');
             }
-            
         } catch (error) {
-            message.error('El Correo No existe en la plataforma -'+error);
-            
+            message.error('Ha existido un error al enviar los datos:'+error);
         }
         setLoading(false);
     }

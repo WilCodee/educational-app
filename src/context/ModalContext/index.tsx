@@ -17,6 +17,8 @@ import { UnorderedListOutlined } from '@ant-design/icons';
 import { CourseDetail } from 'src/components/Details/CourseDetail';
 //import ScheduleForm from 'src/components/Forms/ScheduleForm';
 import ScheduleSelector from 'src/components/Forms/ScheduleSelector'
+import GradeForm from 'src/components/Forms/GradeForm/GradeForm';
+import GradesExperimental from 'src/components/Forms/GradesExperimental/GradesExperimental';
 
 export const MODAL_MODES = {
     ADD: "ADD",
@@ -73,8 +75,12 @@ export const ModalProvider = ({ children }:any) => {
             
             case 'SelectStudents': 
                 content = <StudentsList />
-                break; 
+                break;
             
+            case 'GradesForm':
+                content = <GradesExperimental />
+                break;
+        
             case 'ScheduleForm': 
                 content = <ScheduleSelector />
                 break; 
