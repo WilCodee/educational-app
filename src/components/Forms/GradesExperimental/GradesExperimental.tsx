@@ -11,9 +11,12 @@ import {
 
 // Import the style only once in your app!
 import "react-datasheet-grid/dist/style.css";
+import { ActionsContext } from "src/context/AuthContext/ActionsContext/ActionsContext";
 import { ModalContext } from "src/context/ModalContext";
 import { getData } from "src/services/fetch/getData";
 import { putData } from "src/services/fetch/putData";
+import { useDispatch } from 'react-redux'
+import { toggleRefresh } from "src/store/slices/table.slice";
 
 const GradesWrapper = () => {
   return <GradesExperimental />;
@@ -23,7 +26,10 @@ const GradesExperimental = () => {
   const { data, hideModal } = useContext(ModalContext);
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("data", data);
+  const { updateAction } = useContext(ActionsContext)
+  const dispatch = useDispatch()
+  
+  const [columnsLength, setColumnsLength] = useState(5)
 
   const initialRequest = async () => {
     setLoading(true);
@@ -34,16 +40,19 @@ const GradesExperimental = () => {
           row.grades.map(
             (grade, index) => (values["grade" + (index + 1).toString()] = grade)
           );
-          delete row["grades"];
+          //delete row["grades"];
         }
+        let studentInfo = data['students_list'].find((student:any) => student._id === row.student) 
+        let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
         return {
           ...row,
           ...values,
-          name: "Pablo Trujillo", //todo ese name debe venir en la propiedad student
+          name: studentName, //todo ese name debe venir en la propiedad student
         };
       });
       console.log("gradestotable", gradesToTable);
       setTableData(gradesToTable);
+      setColumnsLength(gradesToTable[0].grades.length)
       setLoading(false);
       return;
     }
@@ -71,9 +80,7 @@ const GradesExperimental = () => {
     initialRequest();
   }, []);
 
-  const [columnsLength, setColumnsLength] = useState(
-    "grades" in data ? ("grades" in data.grades ? data.grades[0].grades.length : 5) : 5
-  );
+
   const columns = useMemo(() => {
     let cols = [
       {
@@ -82,7 +89,7 @@ const GradesExperimental = () => {
         title: "Estudiante",
       },
     ];
-    for (let i = 1; i < columnsLength; i++) {
+    for (let i = 1; i <= columnsLength; i++) {
       cols.push({
         ...keyColumn("grade" + i.toString(), floatColumn),
         title: "Nota " + i.toString(),
@@ -100,6 +107,7 @@ const GradesExperimental = () => {
     let operation = operations[0];
     if (operation.type === "UPDATE") {
       let impactedRow = value[operation.fromRowIndex];
+      delete impactedRow["grades"]
       let rowKeys = Object.keys(impactedRow);
       let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade"));
       console.log("gradekeys", gradeKeys);
@@ -144,6 +152,10 @@ const GradesExperimental = () => {
       grades: cleanRows,
     });
     if (updateRequest.status) {
+      let updatedCourse = updateRequest.course
+      updatedCourse.key = updatedCourse._id
+      updateAction(updatedCourse._id, updatedCourse)
+      dispatch(toggleRefresh())
       message.success("Notas asignadas exitosamente");
       hideModal();
     } else {
