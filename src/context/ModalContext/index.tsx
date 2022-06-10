@@ -19,6 +19,8 @@ import { CourseDetail } from 'src/components/Details/CourseDetail';
 import ScheduleSelector from 'src/components/Forms/ScheduleSelector'
 import GradeForm from 'src/components/Forms/GradeForm/GradeForm';
 import GradesExperimental from 'src/components/Forms/GradesExperimental/GradesExperimental';
+import ScheduleExperimental from 'src/components/Forms/ScheduleExperimental/ScheduleExperimental';
+import AssistanceExperimental from 'src/components/Forms/AssistanceExperimental/AssistanceExperimental';
 
 export const MODAL_MODES = {
     ADD: "ADD",
@@ -81,6 +83,10 @@ export const ModalProvider = ({ children }:any) => {
                 content = <GradesExperimental />
                 break;
         
+            case 'AssistanceForm':
+                content = <AssistanceExperimental />
+                break;  
+    
             case 'ScheduleForm': 
                 content = <ScheduleSelector />
                 break; 

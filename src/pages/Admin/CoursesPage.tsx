@@ -97,6 +97,17 @@ const CoursesPage = () => {
     });
   };
 
+  const handleAssignAssistance = () => {
+    console.log("selectedCourse", selectedCourses[0]);
+    showModal({
+      mode: "EDIT",
+      data: selectedCourses[0],
+      title: "Asignación de notas",
+      contentComponent: "AssistanceForm",
+      width: "auto",
+    });
+  };
+
   const initialRequest = async () => {
     setLoading(true);
     var request = {
@@ -220,7 +231,7 @@ const CoursesPage = () => {
               </Button>
               <Button
                 icon={<EyeOutlined />}
-                onClick={handleViewCourse}
+                onClick={handleAssignAssistance}
                 className="buttonTable"
                 type="primary"
                 disabled={selectedCourses.length === 1 ? false : true}
