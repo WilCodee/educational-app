@@ -102,7 +102,7 @@ const CoursesPage = () => {
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
-      title: "Asignación de notas",
+      title: "Asignación de asistencia",
       contentComponent: "AssistanceForm",
       width: "auto",
     });

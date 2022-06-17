@@ -109,7 +109,7 @@ const ScheduleSelector = () => {
     const lowEnd = disabledHours[0];
     const highEnd = disabledHours[1];
     const list = [];
-    for (var i = lowEnd; i <= highEnd; i++) {
+    for (var i = lowEnd; i < highEnd; i++) {
       list.push(i);
     }
     console.log(list);
@@ -265,6 +265,37 @@ const ScheduleSelector = () => {
     
   };
 
+
+
+  const getDefaultValues = () => {
+    if('schedule' in data){
+      let item = {}
+      data.schedule.map((scheduleItem:any, index:any) => {
+        
+        item['teacher' + index] = scheduleItem.teacher  
+        item['subject' + index] = scheduleItem.subject
+        
+        scheduleItem.days.map((day:any) => 
+          {
+            if(day!==null && 'day' in day){
+              item[day.day + index] = [
+                moment(day.startTime, 'HH:mm:ss'),
+                moment(day.endTime, 'HH:mm:ss')
+              ]
+            }
+          }
+        )
+
+        console.log('item', item)
+
+      })
+
+      return item
+    }
+    return {}
+  }
+
+
   return (
     <div>
       <Row>
@@ -297,7 +328,9 @@ const ScheduleSelector = () => {
           <h4 style={{ textAlign: "center" }}>Viernes</h4>{" "}
         </Col>
       </Row>
-      <Form form={form} onFinish={sendData}>
+      <Form form={form} onFinish={sendData}
+        initialValues={getDefaultValues()}
+      >
         {items.map((item) => (
           <Row>
             <Col span={2}>

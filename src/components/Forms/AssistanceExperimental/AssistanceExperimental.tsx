@@ -31,16 +31,24 @@ const AssistanceExperimental = () => {
 
   const initialRequest = async () => {
     setLoading(true);
+
+    let people = []
+    const studentRequest = await getData("students_by_course/" + data._id);
+    if (studentRequest.status) {
+      people = studentRequest.students
+    }
+
+    console.log('data', data)
     if ("assistance" in data) {
-      let gradesToTable = data.grades.map((row) => {
+      let daysToTable = data.assistance.map((row) => {
         let values = {};
-        if ("grades" in row) {
-          row.grades.map(
-            (grade, index) => (values["grade" + (index + 1).toString()] = grade)
+        if ("days" in row) {
+          row.days.map(
+            (day, index) => (values["day" + (index + 1).toString()] = day)
           );
           //delete row["grades"];
         }
-        let studentInfo = data['students_list'].find((student:any) => student._id === row.student) 
+        let studentInfo = people.find((student:any) => student._id === row.student) 
         let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
         return {
           ...row,
@@ -48,9 +56,8 @@ const AssistanceExperimental = () => {
           name: studentName
         };
       });
-      console.log("gradestotable", gradesToTable);
-      setTableData(gradesToTable);
-      setColumnsLength(gradesToTable[0].grades.length)
+      console.log("daysToTable", daysToTable);
+      setTableData(daysToTable);
       setLoading(false);
       return;
     }
@@ -136,13 +143,13 @@ const AssistanceExperimental = () => {
 
   const handleSave = async () => {
     let cleanRows = tableData.map((row) => {
-      //obtenemos las keys de las columnas correspondientes a notas
+      //obtenemos las keys de las columnas correspondientes a dias
       let rowKeys = Object.keys(row);
-      let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade"));
-      //agrupamos los valores de dichas keys en un arreglo de notas
-      let grades = gradeKeys.map((gradeKey) => row[gradeKey]);
-      //eliminamos las keys individuales (grade1, grade2, ...etc) porque ya fueron agrupadas
-      gradeKeys.map((gradeKey) => delete row[gradeKey]);
+      let dayKeys = rowKeys.filter((rowKey) => rowKey.includes("day"));
+      //agrupamos los valores de dichas keys en un arreglo de dias
+      let days = dayKeys.map((dayKey) => row[dayKey]);
+      //eliminamos las keys individuales (day1, day2, ...etc) porque ya fueron agrupadas
+      dayKeys.map((dayKey) => delete row[dayKey]);
 
       //eliminamos la key de name ya que no es necesario
       let nameKeys = rowKeys.filter((rowKey) => rowKey.includes("name"));
@@ -151,19 +158,20 @@ const AssistanceExperimental = () => {
       //retornamos el arreglo limpio solo con student (id), average y el arreglo de notas (grades)
       return {
         ...row,
-        grades,
+        days,
       };
     });
 
+    console.log('cr', cleanRows)
     const updateRequest = await putData("courses/" + data._id, {
-      grades: cleanRows,
+      assistance: cleanRows,
     });
     if (updateRequest.status) {
       let updatedCourse = updateRequest.course
       updatedCourse.key = updatedCourse._id
       updateAction(updatedCourse._id, updatedCourse)
       dispatch(toggleRefresh())
-      message.success("Notas asignadas exitosamente");
+      message.success("Asistencia asignada exitosamente");
       hideModal();
     } else {
       message.error("Algo ha salido mal enviando la información");
@@ -177,11 +185,6 @@ const AssistanceExperimental = () => {
         <Skeleton active />
       ) : (
         <div>
-          <Button
-            onClick={() => setColumnsLength((prevState) => prevState + 1)}
-          >
-            Agregar nota
-          </Button>
           <DynamicDataSheetGrid
             value={tableData}
             onChange={(value, operations) => changeData(value, operations)}

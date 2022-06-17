@@ -28,11 +28,17 @@ const GradesExperimental = () => {
   const [loading, setLoading] = useState(false);
   const { updateAction } = useContext(ActionsContext)
   const dispatch = useDispatch()
-  
+
   const [columnsLength, setColumnsLength] = useState(5)
 
   const initialRequest = async () => {
     setLoading(true);
+    let people = []
+    const studentRequest = await getData("students_by_course/" + data._id);
+    if (studentRequest.status) {
+      people = studentRequest.students
+    }
+
     if ("grades" in data) {
       let gradesToTable = data.grades.map((row) => {
         let values = {};
@@ -42,8 +48,11 @@ const GradesExperimental = () => {
           );
           //delete row["grades"];
         }
-        let studentInfo = data['students_list'].find((student:any) => student._id === row.student) 
-        let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
+
+
+        let studentInfo = people.find((student: any) => student._id === row.student)
+        let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado"
+        
         return {
           ...row,
           ...values,
