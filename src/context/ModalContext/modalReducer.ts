@@ -30,6 +30,6 @@ export function modalReducer(state:any, action:any) {
                  contentComponent: '' 
                };
     default:
-      console.log("default action");
+      return state
   }
 }

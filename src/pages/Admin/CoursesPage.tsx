@@ -87,7 +87,6 @@ const CoursesPage = () => {
   };
 
   const handleAssignGrades = () => {
-    console.log("selectedCourse", selectedCourses[0]);
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],
@@ -98,7 +97,6 @@ const CoursesPage = () => {
   };
 
   const handleAssignAssistance = () => {
-    console.log("selectedCourse", selectedCourses[0]);
     showModal({
       mode: "EDIT",
       data: selectedCourses[0],

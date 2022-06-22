@@ -1,5 +1,4 @@
 export function getData(endPoint){
-    console.log('executing get data')
     const options = {
         method: 'GET',
         headers: {

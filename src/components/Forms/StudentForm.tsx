@@ -145,7 +145,6 @@ const StudentForm = () => {
           name="basic"
           initialValues={{ remember: true }}
           onFinish={onFinishAdd}
-          //onFinishFailed={console.log('hey')}
           autoComplete="off"
           form={form}
         >
@@ -429,7 +428,6 @@ const StudentForm = () => {
               data.profile.representative.phoneNumber.number,
           }}
           onFinish={onFinishEdit}
-          /*onFinishFailed={console.log('hey')}*/
           autoComplete="off"
           form={form}
         >

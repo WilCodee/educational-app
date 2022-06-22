@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
@@ -20,9 +20,6 @@ export const SideBar = ({ children }: any) => {
 
   const onCollapse = (collapsed: boolean) => setCollapsedt(collapsed);
   const { user } = useContext(AuthContext);
-  useEffect(() => {
-    console.log("DATOS DEL USUARIO", user);
-  }, []);
 
   const goToPage = (page: string) => {
     //Se valida que la ruta la que quiero ir es diferente a la de origen, sino no tiene sentido navegar ni reiniciar el state de items

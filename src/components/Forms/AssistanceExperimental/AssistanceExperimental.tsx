@@ -38,15 +38,13 @@ const AssistanceExperimental = () => {
       people = studentRequest.students
     }
 
-    console.log('data', data)
     if ("assistance" in data) {
       let daysToTable = data.assistance.map((row) => {
         let values = {};
         if ("days" in row) {
           row.days.map(
-            (day, index) => (values["day" + (index + 1).toString()] = day)
+            (day) => (values[day.day] = day.value)
           );
-          //delete row["grades"];
         }
         let studentInfo = people.find((student:any) => student._id === row.student) 
         let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
@@ -56,7 +54,6 @@ const AssistanceExperimental = () => {
           name: studentName
         };
       });
-      console.log("daysToTable", daysToTable);
       setTableData(daysToTable);
       setLoading(false);
       return;
@@ -124,10 +121,8 @@ const AssistanceExperimental = () => {
       delete impactedRow["days"]
       let rowKeys = Object.keys(impactedRow);
       let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("day"));
-      console.log("gradekeys", gradeKeys);
       let sum = 0;
       gradeKeys.map((gradeKey) => (sum += impactedRow[gradeKey]));
-      console.log("sum", sum);
       value[operation.fromRowIndex] = {
         ...impactedRow,
         presentTotal: sum,
@@ -145,9 +140,14 @@ const AssistanceExperimental = () => {
     let cleanRows = tableData.map((row) => {
       //obtenemos las keys de las columnas correspondientes a dias
       let rowKeys = Object.keys(row);
-      let dayKeys = rowKeys.filter((rowKey) => rowKey.includes("day"));
+      let dayKeys = rowKeys.filter((rowKey) => rowKey.includes("day") && rowKey!=="days");
       //agrupamos los valores de dichas keys en un arreglo de dias
-      let days = dayKeys.map((dayKey) => row[dayKey]);
+      let days = dayKeys.map((dayKey) => {
+        return { 
+          day: dayKey, 
+          value: row[dayKey]
+        }
+      });
       //eliminamos las keys individuales (day1, day2, ...etc) porque ya fueron agrupadas
       dayKeys.map((dayKey) => delete row[dayKey]);
 
@@ -162,7 +162,6 @@ const AssistanceExperimental = () => {
       };
     });
 
-    console.log('cr', cleanRows)
     const updateRequest = await putData("courses/" + data._id, {
       assistance: cleanRows,
     });

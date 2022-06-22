@@ -34,11 +34,6 @@ const SelectStudents = ({ setSelectedStudents }:any) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
       setSelectedStudents(selectedRows);
     },
   };

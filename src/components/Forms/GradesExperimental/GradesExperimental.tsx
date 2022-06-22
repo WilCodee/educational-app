@@ -44,7 +44,10 @@ const GradesExperimental = () => {
         let values = {};
         if ("grades" in row) {
           row.grades.map(
-            (grade, index) => (values["grade" + (index + 1).toString()] = grade)
+            (grade, index) => 
+            {
+              values["grade" + (index + 1).toString()] = grade
+            }
           );
           //delete row["grades"];
         }
@@ -59,7 +62,6 @@ const GradesExperimental = () => {
           name: studentName, //todo ese name debe venir en la propiedad student
         };
       });
-      console.log("gradestotable", gradesToTable);
       setTableData(gradesToTable);
       setColumnsLength(gradesToTable[0].grades.length)
       setLoading(false);
@@ -119,10 +121,8 @@ const GradesExperimental = () => {
       delete impactedRow["grades"]
       let rowKeys = Object.keys(impactedRow);
       let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade"));
-      console.log("gradekeys", gradeKeys);
       let sum = 0;
       gradeKeys.map((gradeKey) => (sum += impactedRow[gradeKey]));
-      console.log("sum", sum);
       let average = sum / gradeKeys.length;
       value[operation.fromRowIndex] = {
         ...impactedRow,
@@ -137,15 +137,19 @@ const GradesExperimental = () => {
   };
 
   const handleSave = async () => {
-    let cleanRows = tableData.map((row) => {
+      let cleanRows = tableData.map((row) => {
+      
+      //en caso de que existiere una propiedad "grades", la eliminamos para que no de broncas con el gradeKeys
+      //la propiedad grades existiría en caso de que sea una actualización y no se haya toca esa fila
+      
       //obtenemos las keys de las columnas correspondientes a notas
       let rowKeys = Object.keys(row);
-      let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade"));
+      let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade") && rowKey!=="grades");
       //agrupamos los valores de dichas keys en un arreglo de notas
       let grades = gradeKeys.map((gradeKey) => row[gradeKey]);
       //eliminamos las keys individuales (grade1, grade2, ...etc) porque ya fueron agrupadas
       gradeKeys.map((gradeKey) => delete row[gradeKey]);
-
+      
       //eliminamos la key de name ya que no es necesario
       let nameKeys = rowKeys.filter((rowKey) => rowKey.includes("name"));
       nameKeys.map((nameKey) => delete row[nameKey]);

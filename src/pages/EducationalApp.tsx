@@ -11,7 +11,6 @@ const EducationalApp = (): any => {
     const sessionInfo = localStorage.getItem("userData");
     if (typeof sessionInfo !== "undefined" && sessionInfo !== null) {
       login(JSON.parse(sessionInfo));
-      console.log("Hola",sessionInfo)
     }
   }, []);
 

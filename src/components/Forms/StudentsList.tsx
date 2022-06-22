@@ -6,22 +6,7 @@ import { StudentsColumns } from "../../data/columns";
 import { ModalContext } from "../../context/ModalContext";
 import { ActionsContext } from "../../context/AuthContext/ActionsContext/ActionsContext";
 import { IUser } from "src/data/interfaces/IUser";
-/* import { ICourse } from "src/data/interfaces/ICourse"; */
 
-
-/* const defaultSelectedStudents = (data:ICourse) => {
-    if(data.students && data.students.length > 0){
-        console.log('si tiene')
-        const selectedStudents = data.students.map((student:any) => {
-            let newStudent = student
-            newStudent.key = newStudent._id
-            return newStudent
-        })
-        return selectedStudents;
-    }else{
-        return []
-    }
-} */
 
 const StudentsList = () => {
     const { updateAction } = useContext(ActionsContext)
@@ -63,17 +48,7 @@ const StudentsList = () => {
       setStudents(usersToTable);
     }
 
-    /*if(data.students && data.students.length > 0){
-        console.log('si tiene')
-        const defaultSelected = data.students.map((student:any) => {
-            let newStudent = student
-            newStudent.key = newStudent._id
-            return newStudent
-        })
-        return selectedStudents;
-    }else{
-        return []
-    }*/
+    
 
     setTableLoading(false);
   };
@@ -87,11 +62,6 @@ const StudentsList = () => {
   const rowSelection = {
     selectedRowKeys, 
     onChange: (selectedRowKeys: any, selectedRows: any) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
       setSelectedRowKeys(selectedRowKeys)
       setSelectedStudents(selectedRows);
     },

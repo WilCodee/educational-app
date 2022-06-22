@@ -22,7 +22,6 @@ export const SubjectForm = () => {
             ...values
         }
         const addRequest = await postData("subjects", dataValues);
-        console.log('ar', addRequest)
         if (addRequest.status) {
             message.success("Materia creada exitosamente")
             let newSubject = addRequest.subject
@@ -53,7 +52,7 @@ export const SubjectForm = () => {
     }
 
     const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+        message.error('Algo ha salido mal, reinténtalo más tarde o ponte en contacto con los administradores del sistema');
     };
 
     return (

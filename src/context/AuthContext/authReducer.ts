@@ -17,7 +17,6 @@ export function authReducer(state:IAuthState, action:any) {
     case AUTH_ACTIONS.LOGOUT:
       return { ...state, isLogin: false };
     default:
-      console.log("default action");
       return state
   }
   

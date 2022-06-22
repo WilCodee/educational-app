@@ -92,7 +92,6 @@ export const ModalProvider = ({ children }:any) => {
                 break; 
                 
             default:
-                console.log('No se ha enviado un formulario como paráemtro');
                 break;
         }
         return content;
@@ -114,7 +113,6 @@ export const ModalProvider = ({ children }:any) => {
                 content = <CourseDetail/>
                 break;
             default:
-                console.log('No se ha enviado un formulario como paráemtro');
                 break;
         }
         return content;

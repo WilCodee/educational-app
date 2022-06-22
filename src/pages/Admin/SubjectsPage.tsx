@@ -7,7 +7,6 @@ import { ActionsContext } from 'src/context/AuthContext/ActionsContext/ActionsCo
 import { ModalContext } from 'src/context/ModalContext';
 import { getData } from 'src/services/fetch/getData';
 import { deleteData } from 'src/services/fetch/deleteData'
-import { AuthContext } from 'src/context/AuthContext';
 
 export const SubjectsPage = () => {
 
@@ -15,9 +14,7 @@ export const SubjectsPage = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const { items, deleteAction, setAction } = useContext(ActionsContext)
   const { showModal }:any = useContext(ModalContext);
-  const { user } = useContext(AuthContext);
   
-
   const handleAddSubject = () => {
     showModal({
       mode: "ADD",
@@ -79,14 +76,12 @@ export const SubjectsPage = () => {
 
   useEffect(() => {
     initialRequest()
-    console.log("DATOS DEL USUARIO"+user.profile.fullName)
   }, [])
 
 
 
   const rowSelection = {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedSubjects(selectedRows)
     },
   };

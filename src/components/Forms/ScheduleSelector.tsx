@@ -68,7 +68,6 @@ const ScheduleSelector = () => {
 
   const getBusyHours = async (teacherId: string) => {
     const r = await getData("teacher_busy_hours/" + teacherId + "/" + data._id);
-    console.log("r", r);
     if (r.status && r.busy_days.length > 0) {
       const tc: any = [...teachers];
       const teacherIndex = tc.findIndex(
@@ -82,7 +81,6 @@ const ScheduleSelector = () => {
           disabledEndTimes: [busyDay.endTime],
         })
       );
-      console.log("updated teacher", tc[teacherIndex]["busyDays"]);
       setTeachers(tc);
     }
   };
@@ -104,7 +102,6 @@ const ScheduleSelector = () => {
     disabledEndTimes.map((disabledTime: string) =>
       disabledHours.push(parseInt(disabledTime.substring(0, 2)))
     );
-    console.log("disabled hours", disabledHours);
 
     const lowEnd = disabledHours[0];
     const highEnd = disabledHours[1];
@@ -112,7 +109,6 @@ const ScheduleSelector = () => {
     for (var i = lowEnd; i < highEnd; i++) {
       list.push(i);
     }
-    console.log(list);
     return list;
     //return disabledHours;
   };
@@ -127,14 +123,10 @@ const ScheduleSelector = () => {
       (teacher: any) => teacher._id === form.getFieldValue("teacher" + rowIndex)
     );
     if (currentTeacher && "busyDays" in currentTeacher) {
-      console.log(
-        "el profesor existe y tiene dias ocupados",
-        currentTeacher["busyDays"]
-      );
+      
       const columnDay = currentTeacher["busyDays"].filter(
         (busyDay: any) => busyDay.day === day
       );
-      console.log("column day", columnDay);
       if (
         columnDay &&
         columnDay.length > 0 &&
@@ -143,14 +135,12 @@ const ScheduleSelector = () => {
       ) {
         if (timeType === "hours") {
           if (columnDay.length === 1) {
-            console.log("solo un intervalo");
             return getBusyHoursInterval(
               columnDay[0].disabledStartTimes,
               columnDay[0].disabledEndTimes
             );
           }
           if (columnDay.length > 1) {
-            console.log("mas de un intervalo");
             let interval: any = [];
             columnDay.map((day: any) => {
               interval = [
@@ -204,9 +194,7 @@ const ScheduleSelector = () => {
     let emptyDays = 0
     keys.forEach((key, index) => {
       if(Array.isArray(values[key])){
-        console.log('index', index)
         let dayName = key.replace(/[0-9]/g, '')
-        console.log('dayName', dayName)
         dataValues[key] =  {
           day: dayName,
           startTime: parseTimePickerValue(values[key][0]['_d']), 
@@ -238,7 +226,6 @@ const ScheduleSelector = () => {
       });
       schedule.push(rowObj)
     }
-    console.log('schedule', schedule)
     
     
     //LOGIC TO SAVE TEACHERS ON INDEPENDENT ARRAY INTO COURSE DOCUMENT
@@ -286,7 +273,6 @@ const ScheduleSelector = () => {
           }
         )
 
-        console.log('item', item)
 
       })
 

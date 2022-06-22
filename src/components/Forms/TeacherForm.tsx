@@ -128,7 +128,6 @@ const TeacherForm = () => {
           name="basic"
           initialValues={{ remember: true }}
           onFinish={onFinishAdd}
-          //onFinishFailed={console.log('hey')}
           autoComplete="off"
           form={form}
         >
@@ -329,7 +328,6 @@ const TeacherForm = () => {
             admissionDate: moment(data.profile.admissionDate, "DD-MM-YY"),
           }}
           onFinish={onFinishEdit}
-          /*onFinishFailed={console.log('hey')}*/
           autoComplete="off"
           form={form}
         >

@@ -78,7 +78,6 @@ const StudentsPage = () => {
 
     const rowSelection = {
         onChange: (selectedRowKeys:any, selectedRows:any) => {
-          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
           setSelectedStudents(selectedRows);
         },
     };

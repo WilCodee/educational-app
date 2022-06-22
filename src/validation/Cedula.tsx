@@ -5,7 +5,6 @@ export const Cedula =(cedula: string)=>{
     
     // Pregunto si la region existe ecuador se divide en 24 regiones
     if (Number(digitoRegion)>= 1 && Number(digitoRegion)  <= 24) {
-        console.log(digitoRegion, cedula)
       // Extraigo el ultimo digito
       const ultimoDigito = Number(cedula.substring(9, 10));
 
