@@ -235,10 +235,18 @@ const ScheduleSelector = () => {
       teachers.push(values[tk])
     })
 
-    
-    
+    console.log('schedule', schedule)
+    console.log( 'teachers', teachers)
+    const subjects = schedule.map((item) => {
+      return {
+        _id: item.subject, 
+        teacher: item.teacher, 
+        schedule: item.days
+      }
+    })
+    console.log('subjects', subjects)
     setIsSubmitting(true);
-    const updateRequest = await putData(`courses/${data._id}`, { schedule, teachers });
+    const updateRequest = await putData(`courses/${data._id}`, { subjects, teachers });
     if (updateRequest.status) {
       message.success("Curso editado exitosamente")
       let updatedCourse = updateRequest.course
@@ -255,14 +263,14 @@ const ScheduleSelector = () => {
 
 
   const getDefaultValues = () => {
-    if('schedule' in data){
+    if('subjects' in data){
       let item = {}
-      data.schedule.map((scheduleItem:any, index:any) => {
+      data.subjects.map((subject:any, index:any) => {
         
-        item['teacher' + index] = scheduleItem.teacher  
-        item['subject' + index] = scheduleItem.subject
+        item['teacher' + index] = subject.teacher  
+        item['subject' + index] = subject._id
         
-        scheduleItem.days.map((day:any) => 
+        subject.schedule.map((day:any) => 
           {
             if(day!==null && 'day' in day){
               item[day.day + index] = [

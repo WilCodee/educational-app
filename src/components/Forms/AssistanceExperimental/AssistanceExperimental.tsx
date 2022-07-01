@@ -18,6 +18,7 @@ import { getData } from "src/services/fetch/getData";
 import { putData } from "src/services/fetch/putData";
 import { useDispatch } from 'react-redux'
 import { toggleRefresh } from "src/store/slices/table.slice";
+import { AuthContext } from "src/context/AuthContext";
 
 
 const AssistanceExperimental = () => {
@@ -26,6 +27,7 @@ const AssistanceExperimental = () => {
   const [loading, setLoading] = useState(false);
   const { updateAction } = useContext(ActionsContext)
   const dispatch = useDispatch()
+  const { user } = useContext(AuthContext);
   
   const [columnsLength, setColumnsLength] = useState(30)
 
@@ -38,25 +40,29 @@ const AssistanceExperimental = () => {
       people = studentRequest.students
     }
 
-    if ("assistance" in data) {
-      let daysToTable = data.assistance.map((row) => {
-        let values = {};
-        if ("days" in row) {
-          row.days.map(
-            (day) => (values[day.day] = day.value)
-          );
-        }
-        let studentInfo = people.find((student:any) => student._id === row.student) 
-        let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
-        return {
-          ...row,
-          ...values,
-          name: studentName
-        };
-      });
-      setTableData(daysToTable);
-      setLoading(false);
-      return;
+    console.log('user', user)
+    if ("subjects" in data) {
+      let findSubject = data.subjects.find((subject:any) => subject.teacher === user._id)
+      if('assistance' in findSubject){
+        let daysToTable = findSubject.assistance.map((row) => {
+          let values = {};
+          if ("days" in row) {
+            row.days.map(
+              (day) => (values[day.day] = day.value)
+            );
+          }
+          let studentInfo = people.find((student:any) => student._id === row.student) 
+          let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado" 
+          return {
+            ...row,
+            ...values,
+            name: studentName
+          };
+        });
+        setTableData(daysToTable);
+        setLoading(false);
+        return; 
+      }
     }
     const request = await getData("students_by_course/" + data._id);
     if (request.status) {
@@ -162,8 +168,18 @@ const AssistanceExperimental = () => {
       };
     });
 
+
+
+    console.log('assitance', cleanRows)
+
+    let subjectIndex = data.subjects.findIndex((subject:any) => subject.teacher === user._id)
+    data.subjects[subjectIndex] = {
+      ...data.subjects[subjectIndex], 
+      assistance: cleanRows
+    }
+
     const updateRequest = await putData("courses/" + data._id, {
-      assistance: cleanRows,
+      subjects: data.subjects,
     });
     if (updateRequest.status) {
       let updatedCourse = updateRequest.course

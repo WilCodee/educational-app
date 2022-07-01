@@ -1,11 +1,18 @@
 
 
 export function putData(endPoint, data){
+    let headers = localStorage.getItem("token") !== undefined ?
+    {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+    }
+    :
+    {
+        'Content-Type': 'application/json'
+    }
     const options = {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers,
         body: JSON.stringify(data)
     }
     

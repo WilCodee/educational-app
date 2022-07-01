@@ -17,6 +17,7 @@ import { getData } from "src/services/fetch/getData";
 import { putData } from "src/services/fetch/putData";
 import { useDispatch } from 'react-redux'
 import { toggleRefresh } from "src/store/slices/table.slice";
+import { AuthContext } from "src/context/AuthContext";
 
 const GradesWrapper = () => {
   return <GradesExperimental />;
@@ -27,6 +28,8 @@ const GradesExperimental = () => {
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const { updateAction } = useContext(ActionsContext)
+  const { user } = useContext(AuthContext);
+
   const dispatch = useDispatch()
 
   const [columnsLength, setColumnsLength] = useState(5)
@@ -39,33 +42,35 @@ const GradesExperimental = () => {
       people = studentRequest.students
     }
 
-    if ("grades" in data) {
-      let gradesToTable = data.grades.map((row) => {
+    if ("subjects" in data) {
+      let findSubject = data.subjects.find((subject: any) => subject.teacher === user._id)
+      if ('grades' in findSubject) {
+        let gradesToTable = findSubject.grades.map((row) => {
         let values = {};
         if ("grades" in row) {
           row.grades.map(
-            (grade, index) => 
-            {
-              values["grade" + (index + 1).toString()] = grade
+            (grade, index) => {
+                values["grade" + (index + 1).toString()] = grade
             }
           );
-          //delete row["grades"];
-        }
+            //delete row["grades"];
+          }
 
 
-        let studentInfo = people.find((student: any) => student._id === row.student)
-        let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado"
-        
-        return {
-          ...row,
-          ...values,
-          name: studentName, //todo ese name debe venir en la propiedad student
-        };
-      });
-      setTableData(gradesToTable);
-      setColumnsLength(gradesToTable[0].grades.length)
-      setLoading(false);
-      return;
+          let studentInfo = people.find((student: any) => student._id === row.student)
+          let studentName = studentInfo ? studentInfo.profile.fullName.firstName + " " + studentInfo.profile.fullName.lastName : "Estudiante no encontrado"
+
+          return {
+            ...row,
+            ...values,
+            name: studentName, //todo ese name debe venir en la propiedad student
+          };
+        });
+        setTableData(gradesToTable);
+        setColumnsLength(gradesToTable[0].grades.length)
+        setLoading(false);
+        return;
+      }
     }
     const request = await getData("students_by_course/" + data._id);
     if (request.status) {
@@ -137,19 +142,19 @@ const GradesExperimental = () => {
   };
 
   const handleSave = async () => {
-      let cleanRows = tableData.map((row) => {
-      
+    let cleanRows = tableData.map((row) => {
+
       //en caso de que existiere una propiedad "grades", la eliminamos para que no de broncas con el gradeKeys
       //la propiedad grades existiría en caso de que sea una actualización y no se haya toca esa fila
-      
+
       //obtenemos las keys de las columnas correspondientes a notas
       let rowKeys = Object.keys(row);
-      let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade") && rowKey!=="grades");
+      let gradeKeys = rowKeys.filter((rowKey) => rowKey.includes("grade") && rowKey !== "grades");
       //agrupamos los valores de dichas keys en un arreglo de notas
       let grades = gradeKeys.map((gradeKey) => row[gradeKey]);
       //eliminamos las keys individuales (grade1, grade2, ...etc) porque ya fueron agrupadas
       gradeKeys.map((gradeKey) => delete row[gradeKey]);
-      
+
       //eliminamos la key de name ya que no es necesario
       let nameKeys = rowKeys.filter((rowKey) => rowKey.includes("name"));
       nameKeys.map((nameKey) => delete row[nameKey]);
@@ -160,9 +165,16 @@ const GradesExperimental = () => {
         grades,
       };
     });
+    console.log('grades', cleanRows)
+
+    let subjectIndex = data.subjects.findIndex((subject: any) => subject.teacher === user._id)
+    data.subjects[subjectIndex] = {
+      ...data.subjects[subjectIndex],
+      grades: cleanRows
+    }
 
     const updateRequest = await putData("courses/" + data._id, {
-      grades: cleanRows,
+      subjects: data.subjects,
     });
     if (updateRequest.status) {
       let updatedCourse = updateRequest.course
