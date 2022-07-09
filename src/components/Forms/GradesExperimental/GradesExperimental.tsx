@@ -42,7 +42,73 @@ const GradesExperimental = () => {
       people = studentRequest.students
     }
 
+    let fullStudents = people.map((student:any) => {
+      return {
+        student: student._id,
+        name: student.profile.fullName.firstName + " " + student.profile.fullName.lastName
+      }
+    })
+
+    let gradesToTable = []
+
+    let numOfColumns = 3
+
     if ("subjects" in data) {
+      let findSubject = data.subjects.find((subject: any) => subject.teacher === user._id)
+      if ('grades' in findSubject) {
+        let newGt = fullStudents.map((student:any) => {
+          let gradesOfStudent = findSubject.grades.find((grade:any) => grade.student === student.student)
+          if(gradesOfStudent){
+            let values = {}
+            console.log('El estudiante tiene notas', gradesOfStudent)
+            if('grades' in gradesOfStudent){
+              gradesOfStudent.grades.map((grade, index) => {
+                values["grade" + (index+1).toString()] = grade
+              })
+              numOfColumns = gradesOfStudent.grades.length
+            }
+            console.log('values', values)
+            gradesToTable.push({
+              ...gradesOfStudent,
+              ...values, 
+              name: student.name
+            })
+          }else{
+            gradesToTable.push({
+              student: student.student,
+              name: student.name
+            })
+          }
+        })
+        
+        /*let gradesToTable = findSubject.grades.map((row) => {
+        let values = {};
+        if ("grades" in row) {
+          row.grades.map(
+            (grade, index) => {
+                values["grade" + (index + 1).toString()] = grade
+            }
+          );
+            //delete row["grades"];
+        }
+
+          return {
+            ...row,
+            ...values,
+            name: "AAAAA", //todo ese name debe venir en la propiedad student
+          };
+        });*/
+
+        console.log('gradestotable', gradesToTable)
+        setTableData(gradesToTable);
+        setColumnsLength(numOfColumns)
+        setLoading(false);
+        return;
+      }
+    }
+    
+
+    /*if ("subjects" in data) {
       let findSubject = data.subjects.find((subject: any) => subject.teacher === user._id)
       if ('grades' in findSubject) {
         let gradesToTable = findSubject.grades.map((row) => {
@@ -63,15 +129,16 @@ const GradesExperimental = () => {
           return {
             ...row,
             ...values,
-            name: studentName, //todo ese name debe venir en la propiedad student
+            name: "AAAAA", //todo ese name debe venir en la propiedad student
           };
         });
+        console.log('gradestotable', gradesToTable)
         setTableData(gradesToTable);
         setColumnsLength(gradesToTable[0].grades.length)
         setLoading(false);
         return;
       }
-    }
+    }*/
     const request = await getData("students_by_course/" + data._id);
     if (request.status) {
       setTableData(
@@ -133,6 +200,7 @@ const GradesExperimental = () => {
         ...impactedRow,
         average,
       };
+      console.log('value', value)
       setTableData(value);
     }
 

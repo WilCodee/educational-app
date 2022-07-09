@@ -36,12 +36,6 @@ export const StudentsColumns = [
 
 export const TeachersColumns = [
   {
-    title: 'Cédula',
-    dataIndex: 'profile',
-    key: 'ci',
-    render: (item: any) => item.ci
-  },
-  {
     title: 'Nombre',
     dataIndex: 'profile',
     key: 'firstName',
@@ -52,6 +46,11 @@ export const TeachersColumns = [
     dataIndex: 'profile',
     key: 'lastName',
     render: (item: ITeacher) => item.fullName.lastName
+  },
+  {
+    title: 'Correo',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
     title: 'Area',
