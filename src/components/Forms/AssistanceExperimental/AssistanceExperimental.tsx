@@ -40,11 +40,46 @@ const AssistanceExperimental = () => {
       people = studentRequest.students
     }
 
-    console.log('user', user)
+    let fullStudents = people.map((student:any) => {
+      return {
+        student: student._id,
+        name: student.profile.fullName.firstName + " " + student.profile.fullName.lastName
+      }
+    })
+
+    let daysToTable = []
+
+    let numOfColumns = 15
+
     if ("subjects" in data) {
       let findSubject = data.subjects.find((subject:any) => subject.teacher === user._id)
       if('assistance' in findSubject){
-        let daysToTable = findSubject.assistance.map((row) => {
+        let newDt = fullStudents.map((student:any) => {
+          let assistanceOfStudent = findSubject.assistance.find((a:any) => a.student === student.student)
+          if(assistanceOfStudent){
+            let values = {}
+            console.log('El estudiante tiene asistencia', assistanceOfStudent)
+            if('days' in assistanceOfStudent){
+              assistanceOfStudent.days.map(
+                (day) => (values[day.day] = day.value)
+              )
+              numOfColumns = assistanceOfStudent.days.length
+            }
+            console.log('values', values)
+            daysToTable.push({
+              ...assistanceOfStudent,
+              ...values, 
+              name: student.name
+            })
+          }else{
+            daysToTable.push({
+              student: student.student,
+              name: student.name
+            })
+          }
+        })
+        
+        /*let daysToTable = findSubject.assistance.map((row) => {
           let values = {};
           if ("days" in row) {
             row.days.map(
@@ -58,7 +93,8 @@ const AssistanceExperimental = () => {
             ...values,
             name: studentName
           };
-        });
+        });*/
+        
         setTableData(daysToTable);
         setLoading(false);
         return; 

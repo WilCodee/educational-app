@@ -35,8 +35,6 @@ const StudentsList = () => {
             console.log('subject with grades', subject)
             let us = students.filter((student:any) => !selectedRowKeys.includes(student._id));
             console.log('ids diff', us)
-            //TODO: revisar si los que no están seleccionados existían inicialmente
-
             us.map((us:any) => {
               if(data.students.includes(us._id)){
                 console.log('Existía antes y ha sido deseleccionado, vamos a eliminar sus registros de notas')
@@ -46,7 +44,23 @@ const StudentsList = () => {
                 console.log('Ha sido deseleccionado antes, pero no existía antes.. no hay nada que hacer.')
               }
             })
-          } 
+          }
+
+          if('assistance' in subject){
+            console.log('subject with assistance', subject)
+            let us = students.filter((student:any) => !selectedRowKeys.includes(student._id));
+            console.log('ids diff', us)
+            us.map((us:any) => {
+              if(data.students.includes(us._id)){
+                console.log('Existía antes y ha sido deseleccionado, vamos a eliminar sus registros de asistencia')
+                let newAssistance = subject.assistance.filter((a:any) => a.student !== us._id)                
+                copyOfSubjects[index].assistance = newAssistance 
+              }else{
+                console.log('Ha sido deseleccionado antes, pero no existía antes.. no hay nada que hacer.')
+              }
+            })
+          }
+
         })
 
         let newData = {
@@ -56,7 +70,7 @@ const StudentsList = () => {
 
         console.log('newData', newData)
 
-        const updateRequest = await putData("courses/" + data._id, ids);
+        const updateRequest = await putData("courses/" + data._id, newData);
         if (updateRequest.status) {
           message.success("Curso actualizado exitosamente");
           let updatedCourse = updateRequest.course;
