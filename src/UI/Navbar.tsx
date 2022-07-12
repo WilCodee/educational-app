@@ -28,26 +28,17 @@ export const Navbar = ({ menu }: any) => {
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1">
             <Menu.Item >
-              <img /* src={ LOGO } */ style={{ width: 76, paddingLeft: 0, paddingRight: 0 }} />
+              { JSON.parse(localStorage.getItem("institute") || "{name: aaaa}").name }
             </Menu.Item>
 
           </Menu.Item>
-          <Menu.Item key="2" style={{ marginLeft: 'auto' }}>
-
-            Inicio
-
-          </Menu.Item>
-          <Menu.Item key="3">
-
-            Reglamento
-          </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title={firstName}>
-            <Menu.Item key="4">
-              Perfil
-            </Menu.Item>
-            <Menu.Item key="5">
-              Opciones
-            </Menu.Item>
+         
+          <SubMenu key="sub1" icon={<UserOutlined />} title={firstName}
+          style={{
+            position:'absolute',
+            right: 0
+          }}
+          >
             <Menu.Item key="6" onClick={fullLogout} >
               Salir
             </Menu.Item>

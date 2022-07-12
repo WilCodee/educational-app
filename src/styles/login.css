@@ -76,7 +76,8 @@ div .content-principal{
     outline: none;
     border: none;
     background: #004465;
-   z-index: 1;
+    z-index: 1;
+    width: 100%;
   }
   .button-login:hover:after {
     width: 100%;
