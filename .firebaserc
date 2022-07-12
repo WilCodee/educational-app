@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "educational-app-c150c"
-  }
+    "default": "educational-app-c150c",
+    "thot-prod": "thot-app"
+  },
+  "targets": {}
 }
