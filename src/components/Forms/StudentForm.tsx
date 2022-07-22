@@ -11,7 +11,7 @@ import {
   message,
   Select,
 } from "antd";
-import { postData } from "../../services/fetch/postData";
+import { postData, postFormData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
 import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
@@ -26,16 +26,40 @@ import {
 import { getData } from "src/services/fetch/getData";
 import { generatePassword } from "src/utils";
 import { ObjectId } from 'bson'
+import ImageSelector from "../ImageSelector/ImageSelector";
 
 const { Option } = Select;
 const StudentForm = () => {
   const { mode, data, hideModal }: any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [image, setImage] = useState(null)
   const [form] = Form.useForm();
 
   const onFinishAdd = async (values: any) => {
-    const studentInfo: IStudent = {
+
+    if(image===null){
+      message.warning("Es necesario cargar una imagen!")
+      return; 
+    }
+
+
+    const imageForm = new FormData()
+    imageForm.append('image', image)
+
+    const uploadImage = await postFormData('images/upload', imageForm)
+    let uploadedImageUrl;
+
+    if (uploadImage.status) {
+        uploadedImageUrl = uploadImage['url_images'][0]
+    }
+
+    if (!uploadImage.status) {
+        alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
+        return;
+    }
+
+    const studentInfo: any = {
       fullName: {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -59,6 +83,7 @@ const StudentForm = () => {
           number: values.representativePhoneNumber,
         },
       },
+      profilePicture: uploadedImageUrl
     };
 
     const userObject: IUser = {
@@ -148,6 +173,7 @@ const StudentForm = () => {
           autoComplete="off"
           form={form}
         >
+          <ImageSelector setImage={setImage} />
           <Card title="Datos de acceso">
             <Form.Item
               label="Email"

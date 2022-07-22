@@ -1,7 +1,14 @@
 
 export function postFormData(endPoint, data){
+    let headers = localStorage.getItem("token") !== undefined ?
+    {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+    }
+    :
+    {}
     const options = {
         method: 'POST',
+        headers,
         body: data
     }
     const request = fetch(`${process.env.REACT_APP_API_URL}/${endPoint}`, options)
