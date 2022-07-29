@@ -10,10 +10,10 @@ import {
   InputNumber,
   message,
   Select,
+  Upload,
 } from "antd";
 import { postData, postFormData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
-import { IStudent } from "src/data/interfaces/IStudent";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from "moment";
@@ -21,42 +21,52 @@ import {
   IdcardOutlined,
   MailOutlined,
   PhoneOutlined,
+  PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { getData } from "src/services/fetch/getData";
 import { generatePassword } from "src/utils";
 import { ObjectId } from 'bson'
-import ImageSelector from "../ImageSelector/ImageSelector";
+import type { RcFile } from 'antd/es/upload/interface';
 
 const { Option } = Select;
+
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+
+};
+
 const StudentForm = () => {
   const { mode, data, hideModal }: any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [image, setImage] = useState(null)
+  const [imageUrl, setImageUrl] = useState(() => {
+    if (mode === "EDIT" && data && data.profile && data.profile.profilePicture) {
+      return data.profile.profilePicture
+    }
+    return ''
+  })
   const [form] = Form.useForm();
 
   const onFinishAdd = async (values: any) => {
 
-    if(image===null){
-      message.warning("Es necesario cargar una imagen!")
-      return; 
-    }
-
 
     const imageForm = new FormData()
-    imageForm.append('image', image)
+    imageForm.append('image', values.image)
 
     const uploadImage = await postFormData('images/upload', imageForm)
     let uploadedImageUrl;
 
     if (uploadImage.status) {
-        uploadedImageUrl = uploadImage['url_images'][0]
+      uploadedImageUrl = uploadImage['url_images'][0]
     }
 
     if (!uploadImage.status) {
-        alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
-        return;
+      alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
+      return;
     }
 
     const studentInfo: any = {
@@ -115,7 +125,24 @@ const StudentForm = () => {
   };
 
   const onFinishEdit = async (values: any) => {
-    const studentInfo: IStudent = {
+
+    let profilePicture = values.image
+    if (typeof (profilePicture) !== "string") {
+      const imageForm = new FormData()
+      imageForm.append('image', values.image)
+
+      const uploadImage = await postFormData('images/upload', imageForm)
+
+      if (uploadImage.status) {
+        profilePicture = uploadImage['url_images'][0]
+      }
+
+      if (!uploadImage.status) {
+        alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
+        return;
+      }
+    }
+    const studentInfo: any = {
       fullName: {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -139,6 +166,7 @@ const StudentForm = () => {
           number: values.representativePhoneNumber,
         },
       },
+      profilePicture
     };
 
     const userObject: IUser = {
@@ -163,6 +191,19 @@ const StudentForm = () => {
     hideModal();
   };
 
+
+  const getFile = (e: any) => {
+    console.log('Upload event:', e);
+    getBase64(e.file.originFileObj as RcFile, url => {
+      setImageUrl(url);
+    });
+
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.file.originFileObj;
+  };
+
   return (
     <div>
       {mode === "ADD" && (
@@ -173,7 +214,33 @@ const StudentForm = () => {
           autoComplete="off"
           form={form}
         >
-          <ImageSelector setImage={setImage} />
+          <Form.Item
+            label="Foto"
+            name='image'
+            rules={[
+              { required: true, message: "Campo requerido!" },
+            ]}
+            getValueFromEvent={getFile}
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+            >
+
+              {
+                imageUrl !== "" ?
+                  <img src={imageUrl} alt="not found" style={{ width: '100%' }} />
+                  :
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+              }
+            </Upload>
+          </Form.Item>
+
           <Card title="Datos de acceso">
             <Form.Item
               label="Email"
@@ -452,11 +519,39 @@ const StudentForm = () => {
               data.profile.representative.fullName.lastName,
             representativePhoneNumber:
               data.profile.representative.phoneNumber.number,
+            image: data.profile.profilePicture
           }}
           onFinish={onFinishEdit}
           autoComplete="off"
           form={form}
         >
+          <Form.Item
+            label="Foto"
+            name="image"
+            rules={[
+              { required: true, message: "Campo requerido!" },
+            ]}
+            getValueFromEvent={getFile}
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+            >
+
+              {
+                imageUrl !== "" ?
+                  <img src={imageUrl} alt="not found" style={{ width: '100%' }} />
+                  :
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+              }
+            </Upload>
+
+          </Form.Item>
           <Card title="Datos de acceso">
             <Form.Item
               label="Email"

@@ -10,11 +10,11 @@ import {
   InputNumber,
   message,
   Select,
+  Upload,
 } from "antd";
-import { postData } from "../../services/fetch/postData";
+import { postData, postFormData } from "../../services/fetch/postData";
 import { putData } from "../../services/fetch/putData";
 //import { IStudent } from "src/data/interfaces/IStudent";
-import { ITeacher } from "src/data/interfaces/ITeacher";
 import { IUser } from "src/data/interfaces/IUser";
 import { Cedula } from "src/validation/Cedula";
 import moment from "moment";
@@ -23,22 +23,64 @@ import {
   IdcardOutlined,
   MailOutlined,
   PhoneOutlined,
+  PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons/lib/icons";
 import { getData } from "src/services/fetch/getData";
 import { generatePassword } from "src/utils";
 import { ObjectId } from "bson";
+import type { RcFile } from 'antd/es/upload/interface';
+
 const { Option } = Select;
+
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+
+};
+
 
 const TeacherForm = () => {
   const { mode, data, hideModal }: any = useContext(ModalContext);
   const { createAction, updateAction } = useContext(ActionsContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState(()  => {
+    if(mode==="EDIT" && data && data.profile && data.profile.profilePicture){
+     return data.profile.profilePicture
+    }
+    return ''
+  })
 
   const [form] = Form.useForm();
 
   const onFinishAdd = async (values: any) => {
-    const teacherInfo: ITeacher = {
+    console.log('values', values)
+    /*
+    if (image === null) {
+      message.warning("Es necesario cargar una imagen!")
+      return;
+    }
+    */
+
+    const imageForm = new FormData()
+    imageForm.append('image', values.image)
+
+    const uploadImage = await postFormData('images/upload', imageForm)
+    let uploadedImageUrl;
+
+    if (uploadImage.status) {
+      uploadedImageUrl = uploadImage['url_images'][0]
+    }
+
+    if (!uploadImage.status) {
+      alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
+      return;
+    }
+
+
+    const teacherInfo: any = {
       fullName: {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -52,10 +94,11 @@ const TeacherForm = () => {
         number: values.phoneNumber,
       },
       createdAt: new Date(),
+      profilePicture: uploadedImageUrl
     };
 
     const userObject: IUser = {
-      _id:new ObjectId().toString(),
+      _id: new ObjectId().toString(),
       email: values.email,
       password: generatePassword(),
       isAdmin: false,
@@ -80,10 +123,36 @@ const TeacherForm = () => {
     }
     setIsSubmitting(false);
     hideModal();
+    
   };
 
   const onFinishEdit = async (values: any) => {
-    const teacherInfo: ITeacher = {
+    /*
+    if (image === null) {
+      message.warning("Es necesario cargar una imagen!")
+      return;
+    }
+    */
+    let profilePicture = values.image
+    if (typeof(profilePicture) !== "string"){
+      const imageForm = new FormData()
+      imageForm.append('image', values.image)
+  
+      const uploadImage = await postFormData('images/upload', imageForm)
+  
+      if (uploadImage.status) {
+        profilePicture = uploadImage['url_images'][0]
+      }
+  
+      if (!uploadImage.status) {
+        alert('Hubo un problema al cargar la fotografía, por favor intenta de nuevo')
+        return;
+      }
+    }
+
+
+
+    const teacherInfo: any = {
       fullName: {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -97,6 +166,7 @@ const TeacherForm = () => {
         number: values.phoneNumber,
       },
       createdAt: new Date(),
+      profilePicture
     };
 
     const userObject: IUser = {
@@ -121,6 +191,20 @@ const TeacherForm = () => {
     hideModal();
   };
 
+
+  const getFile = (e: any) => {
+    console.log('Upload event:', e);
+    getBase64(e.file.originFileObj as RcFile, url => {
+      setImageUrl(url);
+    });
+
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.file.originFileObj;
+  };
+
+
   return (
     <div>
       {mode === "ADD" && (
@@ -131,6 +215,34 @@ const TeacherForm = () => {
           autoComplete="off"
           form={form}
         >
+          <Form.Item
+            label="Foto"
+            name='image'
+            rules={[
+              { required: true, message: "Campo requerido!" },
+            ]}
+            getValueFromEvent={getFile}
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+            >
+
+              {
+                imageUrl !== "" ?
+                  <img src={imageUrl} alt="not found" style={{ width: '100%' }} />
+                  :
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+              }
+            </Upload>
+          </Form.Item>
+
+         
           <Card title="Datos de acceso">
             <Form.Item
               label="Email"
@@ -326,11 +438,39 @@ const TeacherForm = () => {
             age: data.profile.age,
             phoneNumber: data.profile.phoneNumber.number,
             admissionDate: moment(data.profile.admissionDate, "DD-MM-YY"),
+            image: data.profile.profilePicture
           }}
           onFinish={onFinishEdit}
           autoComplete="off"
           form={form}
         >
+          <Form.Item
+            label="Foto"
+            name="image"
+            rules={[
+              { required: true, message: "Campo requerido!" },
+            ]}
+            getValueFromEvent={getFile}
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+            >
+
+              {
+                imageUrl !== "" ?
+                  <img src={imageUrl} alt="not found" style={{ width: '100%' }} />
+                  :
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+              }
+            </Upload>
+            
+          </Form.Item>
           <Card title="Datos de acceso">
             <Form.Item
               label="Email"

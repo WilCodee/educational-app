@@ -13,17 +13,20 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 
 
 interface IProps {
-    setImage: any
+    setImage: any;
+    previousUrl?: any; 
+    form:any
 }
 
-const ImageSelector = ({setImage}:IProps) => {
-    const [imageUrl, setImageUrl] = useState<string>('');
-    
+const ImageSelector = ({setImage, previousUrl, form}:IProps) => {
+    const [imageUrl, setImageUrl] = useState(previousUrl ? previousUrl : '')
+
     const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         setImage(info.file.originFileObj)
         // Get this url from response in real world.
         getBase64(info.file.originFileObj as RcFile, url => {
             setImageUrl(url);
+            form.setFieldsValue({profilePicture: url})
         });
     }
 
