@@ -94,9 +94,9 @@ export const SubjectsPage = () => {
 
     },
     {
-      title: 'Descripcion',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Área',
+      dataIndex: 'area',
+      key: 'area',
 
     },
   ];
