@@ -18,6 +18,7 @@ const ActivitiesPage = () => {
   const [mode, setMode] = useState('ADD')
   const [filteredById, setFilteredById] = useState<string>()
   const [reFetchActivities, setReFetchActivities] = useState(false)
+  const [initialDataUpdateModal, setInitialDataUpdateModal] = useState({})
 
   const columns = [
     {
@@ -43,8 +44,7 @@ const ActivitiesPage = () => {
       key: 'action',
       render: (item: any) => (
         <>
-          <EditOutlined onClick={handleUpdateActivity} />
-
+          <EditOutlined onClick={() => handleUpdateActivity(item)} />
           {'  '}
           <Popconfirm
             title='Estas seguro que desea Eliminar esta Actividad?'
@@ -97,7 +97,8 @@ const ActivitiesPage = () => {
     setMode('ADD')
   }
 
-  const handleUpdateActivity = () => {
+  const handleUpdateActivity = (initialData: any) => {
+    setInitialDataUpdateModal(initialData)
     setShowModal(true)
     setMode('UPDATE')
   }
@@ -106,7 +107,6 @@ const ActivitiesPage = () => {
     const request = await deleteData(`/activities/${_id}`)
     if (request.status) {
       setReFetchActivities(true)
-      console.log(request)
       message.info(request.message)
     }
   }
@@ -114,6 +114,10 @@ const ActivitiesPage = () => {
   const handleCancel = () => {
     setShowModal(false)
     setMode('ADD')
+  }
+
+  const onSelect = (value: string) => {
+    setFilteredById(value)
   }
 
   return (
@@ -130,13 +134,8 @@ const ActivitiesPage = () => {
       ) : (
         <div>
           <span>
-            Filtrar por:
-            <Select
-              placeholder='Seleccionar curso'
-              onSelect={(value: string) => {
-                setFilteredById(value)
-              }}
-            >
+            Filtrar por:{' '}
+            <Select placeholder='Seleccionar curso' onChange={onSelect}>
               {courses.map((course: any) => (
                 <Option value={course._id}>{course.name}</Option>
               ))}
@@ -161,7 +160,7 @@ const ActivitiesPage = () => {
                 setReFetch={setReFetchActivities}
                 mode={mode}
                 courses={courses}
-                data={mode === 'ADD' ? {} : {}}
+                data={initialDataUpdateModal}
               />
             </Modal>
           )}

@@ -1,9 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Form, Input, Button, message, DatePicker, Select } from 'antd'
 import { postData } from 'src/services/fetch/postData'
-// import { putData } from "src/services/fetch/putData";
+import { putData } from 'src/services/fetch/putData'
 import moment from 'moment'
-import type { FormInstance } from 'antd/es/form'
 // import { ObjectId } from "bson";
 
 interface IProps {
@@ -16,21 +15,28 @@ interface IProps {
 const { Option } = Select
 
 const ActivityForm = ({ mode, courses, data, setReFetch }: IProps) => {
-  const formAddRef = React.createRef<FormInstance>()
-  const [isSubmitting] = useState(false)
+  const [form] = Form.useForm()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const onFinishAdd = async (values: any) => {
-    console.log({ values })
+    setIsSubmitting(true)
     let request = await postData(`activities`, values)
     if (request.status) {
-      formAddRef.current!.resetFields()
+      form.resetFields()
       message.info(request.message)
       setReFetch(true)
+      setIsSubmitting(false)
     }
   }
 
   const onFinishEdit = async (values: any) => {
-    console.log('values')
+    setIsSubmitting(true)
+    const request = await putData(`activities/${data._id}`, values)
+    if (request.status) {
+      message.info(request.message)
+      setReFetch(true)
+      setIsSubmitting(false)
+    }
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -43,7 +49,7 @@ const ActivityForm = ({ mode, courses, data, setReFetch }: IProps) => {
     <>
       {mode === 'ADD' && (
         <Form
-          ref={formAddRef}
+          form={form}
           name='basic'
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 12 }}
@@ -99,7 +105,7 @@ const ActivityForm = ({ mode, courses, data, setReFetch }: IProps) => {
           </Form.Item>
         </Form>
       )}
-      {mode === 'EDIT' && (
+      {mode === 'UPDATE' && (
         <Form
           initialValues={{
             title: data.title,
@@ -117,6 +123,7 @@ const ActivityForm = ({ mode, courses, data, setReFetch }: IProps) => {
           <Form.Item
             label='Título'
             name='title'
+            initialValue={data.title}
             rules={[
               { required: true, message: 'Ingresa el título de la actividad' },
             ]}
