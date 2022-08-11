@@ -11,6 +11,7 @@ import { ActionsProvider } from "src/context/AuthContext/ActionsContext/ActionsC
 import { ModalProvider } from "src/context/ModalContext";
 import CoursesPage from "src/pages/Admin/CoursesPage";
 import { AuthContext } from "src/context/AuthContext";
+import ActivitiesPage from "src/pages/Teachers/ActivitiesPage";
 
 const AuthenticatedNavigation = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const AuthenticatedNavigation = () => {
                 {user.isTeacher && (
                   <>
                     <Route path="courses" element={<CoursesPage />} />
+                    <Route path="activities" element={<ActivitiesPage />} />
                   </>
                 )}
                 {user.isStudent && (

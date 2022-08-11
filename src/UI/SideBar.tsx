@@ -80,6 +80,14 @@ export const SideBar = ({ children }: any) => {
                 >
                   Cursos
                 </Menu.Item>
+                <Menu.Item
+                  key="2"
+                  icon={<FolderOpenOutlined />}
+                  className="navbar-brand"
+                  onClick={() => goToPage("/activities")}
+                >
+                  Actividades
+                </Menu.Item>
               </>
             )}
             {user.isStudent && (
