@@ -1,10 +1,12 @@
-import { Button, Card, Modal, Select, Skeleton, Table } from 'antd'
+import { Button, Card, Modal, Popconfirm, Select, Skeleton, Table } from 'antd'
 import React, { useState, useEffect, useContext } from 'react'
 import ActivityForm from 'src/components/Forms/ActivityForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { getData } from 'src/services/fetch/getData'
+import { deleteData } from 'src/services/fetch/deleteData'
 import moment from 'moment'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { message } from 'antd'
 const { Option } = Select
 
 const ActivitiesPage = () => {
@@ -39,15 +41,21 @@ const ActivitiesPage = () => {
     {
       title: 'Acción',
       key: 'action',
-      render: () => {
-        return (
-          <>
-            <EditOutlined onClick={handleUpdateActivity} />
-            {'  '}
+      render: (item: any) => (
+        <>
+          <EditOutlined onClick={handleUpdateActivity} />
+
+          {'  '}
+          <Popconfirm
+            title='Estas seguro que desea Eliminar esta Actividad?'
+            onConfirm={() => handleDeleteActivity(item._id)}
+            okText='Si'
+            cancelText='No'
+          >
             <DeleteOutlined />
-          </>
-        )
-      },
+          </Popconfirm>
+        </>
+      ),
     },
   ]
 
@@ -92,6 +100,15 @@ const ActivitiesPage = () => {
   const handleUpdateActivity = () => {
     setShowModal(true)
     setMode('UPDATE')
+  }
+
+  const handleDeleteActivity = async (_id: string) => {
+    const request = await deleteData(`/activities/${_id}`)
+    if (request.status) {
+      setReFetchActivities(true)
+      console.log(request)
+      message.info(request.message)
+    }
   }
 
   const handleCancel = () => {
